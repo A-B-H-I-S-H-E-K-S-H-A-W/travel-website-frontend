@@ -1,4 +1,3 @@
-import { useState } from "react";
 import loginBg from "../../assets/images/login.jpg";
 import Layout from "../../Layout";
 import { Link } from "react-router-dom";

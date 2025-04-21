@@ -4,6 +4,7 @@ import Loading from "../../components/common/Loading";
 import Cards from "../../components/user/Cards";
 import { offers } from "../../data";
 import Layout from "../../Layout";
+import bg from "../../assets/images/bg_main.jpg";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +24,14 @@ const Home = () => {
       ) : (
         <>
           <Layout>
-            <div className="min-h-screen py-10 bg-cover bg-no-repeat bg-[url('./src/assets/images/bg_main.jpg')]">
+            <div
+              style={{
+                background: `url(${bg})`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+              }}
+              className="min-h-screen py-10"
+            >
               <main className="md:pt-28 max-w-6xl mx-auto pt-14 md:px-20 px-3">
                 <div className="text-center md:space-x-5">
                   <div className="mt-16">
