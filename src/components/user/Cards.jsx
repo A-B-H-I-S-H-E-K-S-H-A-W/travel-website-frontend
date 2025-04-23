@@ -3,7 +3,7 @@ import React from "react";
 import { ButtonOutline } from "../common/Button";
 import CardCarousel from "./Carousel";
 
-const Cards = ({ CardTitle, CardBtn, offers }) => {
+const Cards = ({ CardTitle, CardBtn }) => {
   return (
     <div className="">
       <div>
@@ -19,7 +19,7 @@ const Cards = ({ CardTitle, CardBtn, offers }) => {
           </div>
         </div>
         <div>
-          <CardCarousel offerCards={offers} />
+          <CardCarousel />
         </div>
       </div>
     </div>

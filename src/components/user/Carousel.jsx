@@ -1,7 +1,8 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
+import { offers } from "../../data";
 
-const CardCarousel = ({ offerCards }) => {
+const CardCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
@@ -32,7 +33,7 @@ const CardCarousel = ({ offerCards }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const totalSlides = Math.max(0, offerCards.length - Math.floor(visibleCards));
+  const totalSlides = Math.max(0, offers.length - Math.floor(visibleCards));
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -85,20 +86,20 @@ const CardCarousel = ({ offerCards }) => {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {offerCards.map((card) => (
+          {offers.map(({ src, title, id }) => (
             <div
-              key={card.id}
+              key={id}
               className="shrink-0 relative z-0 px- w-full "
               style={{ width: `${100 / visibleCards}%` }}
             >
               <div className="md:h-[22rem] sm:h-[18rem] h-[16rem] bg-white rounded-lg shadow-md border border-gray-200 transition-all hover:shadow-lg">
                 <img
                   className="w-full h-full rounded-lg"
-                  src={card.src}
+                  src={src}
                   alt="img"
                 />
                 <div className="inset-0 absolute z-10 flex rounded-lg justify-center items-center hover:bg-black/40 text-white duration-300">
-                  <p className="text-3xl font-semibold">{card.title}</p>
+                  <p className="text-3xl font-semibold">{title}</p>
                 </div>
               </div>
             </div>

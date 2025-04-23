@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ButtonSolid } from "../../components/common/Button";
 import Loading from "../../components/common/Loading";
 import Cards from "../../components/user/Cards";
-import { offers } from "../../data";
+
 import Layout from "../../Layout";
 import bg from "../../assets/images/bg_main.jpg";
 
@@ -60,7 +60,7 @@ const Home = () => {
                               />
                             </div>
                             <div className="h-16 w-full flex flex-col items-start justify-center px-5">
-                              <pre>Choose Destination</pre>
+                              <pre>Destination</pre>
                               <input
                                 type="text"
                                 className="border-4 rounded-xl w-full"
@@ -106,20 +106,14 @@ const Home = () => {
                 </div>
               </main>
             </div>
-            <Cards
-              CardTitle={"Top offers live now"}
-              CardBtn={"See more"}
-              offers={offers}
-            />
+            <Cards CardTitle={"Top offers live now"} CardBtn={"See more"} />
             <Cards
               CardTitle={"Top hotels to choose from"}
               CardBtn={"More hotels"}
-              offers={offers}
             />
             <Cards
               CardTitle={"Choose perfect destination."}
               CardBtn={"Search Places"}
-              offers={offers}
             />
           </Layout>
         </>
