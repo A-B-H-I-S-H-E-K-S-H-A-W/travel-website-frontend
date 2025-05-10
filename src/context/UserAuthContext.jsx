@@ -33,6 +33,7 @@ export const UserAuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
+      console.log(data);
     } catch (err) {
       return { success: false, message: `${err.message} hello` };
     }

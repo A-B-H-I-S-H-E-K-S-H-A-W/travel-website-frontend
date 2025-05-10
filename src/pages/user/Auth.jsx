@@ -1,18 +1,20 @@
 import { div } from "framer-motion/client";
 import loginBg from "../../assets/images/login.jpg";
 import Layout from "../../Layout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useState } from "react";
 
 export default function Auth({ isLoginSection = true }) {
   const { register } = useUserAuth();
+  const navigate = useNavigate();
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [result, setResult] = useState(null);
 
   const handleSubmitRegistration = async () => {
     const res = await register(form);
     setResult(res);
+    navigate("/auth/v1/login");
   };
 
   const handleSubmitLogin = () => {};
