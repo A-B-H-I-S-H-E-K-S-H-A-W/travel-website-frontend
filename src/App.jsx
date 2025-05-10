@@ -12,24 +12,31 @@ import HotelForm from "./pages/admin/hotels/HotelForm";
 import HotelDashboard from "./pages/admin/hotels/Dashboard";
 import AdminDashboard from "./pages/superadmin/Dashboard";
 import Checkout from "./pages/user/Checkout";
+import { UserAuthProvider } from "./context/UserAuthContext";
 
 function App() {
   return (
     <>
+      <UserAuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/auth/v1/login"
+              element={<Auth isLoginSection={true} />}
+            />
+            <Route
+              path="/auth/v1/register"
+              element={<Auth isLoginSection={false} />}
+            />
+            <Route path="/search" element={<Search />} />
+            <Route path="/info" element={<InfoPage />} />
+            <Route path="/checkout" element={<Checkout />} />
+          </Routes>
+        </BrowserRouter>
+      </UserAuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/auth/v1/login"
-            element={<Auth isLoginSection={true} />}
-          />
-          <Route
-            path="/auth/v1/register"
-            element={<Auth isLoginSection={false} />}
-          />
-          <Route path="/search" element={<Search />} />
-          <Route path="/info" element={<InfoPage />} />
-          <Route path="/checkout" element={<Checkout />} />
           {/* Admin Dashboard */}
           {/* BusDashboard */}
           <Route path="/bus/admin/dashboard" element={<BusDashboard />} />

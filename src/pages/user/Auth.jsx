@@ -1,14 +1,21 @@
+import { div } from "framer-motion/client";
 import loginBg from "../../assets/images/login.jpg";
 import Layout from "../../Layout";
 import { Link } from "react-router-dom";
+import { useUserAuth } from "../../context/UserAuthContext";
+import { useState } from "react";
 
 export default function Auth({ isLoginSection = true }) {
-  function userLogin() {
-    console.log("Login");
-  }
-  function userRegistration() {
-    console.log("Register");
-  }
+  const { register } = useUserAuth();
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [result, setResult] = useState(null);
+
+  const handleSubmitRegistration = async () => {
+    const res = await register(form);
+    setResult(res);
+  };
+
+  const handleSubmitLogin = () => {};
 
   return (
     <>
@@ -37,8 +44,34 @@ export default function Auth({ isLoginSection = true }) {
                 </h2>
               </div>
 
-              <div className="mt-10">
-                <div className="space-y-6">
+              <div className="mt-6">
+                <div className="space-y-2">
+                  {isLoginSection ? (
+                    <div></div>
+                  ) : (
+                    <div>
+                      <label
+                        htmlFor="username"
+                        className="block text-sm/6 font-medium text-gray-700"
+                      >
+                        Username
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          id="username"
+                          name="username"
+                          type="text"
+                          required
+                          onChange={(e) =>
+                            setForm({ ...form, username: e.target.value })
+                          }
+                          autoComplete="username"
+                          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-800 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   <div>
                     <label
                       htmlFor="email"
@@ -52,8 +85,11 @@ export default function Auth({ isLoginSection = true }) {
                         name="email"
                         type="email"
                         required
+                        onChange={(e) =>
+                          setForm({ ...form, email: e.target.value })
+                        }
                         autoComplete="email"
-                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-200 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"
+                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-800 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"
                       />
                     </div>
                   </div>
@@ -85,8 +121,11 @@ export default function Auth({ isLoginSection = true }) {
                         name="password"
                         type="password"
                         required
+                        onChange={(e) =>
+                          setForm({ ...form, password: e.target.value })
+                        }
                         autoComplete="current-password"
-                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-200 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"
+                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-800 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"
                       />
                     </div>
                   </div>
@@ -97,7 +136,7 @@ export default function Auth({ isLoginSection = true }) {
                         if (isLoginSection === true) {
                           userLogin();
                         } else {
-                          userRegistration();
+                          handleSubmitRegistration();
                         }
                       }}
                       type="submit"

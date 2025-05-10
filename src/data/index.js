@@ -17,5 +17,5 @@ export const offers = [
   { id: 6, title: "Card 6", src: card6 },
   { id: 7, title: "Card 7", src: card7 },
   { id: 8, title: "Card 8", src: card8 },
-  { id: 8, title: "Card 9", src: card9 },
+  { id: 9, title: "Card 9", src: card9 },
 ];
