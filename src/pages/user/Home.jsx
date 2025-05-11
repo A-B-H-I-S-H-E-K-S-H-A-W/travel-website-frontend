@@ -8,12 +8,15 @@ import bg from "../../assets/images/bg_main.jpg";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true);
+  
 
   useEffect(() => {
     // Show the loader for 3 seconds
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 5000);
+
+    
 
     return () => clearTimeout(timer); // Cleanup the timer
   }, []);

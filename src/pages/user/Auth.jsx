@@ -3,24 +3,25 @@ import Layout from "../../Layout";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useState } from "react";
-import { motion } from "framer-motion";
 import Toast from "../../components/common/Toast";
 
 export default function Auth({ isLoginSection = true }) {
-  const { register } = useUserAuth();
+  const { register, login } = useUserAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ username: "", email: "", password: "" });
   const [result, setResult] = useState(null);
 
   const handleSubmitRegistration = async () => {
     const res = await register(form);
-    console.log(res);
-
     setResult(res);
     navigate("/auth/v1/login");
   };
 
-  const handleSubmitLogin = () => {};
+  const handleSubmitLogin = async () => {
+    const res = await login(form);
+    setResult(res);
+    navigate("/");
+  };
 
   return (
     <>
@@ -139,7 +140,7 @@ export default function Auth({ isLoginSection = true }) {
                     <button
                       onClick={() => {
                         if (isLoginSection === true) {
-                          userLogin();
+                          handleSubmitLogin();
                         } else {
                           handleSubmitRegistration();
                         }

@@ -12,11 +12,6 @@ export const UserAuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setCurrentUser(userData);
-  };
-
   const logout = () => {
     localStorage.removeItem("user");
     setCurrentUser(null);
@@ -24,7 +19,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const register = async (userDetails) => {
     try {
-      const res = await fetch("http://localhost:8000/api/users/register", {
+      const res = await fetch("/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,6 +31,28 @@ export const UserAuthProvider = ({ children }) => {
       return data;
     } catch (err) {
       return { success: false, message: `${err.message}` };
+    }
+  };
+
+  const login = async (userData) => {
+    try {
+      const res = await fetch("/api/users/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("userToken", JSON.stringify(data.token));
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setCurrentUser(data.user);
+        return data.message;
+      }
+    } catch (error) {
+      return { success: false, message: `${error.message}` };
     }
   };
 
