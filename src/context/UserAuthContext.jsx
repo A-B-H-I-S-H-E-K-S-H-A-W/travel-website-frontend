@@ -33,9 +33,9 @@ export const UserAuthProvider = ({ children }) => {
       });
 
       const data = await res.json();
-      console.log(data);
+      return data;
     } catch (err) {
-      return { success: false, message: `${err.message} hello` };
+      return { success: false, message: `${err.message}` };
     }
   };
 

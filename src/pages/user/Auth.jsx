@@ -1,9 +1,10 @@
-import { div } from "framer-motion/client";
 import loginBg from "../../assets/images/login.jpg";
 import Layout from "../../Layout";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useState } from "react";
+import { motion } from "framer-motion";
+import Toast from "../../components/common/Toast";
 
 export default function Auth({ isLoginSection = true }) {
   const { register } = useUserAuth();
@@ -13,6 +14,8 @@ export default function Auth({ isLoginSection = true }) {
 
   const handleSubmitRegistration = async () => {
     const res = await register(form);
+    console.log(res);
+
     setResult(res);
     navigate("/auth/v1/login");
   };
@@ -142,7 +145,7 @@ export default function Auth({ isLoginSection = true }) {
                         }
                       }}
                       type="submit"
-                      className="flex w-full justify-center rounded-md bg-cyan-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-cyan-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
+                      className="flex w-full cursor-pointer justify-center rounded-md bg-cyan-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-cyan-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600"
                     >
                       {isLoginSection ? <p>Login</p> : <p>Register</p>}
                     </button>
@@ -173,6 +176,7 @@ export default function Auth({ isLoginSection = true }) {
               </div>
             </div>
           </div>
+          <Toast result={result} setResult={setResult} />
         </div>
       </Layout>
     </>
