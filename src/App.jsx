@@ -15,6 +15,7 @@ import Checkout from "./pages/user/Checkout";
 import { UserAuthProvider } from "./context/UserAuthContext";
 import AccountSettings from "./pages/user/AccountSettings";
 import ProtectedRoute from "./services/ProtectedRoute";
+import Saved from "./pages/user/Saved";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/saved" element={<Saved />} />
           </Routes>
         </BrowserRouter>
       </UserAuthProvider>
