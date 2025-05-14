@@ -3,8 +3,9 @@ import Layout from "../../Layout";
 import loginBg from "../../assets/images/search.jpg";
 import InfoCard from "../../components/common/InfoCard";
 
-const Saved = () => {
+const RecentTrips = () => {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
   return (
     <>
       <Layout>
@@ -19,7 +20,7 @@ const Saved = () => {
         >
           <div className="pt-20 px-20">
             <div>
-              <h3 className="text-3xl font-bold">Your Saved Travels</h3>
+              <h3 className="text-3xl font-bold">Your Recent Trips</h3>
             </div>
           </div>
         </div>
@@ -33,4 +34,4 @@ const Saved = () => {
   );
 };
 
-export default Saved;
+export default RecentTrips;

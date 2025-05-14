@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "../../Layout";
 import loginBg from "../../assets/images/search.jpg";
 import { ButtonOutline, ButtonSolid } from "../../components/common/Button";
-import CardItems from "../../components/user/CardItems";
+import InfoCard from "../../components/common/InfoCard";
 
 const Search = () => {
   return (
@@ -81,8 +81,10 @@ const Search = () => {
                 />
               </div>
 
-              <div className="mt-4">
-                <CardItems />
+              <div className="mt-10 grid grid-cols-3 px-20 pb-20">
+                {arr.map(() => (
+                  <InfoCard />
+                ))}
               </div>
             </div>
           </div>

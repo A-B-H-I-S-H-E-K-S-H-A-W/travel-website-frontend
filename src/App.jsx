@@ -16,6 +16,7 @@ import { UserAuthProvider } from "./context/UserAuthContext";
 import AccountSettings from "./pages/user/AccountSettings";
 import ProtectedRoute from "./services/ProtectedRoute";
 import Saved from "./pages/user/Saved";
+import RecentTrips from "./pages/user/RecentTrips";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
               }
             />
             <Route path="/saved" element={<Saved />} />
+            <Route path="/recent" element={<RecentTrips />} />
           </Routes>
         </BrowserRouter>
       </UserAuthProvider>
