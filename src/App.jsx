@@ -13,6 +13,8 @@ import HotelDashboard from "./pages/admin/hotels/Dashboard";
 import AdminDashboard from "./pages/superadmin/Dashboard";
 import Checkout from "./pages/user/Checkout";
 import { UserAuthProvider } from "./context/UserAuthContext";
+import AccountSettings from "./pages/user/AccountSettings";
+import ProtectedRoute from "./services/ProtectedRoute";
 
 function App() {
   return (
@@ -32,22 +34,37 @@ function App() {
             <Route path="/search" element={<Search />} />
             <Route path="/info" element={<InfoPage />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <AccountSettings />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </UserAuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* Admin Dashboard */}
-          {/* BusDashboard */}
-          <Route path="/bus/admin/dashboard" element={<BusDashboard />} />
-          <Route path="/bus/admin/create" element={<BusForm />} />
-          {/* FlightDashboard */}
-          <Route path="/flight/admin/dashboard" element={<FlightDashboard />} />
-          <Route path="/flight/admin/create" element={<FlightForm />} />
-          {/* HotelDashboard */}
           <Route path="/hotel/admin/dashboard" element={<HotelDashboard />} />
           <Route path="/hotel/admin/create" element={<HotelForm />} />
-          {/* SuperAdmin */}
+        </Routes>
+      </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/bus/admin/dashboard" element={<BusDashboard />} />
+          <Route path="/bus/admin/create" element={<BusForm />} />
+        </Routes>
+      </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/flight/admin/dashboard" element={<FlightDashboard />} />
+          <Route path="/flight/admin/create" element={<FlightForm />} />
+        </Routes>
+      </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
           <Route path="/super-admin/dashboard" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
