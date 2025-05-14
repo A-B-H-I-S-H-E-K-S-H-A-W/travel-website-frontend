@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ButtonOutline, ButtonSolid } from "../common/Button";
 import { Link } from "react-router-dom";
 import avatar from "../../assets/static/avatar.jpg";
+import { useUserAuth } from "../../context/UserAuthContext";
 
 const Navbar = ({ user }) => {
   const [toggle, setToggle] = useState(false);
+  const { logout } = useUserAuth();
   return (
     <>
       <div className="flex fixed z-50 top-0 w-full backdrop-blur-xl items-center justify-between md:px-20 px-5 h-20">
@@ -40,49 +42,47 @@ const Navbar = ({ user }) => {
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="menu-button"
-                  tabindex="-1"
                 >
                   <div className="py-1" role="none">
-                    <a
-                      href="#"
+                    <Link
+                      to="/settings"
                       className="block px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
-                      tabindex="-1"
                       id="menu-item-0"
                     >
                       Account Settings
-                    </a>
+                    </Link>
                   </div>
                   <div className="py-1" role="none">
-                    <a
-                      href="#"
+                    <Link
+                      to="/saved"
                       className="block px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
-                      tabindex="-1"
                       id="menu-item-4"
                     >
                       Saved
-                    </a>
-                    <a
-                      href="#"
+                    </Link>
+                    <Link
+                      to="/recent"
                       className="block px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
-                      tabindex="-1"
                       id="menu-item-5"
                     >
                       Trips
-                    </a>
+                    </Link>
                   </div>
                   <div className="py-1" role="none">
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700"
+                    <button
+                      onClick={() => {
+                        logout();
+                        window.location.href = "/";
+                      }}
+                      className="block cursor-pointer px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
-                      tabindex="-1"
                       id="menu-item-6"
                     >
                       Logout
-                    </a>
+                    </button>
                   </div>
                 </div>
               ) : (
@@ -90,7 +90,7 @@ const Navbar = ({ user }) => {
               )}
             </div>
           ) : (
-            <div>
+            <div className="space-x-2">
               <Link to={"/auth/v1/register"}>
                 <ButtonOutline
                   title={"Register"}

@@ -14,6 +14,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("userToken");
     setCurrentUser(null);
   };
 
