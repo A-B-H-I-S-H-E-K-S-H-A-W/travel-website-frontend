@@ -12,10 +12,18 @@ export const UserAuthProvider = ({ children }) => {
     }
   }, []);
 
-  const logout = () => {
+  const logout = async () => {
+    const res = await fetch("/api/users/logout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     localStorage.removeItem("user");
     localStorage.removeItem("userToken");
     setCurrentUser(null);
+    return res;
   };
 
   const register = async (userDetails) => {
