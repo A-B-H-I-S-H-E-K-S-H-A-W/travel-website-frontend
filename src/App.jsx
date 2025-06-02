@@ -17,6 +17,7 @@ import AccountSettings from "./pages/user/AccountSettings";
 import ProtectedRoute from "./services/ProtectedRoute";
 import Saved from "./pages/user/Saved";
 import RecentTrips from "./pages/user/RecentTrips";
+import AdminLogin from "./pages/admin/AdminLogin";
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
       </UserAuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/hotel/admin/login" element={<AdminLogin />} />
           <Route path="/hotel/admin/dashboard" element={<HotelDashboard />} />
           <Route path="/hotel/admin/create" element={<HotelForm />} />
         </Routes>
