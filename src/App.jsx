@@ -42,7 +42,7 @@ function App() {
             <Route
               path="/settings"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute token={"userToken"}>
                   <AccountSettings />
                 </ProtectedRoute>
               }
