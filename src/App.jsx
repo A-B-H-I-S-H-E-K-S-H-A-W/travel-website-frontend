@@ -17,13 +17,15 @@ import AccountSettings from "./pages/user/AccountSettings";
 import ProtectedRoute from "./services/ProtectedRoute";
 import Saved from "./pages/user/Saved";
 import RecentTrips from "./pages/user/RecentTrips";
-import AdminLogin from "./pages/admin/AdminLogin";
+import { AdminAuthProvider } from "./context/AdminAuthContext";
+import AdminAuth from "./pages/admin/AdminLogin";
 
 function App() {
   return (
     <>
-      <UserAuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        {/* User */}
+        <UserAuthProvider>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
@@ -48,28 +50,33 @@ function App() {
             <Route path="/saved" element={<Saved />} />
             <Route path="/recent" element={<RecentTrips />} />
           </Routes>
-        </BrowserRouter>
-      </UserAuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/hotel/admin/login" element={<AdminLogin />} />
-          <Route path="/hotel/admin/dashboard" element={<HotelDashboard />} />
-          <Route path="/hotel/admin/create" element={<HotelForm />} />
-        </Routes>
-      </BrowserRouter>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/bus/admin/dashboard" element={<BusDashboard />} />
-          <Route path="/bus/admin/create" element={<BusForm />} />
-        </Routes>
-      </BrowserRouter>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/flight/admin/dashboard" element={<FlightDashboard />} />
-          <Route path="/flight/admin/create" element={<FlightForm />} />
-        </Routes>
-      </BrowserRouter>
-      <BrowserRouter>
+        </UserAuthProvider>
+        {/* User Ends */}
+        <AdminAuthProvider>
+          <Routes>
+            <Route
+              path="/admin/login"
+              element={<AdminAuth isLoginSection={true} />}
+            />
+            <Route
+              path="/admin/register"
+              element={<AdminAuth isLoginSection={false} />}
+            />
+            <Route path="/hotel/admin/dashboard" element={<HotelDashboard />} />
+            <Route path="/hotel/admin/create" element={<HotelForm />} />
+          </Routes>
+          <Routes>
+            <Route path="/bus/admin/dashboard" element={<BusDashboard />} />
+            <Route path="/bus/admin/create" element={<BusForm />} />
+          </Routes>
+          <Routes>
+            <Route
+              path="/flight/admin/dashboard"
+              element={<FlightDashboard />}
+            />
+            <Route path="/flight/admin/create" element={<FlightForm />} />
+          </Routes>
+        </AdminAuthProvider>
         <Routes>
           <Route path="/super-admin/dashboard" element={<AdminDashboard />} />
         </Routes>

@@ -1,10 +1,35 @@
 import { useState } from "react";
 import Toast from "../../components/common/Toast";
 import loginBg from "../../assets/images/bg_main.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAdminAuth } from "../../context/AdminAuthContext";
 
-export default function AdminLogin() {
-  const [isLoginSection, setIsLoginSection] = useState(true);
+export default function AdminAuth({ isLoginSection = true }) {
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    domain: "",
+  });
+  const navigate = useNavigate();
+  const [result, setResult] = useState(null);
+  const { login, register } = useAdminAuth();
+
+  const handleSubmitRegistration = async () => {
+    const res = await register(form);
+    setResult(res);
+    navigate("/admin/login");
+  };
+
+  const handleSubmitLogin = async () => {
+    const res = await login(form);
+    setResult(res);
+    if (res.success === true) {
+      console.log(res.admin.domain);
+      const domain = res.admin.domain.toLowerCase();
+      navigate(`/${domain}/admin/dashboard`);
+    }
+  };
 
   return (
     <>
@@ -50,6 +75,9 @@ export default function AdminLogin() {
                         name="username"
                         type="text"
                         required
+                        onChange={(e) =>
+                          setForm({ ...form, username: e.target.value })
+                        }
                         autoComplete="username"
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-800 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"
                       />
@@ -70,6 +98,9 @@ export default function AdminLogin() {
                       name="email"
                       type="email"
                       required
+                      onChange={(e) =>
+                        setForm({ ...form, email: e.target.value })
+                      }
                       autoComplete="email"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-800 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"
                     />
@@ -103,31 +134,43 @@ export default function AdminLogin() {
                       name="password"
                       type="password"
                       required
+                      onChange={(e) =>
+                        setForm({ ...form, password: e.target.value })
+                      }
                       autoComplete="current-password"
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-800 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"
                     />
                   </div>
                 </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm/6 font-medium text-gray-700"
-                  >
-                    Domain
-                  </label>
-                  <div className="mt-2">
-                    <select className="block w-full rounded-md bg-white px-3 py-2 mb-5 text-base text-gray-800 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6">
-                      <option value="Bus">Bus</option>
-                      <option value="Hotel">Hotel</option>
-                      <option value="Flight">Flight</option>
-                    </select>
+                {isLoginSection ? (
+                  <div></div>
+                ) : (
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
+                      Domain
+                    </label>
+                    <div className="mt-2">
+                      <select
+                        onChange={(e) =>
+                          setForm({ ...form, domain: e.target.value })
+                        }
+                        className="block w-full rounded-md bg-white px-3 py-2 mb-5 text-base text-gray-800 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"
+                      >
+                        <option value="Bus">Bus</option>
+                        <option value="Hotel">Hotel</option>
+                        <option value="Flight">Flight</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div>
                   <button
                     onClick={() => {
-                      if (isLoginSection === true) {
+                      if (isLoginSection) {
                         handleSubmitLogin();
                       } else {
                         handleSubmitRegistration();
@@ -145,7 +188,7 @@ export default function AdminLogin() {
                 <p className="mt-10 text-center text-sm/6 text-gray-800">
                   Not a member?{" "}
                   <Link
-                    to="/auth/v1/register"
+                    to="/admin/register"
                     className="font-semibold text-cyan-600 hover:text-cyan-500"
                   >
                     Register
@@ -155,7 +198,7 @@ export default function AdminLogin() {
                 <p className="mt-10 text-center text-sm/6 text-gray-800">
                   Already have an account?{" "}
                   <Link
-                    to="/auth/v1/login"
+                    to="/admin/login"
                     className="font-semibold text-cyan-600 hover:text-cyan-500"
                   >
                     Login
@@ -165,7 +208,7 @@ export default function AdminLogin() {
             </div>
           </div>
         </div>
-        <Toast />
+        <Toast result={result} setResult={setResult} />
       </div>
     </>
   );
