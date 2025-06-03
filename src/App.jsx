@@ -42,7 +42,7 @@ function App() {
             <Route
               path="/settings"
               element={
-                <ProtectedRoute token={"userToken"}>
+                <ProtectedRoute token={"userToken"} route={"/"}>
                   <AccountSettings />
                 </ProtectedRoute>
               }
@@ -62,7 +62,14 @@ function App() {
               path="/admin/register"
               element={<AdminAuth isLoginSection={false} />}
             />
-            <Route path="/hotel/admin/dashboard" element={<HotelDashboard />} />
+            <Route
+              path="/hotel/admin/dashboard"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <HotelDashboard />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/hotel/admin/create" element={<HotelForm />} />
           </Routes>
           <Routes>
