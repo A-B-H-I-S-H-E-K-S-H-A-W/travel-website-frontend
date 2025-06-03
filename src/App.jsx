@@ -5,7 +5,6 @@ import Auth from "./pages/user/Auth";
 import Search from "./pages/user/Search";
 import InfoPage from "./pages/user/InfoPage";
 import BusDashboard from "./pages/admin/bus/Dashboard";
-import FlightDashboard from "./pages/admin/flights/Layout";
 import BusForm from "./pages/admin/bus/BusForm";
 import FlightForm from "./pages/admin/flights/FlightForm";
 import HotelForm from "./pages/admin/hotels/HotelForm";
@@ -19,6 +18,7 @@ import Saved from "./pages/user/Saved";
 import RecentTrips from "./pages/user/RecentTrips";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
 import AdminAuth from "./pages/admin/AdminLogin";
+import FlightDashboard from "./pages/admin/flights/Dashboard";
 
 function App() {
   return (

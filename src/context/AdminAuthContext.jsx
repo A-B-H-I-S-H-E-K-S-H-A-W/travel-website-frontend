@@ -3,12 +3,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 const AdminAuthContext = createContext();
 
 export const AdminAuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentAdmin, setCurrentAdmin] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("admin");
     if (storedUser) {
-      setCurrentUser(JSON.parse(storedUser));
+      setCurrentAdmin(JSON.parse(storedUser));
     }
   }, []);
 
@@ -56,7 +56,9 @@ export const AdminAuthProvider = ({ children }) => {
   };
 
   return (
-    <AdminAuthContext.Provider value={{ currentUser, login, logout, register }}>
+    <AdminAuthContext.Provider
+      value={{ currentAdmin, login, logout, register }}
+    >
       {children}
     </AdminAuthContext.Provider>
   );

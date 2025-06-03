@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FlightDashboard from "./Layout";
+import AdminLayout from "../layout/AdminLayout";
 
 const FlightForm = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ const FlightForm = () => {
   };
 
   return (
-    <FlightDashboard>
+    <AdminLayout>
       <form className="max-w-4xl" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-bold mb-6 text-gray-800">
           Flight Details Form
@@ -248,7 +248,7 @@ const FlightForm = () => {
           Submit
         </button>
       </form>
-    </FlightDashboard>
+    </AdminLayout>
   );
 };
 

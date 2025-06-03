@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import HotelDashboardLayout from "./Layout";
+import AdminLayout from "../layout/AdminLayout";
 
 const HotelForm = () => {
   const [formData, setFormData] = useState({
@@ -40,7 +40,7 @@ const HotelForm = () => {
   };
 
   return (
-    <HotelDashboardLayout>
+    <AdminLayout>
       <form className="max-w-4xl" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-bold mb-6">Hotel Details Form</h1>
 
@@ -253,7 +253,7 @@ const HotelForm = () => {
           Submit
         </button>
       </form>
-    </HotelDashboardLayout>
+    </AdminLayout>
   );
 };
 

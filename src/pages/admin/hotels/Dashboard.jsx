@@ -1,11 +1,10 @@
-import React from "react";
-import HotelDashboardLayout from "./Layout";
+import AdminLayout from "../layout/AdminLayout";
 
 const HotelDashboard = () => {
   return (
-    <HotelDashboardLayout>
+    <AdminLayout>
       <div></div>
-    </HotelDashboardLayout>
+    </AdminLayout>
   );
 };
 

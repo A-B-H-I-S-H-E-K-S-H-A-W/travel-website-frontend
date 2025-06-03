@@ -1,11 +1,10 @@
-import React from "react";
-import FlightDashboardLayout from "./Layout";
+import AdminLayout from "../layout/AdminLayout";
 
 const FlightDashboard = () => {
   return (
-    <FlightDashboardLayout>
+    <AdminLayout>
       <div>Dashboard</div>
-    </FlightDashboardLayout>
+    </AdminLayout>
   );
 };
 

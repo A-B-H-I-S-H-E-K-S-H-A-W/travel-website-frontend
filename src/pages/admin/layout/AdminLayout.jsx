@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import { Settings, User, Menu, List } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAdminAuth } from "../../../context/AdminAuthContext";
 
 const Sidebar = ({ isOpen }) => {
-  const [admin, setAdmin] = useState(null);
-
-  useEffect(() => {
-    const adminData = localStorage.getItem("admin");
-    if (adminData) {
-      setAdmin(JSON.parse(adminData));
-    }
-  }, []);
+  const { currentAdmin } = useAdminAuth();
 
   const busLayout = [
     {
@@ -86,16 +80,16 @@ const Sidebar = ({ isOpen }) => {
     >
       <h2 className="text-xl font-semibold mb-8 tracking-wide">WanderSphere</h2>
 
-      {admin.domain === "Hotel" && <LinkList layout={hotelLayout} />}
-      {admin.domain === "Bus" && <LinkList layout={busLayout} />}
-      {admin.domain === "Flight" && <LinkList layout={flightLayout} />}
+      {currentAdmin?.domain === "Hotel" && <LinkList layout={hotelLayout} />}
+      {currentAdmin?.domain === "Bus" && <LinkList layout={busLayout} />}
+      {currentAdmin?.domain === "Flight" && <LinkList layout={flightLayout} />}
     </div>
   );
 };
 
 const TopBar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const { currentAdmin } = useAdminAuth();
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
       <button
@@ -106,6 +100,7 @@ const TopBar = ({ toggleSidebar }) => {
       </button>
       <h1 className="text-lg font-semibold tracking-wide">Dashboard</h1>
       <div className="flex items-center space-x-4">
+        <p>{currentAdmin?.username}</p>
         <button className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition">
           <User size={20} />
         </button>
