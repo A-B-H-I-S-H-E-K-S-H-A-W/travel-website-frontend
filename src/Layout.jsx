@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from "react";
 import Navbar from "./components/user/Navbar";
 import Footer from "./components/user/Footer";
+import { useUserAuth } from "./context/UserAuthContext";
 
 export default function Layout({ children, showFooter = true }) {
-  const [user, setUser] = useState(null);
+  const { currentUser } = useUserAuth();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
       {/* Navbar */}
-      <Navbar user={user} />
+      <Navbar user={currentUser} />
 
       {/* Main content */}
       <main className="flex-grow">{children}</main>
