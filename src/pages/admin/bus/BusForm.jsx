@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import BusDashboard from "./Layout";
+import AdminLayout from "../layout/AdminLayout";
 
 const BusForm = () => {
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ const BusForm = () => {
   };
 
   return (
-    <BusDashboard>
+    <AdminLayout>
       <form className="max-w-4xl" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-bold mb-6">Bus Details Form</h1>
 
@@ -240,7 +240,7 @@ const BusForm = () => {
           Submit
         </button>
       </form>
-    </BusDashboard>
+    </AdminLayout>
   );
 };
 

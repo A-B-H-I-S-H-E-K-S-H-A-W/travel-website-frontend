@@ -1,8 +1,83 @@
-import { useState } from "react";
-import { Settings, User, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Settings, User, Menu, List } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Sidebar = ({ isOpen }) => {
+  const [admin, setAdmin] = useState(null);
+
+  useEffect(() => {
+    const adminData = localStorage.getItem("admin");
+    if (adminData) {
+      setAdmin(JSON.parse(adminData));
+    }
+  }, []);
+
+  const busLayout = [
+    {
+      id: 1,
+      link: "/bus/admin/dashboard",
+      linkName: "📦 Dashboard",
+    },
+    {
+      id: 2,
+      link: "/bus/admin/create",
+      linkName: "📦 Create Bus Shedule",
+    },
+    {
+      id: 3,
+      link: "/bus/admin/dashboard",
+      linkName: "📦 List Buses",
+    },
+  ];
+  const hotelLayout = [
+    {
+      id: 1,
+      link: "/hotel/admin/dashboard",
+      linkName: "📦 Dashboard",
+    },
+    {
+      id: 2,
+      link: "/hotel/admin/create",
+      linkName: "📦 Create Room",
+    },
+    {
+      id: 3,
+      link: "/hotel/admin/dashboard",
+      linkName: "📦 List Rooms",
+    },
+  ];
+  const flightLayout = [
+    {
+      id: 1,
+      link: "/flight/admin/dashboard",
+      linkName: "📦 Dashboard",
+    },
+    {
+      id: 2,
+      link: "/flight/admin/create",
+      linkName: "📦 Create Flight",
+    },
+    {
+      id: 3,
+      link: "/flight/admin/dashboard",
+      linkName: "📦 List Flights",
+    },
+  ];
+
+  const LinkList = ({ layout }) => {
+    return (
+      <ul className="flex flex-col space-y-4">
+        {layout.map((item) => (
+          <Link key={item.id} to={item.link}>
+            <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
+              {item.linkName}
+            </li>
+          </Link>
+        ))}
+      </ul>
+    );
+  };
+
   return (
     <div
       className={`bg-gray-900 text-white w-64 h-screen fixed top-0 left-0 p-6 shadow-xl flex flex-col transition-transform duration-300 ${
@@ -10,23 +85,10 @@ const Sidebar = ({ isOpen }) => {
       } md:translate-x-0`}
     >
       <h2 className="text-xl font-semibold mb-8 tracking-wide">WanderSphere</h2>
-      <ul className="flex flex-col space-y-4">
-        <Link to="/bus/admin/dashboard">
-          <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
-            📦 Dashboard
-          </li>
-        </Link>
-        <Link to="/bus/admin/create">
-          <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
-            📦 Create Item
-          </li>
-        </Link>
-        <Link>
-          <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
-            📋 List Items
-          </li>
-        </Link>
-      </ul>
+
+      {admin.domain === "Hotel" && <LinkList layout={hotelLayout} />}
+      {admin.domain === "Bus" && <LinkList layout={busLayout} />}
+      {admin.domain === "Flight" && <LinkList layout={flightLayout} />}
     </div>
   );
 };
@@ -68,7 +130,7 @@ const TopBar = ({ toggleSidebar }) => {
   );
 };
 
-export default function BusDashboardLayout({ children }) {
+export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (

@@ -4,7 +4,7 @@ import Home from "./pages/user/Home";
 import Auth from "./pages/user/Auth";
 import Search from "./pages/user/Search";
 import InfoPage from "./pages/user/InfoPage";
-import BusDashboard from "./pages/admin/bus/Layout";
+import BusDashboard from "./pages/admin/bus/Dashboard";
 import FlightDashboard from "./pages/admin/flights/Layout";
 import BusForm from "./pages/admin/bus/BusForm";
 import FlightForm from "./pages/admin/flights/FlightForm";
