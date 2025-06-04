@@ -46,7 +46,7 @@ const Navbar = ({ user }) => {
                   <div className="py-1" role="none">
                     <Link
                       to="/settings"
-                      className="block px-4 py-2 text-sm text-gray-700"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
                       role="menuitem"
                       id="menu-item-0"
                     >
@@ -56,7 +56,7 @@ const Navbar = ({ user }) => {
                   <div className="py-1" role="none">
                     <Link
                       to="/saved"
-                      className="block px-4 py-2 text-sm text-gray-700"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
                       role="menuitem"
                       id="menu-item-4"
                     >
@@ -64,7 +64,7 @@ const Navbar = ({ user }) => {
                     </Link>
                     <Link
                       to="/recent"
-                      className="block px-4 py-2 text-sm text-gray-700"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
                       role="menuitem"
                       id="menu-item-5"
                     >
@@ -77,7 +77,7 @@ const Navbar = ({ user }) => {
                         logout();
                         window.location.href = "/";
                       }}
-                      className="block cursor-pointer px-4 py-2 text-sm text-gray-700"
+                      className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
                       role="menuitem"
                       id="menu-item-6"
                     >
