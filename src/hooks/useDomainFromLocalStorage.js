@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // Custom hook to fetch admin from localStorage
-export function useAdminFromLocalStorage(domain) {
+export function useDomainFromLocalStorage(domain) {
   const [currentAdmin, setCurrentAdmin] = useState(null);
 
   useEffect(() => {

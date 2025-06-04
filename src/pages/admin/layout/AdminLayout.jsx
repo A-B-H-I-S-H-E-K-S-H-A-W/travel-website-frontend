@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Settings, User, Menu, List } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
-import { useAdminFromLocalStorage } from "../../../hooks/useAdminFromLocalStorage";
+import { useDomainFromLocalStorage } from "../../../hooks/useDomainFromLocalStorage";
 
 // import { useAdminAuth } from "../../../context/AdminAuthContext";
 
@@ -19,7 +19,7 @@ import { useAdminFromLocalStorage } from "../../../hooks/useAdminFromLocalStorag
 // };
 
 const Sidebar = ({ isOpen }) => {
-  const admin = useAdminFromLocalStorage("admin");
+  const admin = useDomainFromLocalStorage("admin");
   const busLayout = [
     {
       id: 1,
@@ -105,7 +105,7 @@ const TopBar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { logout } = useAdminAuth();
 
-  const admin = useAdminFromLocalStorage("admin");
+  const admin = useDomainFromLocalStorage("admin");
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
       <button
