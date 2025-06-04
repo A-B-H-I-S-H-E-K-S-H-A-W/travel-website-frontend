@@ -12,7 +12,23 @@ export const AdminAuthProvider = ({ children }) => {
     }
   }, []);
 
-  const logout = async () => {};
+  const logout = async () => {
+    try {
+      const res = await fetch("/api/users/logout", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      localStorage.removeItem("admin");
+      localStorage.removeItem("adminToken");
+      setCurrentAdmin(null);
+      return res;
+    } catch (error) {
+      return { success: false, message: "Something went wrong" };
+    }
+  };
 
   const register = async (adminDetails) => {
     try {
@@ -33,6 +49,8 @@ export const AdminAuthProvider = ({ children }) => {
 
   const login = async (adminData) => {
     try {
+      console.log("error2");
+
       const res = await fetch("/api/admin/auth", {
         method: "POST",
         headers: {
@@ -42,10 +60,12 @@ export const AdminAuthProvider = ({ children }) => {
       });
 
       if (res.ok) {
+        console.log("error3");
+
         const data = await res.json();
         localStorage.setItem("adminToken", JSON.stringify(data.token));
         localStorage.setItem("admin", JSON.stringify(data.admin));
-        setCurrentUser(data.user);
+        setCurrentAdmin(data.user);
         return data;
       } else {
         return { success: false, message: `Email not found, Please Register` };

@@ -3,9 +3,22 @@ import { Settings, User, Menu, List } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
 
-const Sidebar = ({ isOpen }) => {
-  const { currentAdmin } = useAdminAuth();
+// import { useAdminAuth } from "../../../context/AdminAuthContext";
 
+const fetch = () => {
+  const [currentAdmin, setCurrentAdmin] = useState(null);
+  useEffect(() => {
+    const storedUser = localStorage.getItem("admin");
+    if (storedUser) {
+      setCurrentAdmin(JSON.parse(storedUser));
+    }
+  }, []);
+
+  return currentAdmin;
+};
+
+const Sidebar = ({ isOpen }) => {
+  const admin = fetch();
   const busLayout = [
     {
       id: 1,
@@ -80,16 +93,18 @@ const Sidebar = ({ isOpen }) => {
     >
       <h2 className="text-xl font-semibold mb-8 tracking-wide">WanderSphere</h2>
 
-      {currentAdmin?.domain === "Hotel" && <LinkList layout={hotelLayout} />}
-      {currentAdmin?.domain === "Bus" && <LinkList layout={busLayout} />}
-      {currentAdmin?.domain === "Flight" && <LinkList layout={flightLayout} />}
+      {admin?.domain === "Hotel" && <LinkList layout={hotelLayout} />}
+      {admin?.domain === "Bus" && <LinkList layout={busLayout} />}
+      {admin?.domain === "Flight" && <LinkList layout={flightLayout} />}
     </div>
   );
 };
 
 const TopBar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { currentAdmin } = useAdminAuth();
+  const { logout } = useAdminAuth();
+
+  const admin = fetch();
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
       <button
@@ -100,23 +115,29 @@ const TopBar = ({ toggleSidebar }) => {
       </button>
       <h1 className="text-lg font-semibold tracking-wide">Dashboard</h1>
       <div className="flex items-center space-x-4">
-        <p>{currentAdmin?.username}</p>
+        <p>{admin?.username}</p>
         <button className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition">
           <User size={20} />
         </button>
         <button
-          className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition focus:outline-none"
+          className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition focus:outline-none  cursor-pointer"
           onClick={() => setDropdownOpen(!dropdownOpen)}
         >
           <Settings size={20} />
         </button>
       </div>
       {dropdownOpen && (
-        <div className="absolute right-6 top-12 bg-white text-black shadow-lg rounded-lg w-40 py-2 overflow-hidden">
-          <button className="block w-full text-left px-4 py-3 hover:bg-gray-100 transition">
+        <div className="absolute right-6 top-14 bg-white text-black shadow-lg rounded-lg w-40 py-2 overflow-hidden">
+          <button className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition">
             Settings
           </button>
-          <button className="block w-full text-left px-4 py-3 hover:bg-gray-100 transition">
+          <button
+            onClick={() => {
+              logout();
+              window.location.href = "/admin/login";
+            }}
+            className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+          >
             Logout
           </button>
         </div>

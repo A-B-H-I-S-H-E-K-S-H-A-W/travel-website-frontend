@@ -28,6 +28,8 @@ export default function AdminAuth({ isLoginSection = true }) {
       console.log(res.admin.domain);
       const domain = res.admin.domain.toLowerCase();
       navigate(`/${domain}/admin/dashboard`);
+    } else {
+      console.log("error1");
     }
   };
 
