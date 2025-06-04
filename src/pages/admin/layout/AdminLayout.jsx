@@ -2,23 +2,24 @@ import { useEffect, useState } from "react";
 import { Settings, User, Menu, List } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
+import { useAdminFromLocalStorage } from "../../../hooks/useAdminFromLocalStorage";
 
 // import { useAdminAuth } from "../../../context/AdminAuthContext";
 
-const fetch = () => {
-  const [currentAdmin, setCurrentAdmin] = useState(null);
-  useEffect(() => {
-    const storedUser = localStorage.getItem("admin");
-    if (storedUser) {
-      setCurrentAdmin(JSON.parse(storedUser));
-    }
-  }, []);
+// const fetch = ({ domain }) => {
+//   const [currentAdmin, setCurrentAdmin] = useState(null);
+//   useEffect(() => {
+//     const storedUser = localStorage.getItem(domain);
+//     if (storedUser) {
+//       setCurrentAdmin(JSON.parse(storedUser));
+//     }
+//   }, [domain]);
 
-  return currentAdmin;
-};
+//   return currentAdmin;
+// };
 
 const Sidebar = ({ isOpen }) => {
-  const admin = fetch();
+  const admin = useAdminFromLocalStorage("admin");
   const busLayout = [
     {
       id: 1,
@@ -104,7 +105,7 @@ const TopBar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { logout } = useAdminAuth();
 
-  const admin = fetch();
+  const admin = useAdminFromLocalStorage("admin");
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
       <button
