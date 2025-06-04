@@ -20,7 +20,11 @@ export default function Auth({ isLoginSection = true }) {
   const handleSubmitLogin = async () => {
     const res = await login(form);
     setResult(res);
-    navigate("/");
+    if (res.success) {
+      navigate("/");
+    } else {
+      console.log("Error");
+    }
   };
 
   return (

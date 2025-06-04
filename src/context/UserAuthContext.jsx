@@ -58,7 +58,9 @@ export const UserAuthProvider = ({ children }) => {
         localStorage.setItem("userToken", JSON.stringify(data.token));
         localStorage.setItem("user", JSON.stringify(data.user));
         setCurrentUser(data.user);
-        return data.message;
+        return data;
+      } else {
+        return { success: false, message: `Wrong email or password` };
       }
     } catch (error) {
       return { success: false, message: `${error.message}` };
