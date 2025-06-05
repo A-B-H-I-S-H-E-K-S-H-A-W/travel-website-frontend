@@ -19,6 +19,8 @@ import RecentTrips from "./pages/user/RecentTrips";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
 import AdminAuth from "./pages/admin/AdminLogin";
 import FlightDashboard from "./pages/admin/flights/Dashboard";
+import RoomCreate from "./pages/admin/hotels/RoomCreate";
+import RoomList from "./pages/admin/hotels/RoomList";
 
 function App() {
   return (
@@ -52,6 +54,7 @@ function App() {
           </Routes>
         </UserAuthProvider>
         {/* User Ends */}
+        {/* Admin */}
         <AdminAuthProvider>
           <Routes>
             <Route
@@ -71,6 +74,8 @@ function App() {
               }
             />
             <Route path="/hotel/admin/create" element={<HotelForm />} />
+            <Route path="/hotel/admin/room/create" element={<RoomCreate />} />
+            <Route path="/hotel/admin/room/list" element={<RoomList />} />
           </Routes>
           <Routes>
             <Route path="/bus/admin/dashboard" element={<BusDashboard />} />

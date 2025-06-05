@@ -31,12 +31,12 @@ const Sidebar = ({ isOpen }) => {
     },
     {
       id: 2,
-      link: "/hotel/admin/create",
+      link: "/hotel/admin/room/create",
       linkName: "📦 Create Room",
     },
     {
       id: 3,
-      link: "/hotel/admin/dashboard",
+      link: "/hotel/admin/room/list",
       linkName: "📦 List Rooms",
     },
   ];
