@@ -65,15 +65,28 @@ const Sidebar = ({ isOpen }) => {
 
   const LinkList = ({ layout }) => {
     return (
-      <ul className="flex flex-col space-y-4">
-        {layout.map((item) => (
-          <Link key={item.id} to={item.link}>
+      <>
+        {admin.verification === "Verified" && (
+          <>
+            <ul className="flex flex-col space-y-4">
+              {layout.map((item) => (
+                <Link key={item.id} to={item.link}>
+                  <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
+                    {item.linkName}
+                  </li>
+                </Link>
+              ))}
+            </ul>
+          </>
+        )}
+        <ul className="flex flex-col space-y-4">
+          <Link to={layout[0].link}>
             <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
-              {item.linkName}
+              {layout[0].linkName}
             </li>
           </Link>
-        ))}
-      </ul>
+        </ul>
+      </>
     );
   };
 
@@ -122,7 +135,7 @@ const TopBar = ({ toggleSidebar }) => {
         <div className="absolute right-6 top-14 bg-white text-black shadow-lg rounded-lg w-40 py-2 overflow-hidden">
           {admin?.domain === "Hotel" && (
             <Link
-              to="/hotel/admin/create"
+              to="/hotel/admin/settings"
               className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
             >
               Profile Settings
