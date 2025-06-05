@@ -236,7 +236,7 @@ const HotelForm = () => {
             Photos (URL)
           </label>
           <input
-            type="url"
+            type="text"
             id="photos"
             name="photos"
             value={formData.photos}

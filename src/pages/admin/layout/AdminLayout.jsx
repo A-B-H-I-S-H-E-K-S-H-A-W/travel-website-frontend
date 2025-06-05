@@ -4,20 +4,6 @@ import { Link } from "react-router-dom";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
 import { useDomainFromLocalStorage } from "../../../hooks/useDomainFromLocalStorage";
 
-// import { useAdminAuth } from "../../../context/AdminAuthContext";
-
-// const fetch = ({ domain }) => {
-//   const [currentAdmin, setCurrentAdmin] = useState(null);
-//   useEffect(() => {
-//     const storedUser = localStorage.getItem(domain);
-//     if (storedUser) {
-//       setCurrentAdmin(JSON.parse(storedUser));
-//     }
-//   }, [domain]);
-
-//   return currentAdmin;
-// };
-
 const Sidebar = ({ isOpen }) => {
   const admin = useDomainFromLocalStorage("admin");
   const busLayout = [
@@ -129,9 +115,30 @@ const TopBar = ({ toggleSidebar }) => {
       </div>
       {dropdownOpen && (
         <div className="absolute right-6 top-14 bg-white text-black shadow-lg rounded-lg w-40 py-2 overflow-hidden">
-          <button className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition">
-            Settings
-          </button>
+          {admin?.domain === "Hotel" && (
+            <Link
+              to="/hotel/admin/create"
+              className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+            >
+              Profile Settings
+            </Link>
+          )}
+          {admin?.domain === "Bus" && (
+            <Link
+              to="/bus/admin/create"
+              className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+            >
+              Profile Settings
+            </Link>
+          )}
+          {admin?.domain === "Flight" && (
+            <Link
+              to="/flight/admin/create"
+              className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+            >
+              Profile Settings
+            </Link>
+          )}
           <button
             onClick={() => {
               logout();
