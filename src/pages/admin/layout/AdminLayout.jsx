@@ -120,7 +120,21 @@ const TopBar = ({ toggleSidebar }) => {
       </button>
       <h1 className="text-lg font-semibold tracking-wide">Dashboard</h1>
       <div className="flex items-center space-x-4">
-        <p>{admin?.username}</p>
+        <div className="">
+          {admin?.verification === "Not Verified" && (
+            <p className="text-[10px] text-red-400">{admin?.verification}</p>
+          )}
+          {admin?.verification === "Denied" && (
+            <p className="text-[10px] text-red-500">{admin?.verification}</p>
+          )}
+          {admin?.verification === "Verification Pending" && (
+            <p className="text-[10px] text-yellow-400">{admin?.verification}</p>
+          )}
+          {admin?.verification === "Verified" && (
+            <p className="text-[10px] text-green-400">{admin?.verification}</p>
+          )}
+          <p>{admin?.username}</p>
+        </div>
         <button className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition">
           <User size={20} />
         </button>
