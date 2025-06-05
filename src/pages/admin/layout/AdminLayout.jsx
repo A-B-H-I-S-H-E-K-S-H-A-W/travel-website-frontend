@@ -30,6 +30,11 @@ const Sidebar = ({ isOpen }) => {
       linkName: "📦 Dashboard",
     },
     {
+      id: 1,
+      link: "/hotel/admin/create",
+      linkName: "📦 Hotel Details",
+    },
+    {
       id: 2,
       link: "/hotel/admin/room/create",
       linkName: "📦 Create Room",
