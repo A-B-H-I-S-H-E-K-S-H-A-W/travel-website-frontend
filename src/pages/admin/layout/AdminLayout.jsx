@@ -3,8 +3,9 @@ import { Settings, User, Menu, List } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
 import { useDomainFromLocalStorage } from "../../../hooks/useDomainFromLocalStorage";
+import Toast from "../../../components/common/Toast";
 
-const Sidebar = ({ isOpen }) => {
+const Sidebar = ({ isOpen, setResult }) => {
   const admin = useDomainFromLocalStorage("admin");
   const busLayout = [
     {
@@ -85,6 +86,17 @@ const Sidebar = ({ isOpen }) => {
               {layout[0].linkName}
             </li>
           </Link>
+          <li
+            onClick={() => {
+              const res = {
+                message: "Verify yourself in profile settings",
+              };
+              setResult(res);
+            }}
+            className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3"
+          >
+            📦 Manage Resource
+          </li>
         </ul>
       </>
     );
@@ -188,14 +200,16 @@ const TopBar = ({ toggleSidebar }) => {
 
 export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [result, setResult] = useState(null);
 
   return (
     <div className="flex min-h-screen overflow-hidden bg-gray-100">
-      <Sidebar isOpen={sidebarOpen} />
+      <Sidebar isOpen={sidebarOpen} setResult={setResult} />
       <div className="flex-1 flex flex-col md:ml-64 transition-all">
         <TopBar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <div className="p-8 text-gray-800 text-lg">{children}</div>
       </div>
+      <Toast result={result} setResult={setResult} />
     </div>
   );
 }
