@@ -63,7 +63,7 @@ export const AdminAuthProvider = ({ children }) => {
         console.log("error3");
 
         const data = await res.json();
-        localStorage.setItem("adminToken", JSON.stringify(data.token));
+        localStorage.setItem("adminToken", data.token);
         localStorage.setItem("admin", JSON.stringify(data.admin));
         setCurrentAdmin(data.user);
         return data;

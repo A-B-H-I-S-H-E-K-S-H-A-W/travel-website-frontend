@@ -21,7 +21,7 @@ import AdminAuth from "./pages/admin/AdminLogin";
 import FlightDashboard from "./pages/admin/flights/Dashboard";
 import RoomCreate from "./pages/admin/hotels/RoomCreate";
 import RoomList from "./pages/admin/hotels/RoomList";
-import ProfileSettings from "./pages/admin/hotels/ProfileSettings";
+import ProfileSettings from "./pages/admin/ProfileSettings";
 
 function App() {
   return (
@@ -74,7 +74,10 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/hotel/admin/settings" element={<ProfileSettings />} />
+            <Route
+              path="/hotel/admin/settings/:id"
+              element={<ProfileSettings />}
+            />
             <Route path="/hotel/admin/create" element={<HotelForm />} />
             <Route path="/hotel/admin/room/create" element={<RoomCreate />} />
             <Route path="/hotel/admin/room/list" element={<RoomList />} />

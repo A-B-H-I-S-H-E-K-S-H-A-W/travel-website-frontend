@@ -122,6 +122,7 @@ const TopBar = ({ toggleSidebar }) => {
   const { logout } = useAdminAuth();
 
   const admin = useDomainFromLocalStorage("admin");
+  const adminId = admin?.id;
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
       <button
@@ -161,7 +162,7 @@ const TopBar = ({ toggleSidebar }) => {
         <div className="absolute right-6 top-14 bg-white text-black shadow-lg rounded-lg w-40 py-2 overflow-hidden">
           {admin?.domain === "Hotel" && (
             <Link
-              to="/hotel/admin/settings"
+              to={`/${admin.domain.toLowerCase()}/admin/settings/${adminId}`}
               className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
             >
               Profile Settings

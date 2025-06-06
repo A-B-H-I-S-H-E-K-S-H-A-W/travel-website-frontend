@@ -1,11 +1,30 @@
-import React, { useState } from "react";
-import AdminLayout from "../layout/AdminLayout";
+import React, { useEffect, useState } from "react";
+import AdminLayout from "./layout/AdminLayout";
+import { fetchAdmin, updateAdmin } from "../../services/ApiServices";
+import { useParams } from "react-router-dom";
+import Toast from "../../components/common/Toast";
 
 const ProfileSettings = () => {
+  const params = useParams();
+  const [result, setResult] = useState(null);
+  const [adminData, setAdminData] = useState(null);
+
+  const getAdminData = async () => {
+    try {
+      const data = await fetchAdmin(params.id);
+      setAdminData(data);
+    } catch (error) {
+      console.log("ERROR :::", error);
+    }
+  };
+
+  useEffect(() => {
+    getAdminData();
+  }, [params.id]);
+
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    password: "",
     phoneNumber: "",
     companyName: "",
     address: "",
@@ -15,17 +34,51 @@ const ProfileSettings = () => {
     country: "",
     pancardNumber: "",
     gstNumber: "",
-    license: "",
+    license: null, // file
   });
 
+  // 🔄 Fetch admin data on mount
+  useEffect(() => {
+    if (adminData) {
+      setFormData((prev) => ({
+        ...prev,
+        username: adminData.username || "",
+        email: adminData.email || "",
+        phoneNumber: adminData.phoneNumber || "",
+        companyName: adminData.companyName || "",
+        address: adminData.address || "",
+        pincode: adminData.pincode || "",
+        city: adminData.city || "",
+        state: adminData.state || "",
+        country: adminData.country || "",
+        pancardNumber: adminData.pancardNumber || "",
+        gstNumber: adminData.gstNumber || "",
+      }));
+    }
+  }, [adminData]);
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, files } = e.target;
+    if (name === "license") {
+      setFormData({ ...formData, [name]: files[0] });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted Admin Data:", formData);
+    const token = localStorage.getItem("adminToken");
+    const fd = new FormData();
+
+    for (let key in formData) {
+      fd.append(key, formData[key]);
+    }
+
+    const res = await updateAdmin(fd, token);
+    console.log("Update response:", res);
+    setResult(res);
+    // optionally show a toast or success message here
   };
 
   return (
@@ -45,14 +98,6 @@ const ProfileSettings = () => {
           name="email"
           type="email"
           value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <InputField
-          label="Password"
-          name="password"
-          type="password"
-          value={formData.password}
           onChange={handleChange}
           required
         />
@@ -115,7 +160,6 @@ const ProfileSettings = () => {
           label="License"
           name="license"
           type="file"
-          value={formData.license}
           onChange={handleChange}
         />
 
@@ -126,11 +170,15 @@ const ProfileSettings = () => {
           Submit
         </button>
       </form>
+      <Toast
+        result={result}
+        setResult={setResult}
+        color={"bg-green-500 text-white"}
+      />
     </AdminLayout>
   );
 };
 
-// Reusable InputField Component
 const InputField = ({
   label,
   name,
@@ -147,15 +195,14 @@ const InputField = ({
       type={type}
       id={name}
       name={name}
-      value={value}
+      value={type === "file" ? undefined : value}
       onChange={onChange}
       required={required}
-      className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
+      className="mt-1 block w-full p-2 border-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
     />
   </div>
 );
 
-// Reusable TextareaField Component
 const TextareaField = ({ label, name, value, onChange, required = false }) => (
   <div className="mb-4">
     <label htmlFor={name} className="block text-sm font-medium text-gray-700">
@@ -167,7 +214,7 @@ const TextareaField = ({ label, name, value, onChange, required = false }) => (
       value={value}
       onChange={onChange}
       required={required}
-      className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
+      className="mt-1 block w-full p-2 border-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
     />
   </div>
 );
