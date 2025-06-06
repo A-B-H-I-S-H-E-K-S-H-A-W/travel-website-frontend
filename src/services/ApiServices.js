@@ -20,21 +20,46 @@ export const updateAdmin = async (formData, token) => {
   }
 };
 
-export const fetchAdminId = async (paramId) => {
-  const token = localStorage.getItem("adminToken"); // or your token key
+export const fetchAdminId = async (paramId, token) => {
+  try {
+    const res = await fetch(`/api/admin/profile/${paramId}`, {
+      method: "GET", // should be GET, not POST!
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // required by many backends
+      },
+    });
 
-  const res = await fetch(`/api/admin/profile/${paramId}`, {
-    method: "GET", // should be GET, not POST!
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`, // required by many backends
-    },
-  });
+    if (!res.ok) {
+      throw new Error(`Failed to fetch admin: ${res.status}`);
+    }
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch admin: ${res.status}`);
+    const data = await res.json(); // Will now work as backend returns JSON
+    return data;
+  } catch (error) {
+    console.error("Verify Admin Error:", error);
+    return { success: false, message: error.message };
   }
+};
 
-  const data = await res.json(); // Will now work as backend returns JSON
-  return data;
+export const fetchAdmin = async (token) => {
+  try {
+    const res = await fetch(`/api/admin/profile`, {
+      method: "GET", // should be GET, not POST!
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // required by many backends
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch admin: ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Verify Admin Error:", error);
+    return { success: false, message: error.message };
+  }
 };

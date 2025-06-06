@@ -11,7 +11,8 @@ const ProfileSettings = () => {
 
   const getAdminData = async () => {
     try {
-      const data = await fetchAdminId(params.id);
+      const token = localStorage.getItem("adminToken");
+      const data = await fetchAdminId(params.id, token);
       setAdminData(data);
     } catch (error) {
       console.log("ERROR :::", error);
