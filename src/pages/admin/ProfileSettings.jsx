@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "./layout/AdminLayout";
-import { fetchAdmin, updateAdmin } from "../../services/ApiServices";
+import { fetchAdminId, updateAdmin } from "../../services/ApiServices";
 import { useParams } from "react-router-dom";
 import Toast from "../../components/common/Toast";
 
@@ -11,7 +11,7 @@ const ProfileSettings = () => {
 
   const getAdminData = async () => {
     try {
-      const data = await fetchAdmin(params.id);
+      const data = await fetchAdminId(params.id);
       setAdminData(data);
     } catch (error) {
       console.log("ERROR :::", error);

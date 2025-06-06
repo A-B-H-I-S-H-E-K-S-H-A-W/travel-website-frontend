@@ -20,7 +20,7 @@ export const updateAdmin = async (formData, token) => {
   }
 };
 
-export const fetchAdmin = async (paramId) => {
+export const fetchAdminId = async (paramId) => {
   const token = localStorage.getItem("adminToken"); // or your token key
 
   const res = await fetch(`/api/admin/profile/${paramId}`, {
