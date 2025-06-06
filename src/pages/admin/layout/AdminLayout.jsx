@@ -6,7 +6,7 @@ import { useDomainFromLocalStorage } from "../../../hooks/useDomainFromLocalStor
 import Toast from "../../../components/common/Toast";
 
 const Sidebar = ({ isOpen, setResult }) => {
-  const admin = useDomainFromLocalStorage("admin");
+  const admin = useDomainFromLocalStorage("adminToken");
   const busLayout = [
     {
       id: 1,
@@ -121,7 +121,7 @@ const TopBar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { logout } = useAdminAuth();
 
-  const admin = useDomainFromLocalStorage("admin");
+  const admin = useDomainFromLocalStorage("adminToken");
   const adminId = admin?.id;
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
@@ -163,22 +163,6 @@ const TopBar = ({ toggleSidebar }) => {
           {admin?.domain === "Hotel" && (
             <Link
               to={`/${admin.domain.toLowerCase()}/admin/settings/${adminId}`}
-              className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
-            >
-              Profile Settings
-            </Link>
-          )}
-          {admin?.domain === "Bus" && (
-            <Link
-              to="/bus/admin/create"
-              className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
-            >
-              Profile Settings
-            </Link>
-          )}
-          {admin?.domain === "Flight" && (
-            <Link
-              to="/flight/admin/create"
               className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
             >
               Profile Settings

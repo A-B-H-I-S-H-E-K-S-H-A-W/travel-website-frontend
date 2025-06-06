@@ -75,9 +75,31 @@ export const AdminAuthProvider = ({ children }) => {
     }
   };
 
+  const fetchAdmin = async (token) => {
+    try {
+      const res = await fetch(`/api/admin/profile`, {
+        method: "GET", // should be GET, not POST!
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // required by many backends
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to fetch admin: ${res.status}`);
+      }
+
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.error("Verify Admin Error:", error);
+      return { success: false, message: error.message };
+    }
+  };
+
   return (
     <AdminAuthContext.Provider
-      value={{ currentAdmin, login, logout, register }}
+      value={{ currentAdmin, login, logout, register, fetchAdmin }}
     >
       {children}
     </AdminAuthContext.Provider>
