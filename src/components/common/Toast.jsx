@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Toast = ({ result, setResult }) => {
+const Toast = ({ result, setResult, color }) => {
   useEffect(() => {
     if (result) {
       const timer = setTimeout(() => {
@@ -20,7 +20,7 @@ const Toast = ({ result, setResult }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 50 }}
           transition={{ duration: 0.4 }}
-          className="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-800 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow-sm right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800"
+          className={`fixed flex items-center w-full max-w-xs p-4 space-x-4 divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow-sm right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800 ${color}`}
           role="alert"
         >
           <div className="text-sm font-semibold">{result.message}</div>

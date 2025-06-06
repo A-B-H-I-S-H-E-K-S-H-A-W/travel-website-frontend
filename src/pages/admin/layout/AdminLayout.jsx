@@ -209,7 +209,11 @@ export default function AdminLayout({ children }) {
         <TopBar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
         <div className="p-8 text-gray-800 text-lg">{children}</div>
       </div>
-      <Toast result={result} setResult={setResult} />
+      <Toast
+        result={result}
+        setResult={setResult}
+        color={"bg-red-500 text-white"}
+      />
     </div>
   );
 }
