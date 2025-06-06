@@ -3,16 +3,17 @@ import AdminLayout from "./layout/AdminLayout";
 import { fetchAdminId, updateAdmin } from "../../services/ApiServices";
 import { useParams } from "react-router-dom";
 import Toast from "../../components/common/Toast";
+import { useAdminAuth } from "../../context/AdminAuthContext";
 
 const ProfileSettings = () => {
-  const params = useParams();
+  const { fetchAdmin } = useAdminAuth();
   const [result, setResult] = useState(null);
   const [adminData, setAdminData] = useState(null);
 
   const getAdminData = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const data = await fetchAdminId(params.id, token);
+      const data = await fetchAdmin(token);
       setAdminData(data);
     } catch (error) {
       console.log("ERROR :::", error);
@@ -21,7 +22,7 @@ const ProfileSettings = () => {
 
   useEffect(() => {
     getAdminData();
-  }, [params.id]);
+  }, []);
 
   const [formData, setFormData] = useState({
     username: "",

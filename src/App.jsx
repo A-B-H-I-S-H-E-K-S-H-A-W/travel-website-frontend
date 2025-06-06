@@ -74,10 +74,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/hotel/admin/settings/:id"
-              element={<ProfileSettings />}
-            />
+            <Route path="/hotel/admin/settings" element={<ProfileSettings />} />
             <Route path="/hotel/admin/create" element={<HotelForm />} />
             <Route path="/hotel/admin/room/create" element={<RoomCreate />} />
             <Route path="/hotel/admin/room/list" element={<RoomList />} />
