@@ -93,7 +93,7 @@ const Sidebar = ({ isOpen, setResult }) => {
               };
               setResult(res);
             }}
-            className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3"
+            className="p-3 rounded-lg bg-gray-950 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3"
           >
             📦 Manage Resource
           </li>
