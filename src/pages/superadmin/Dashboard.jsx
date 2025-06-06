@@ -1,11 +1,10 @@
-import React from "react";
-import SuperAdminDashboardLayout from "./Layout";
+import SuperAdminLayout from "./layout/Layout";
 
 const AdminDashboard = () => {
   return (
-    <SuperAdminDashboardLayout>
+    <SuperAdminLayout>
       <div>Dashboard</div>
-    </SuperAdminDashboardLayout>
+    </SuperAdminLayout>
   );
 };
 
