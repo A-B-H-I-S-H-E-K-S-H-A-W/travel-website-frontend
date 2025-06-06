@@ -1,12 +1,175 @@
-import React from "react";
+import React, { useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
 
 const ProfileSettings = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    phoneNumber: "",
+    companyName: "",
+    address: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+    pancardNumber: "",
+    gstNumber: "",
+    license: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Submitted Admin Data:", formData);
+  };
+
   return (
     <AdminLayout>
-      <div>ProfileSettings</div>
+      <form className="max-w-4xl" onSubmit={handleSubmit}>
+        <h1 className="text-2xl font-bold mb-6">Profile Settings</h1>
+
+        <InputField
+          label="Username"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          label="Email"
+          name="email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          label="Password"
+          name="password"
+          type="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          label="Phone Number"
+          name="phoneNumber"
+          type="tel"
+          value={formData.phoneNumber}
+          onChange={handleChange}
+        />
+        <InputField
+          label="Company Name"
+          name="companyName"
+          value={formData.companyName}
+          onChange={handleChange}
+        />
+        <TextareaField
+          label="Address"
+          name="address"
+          value={formData.address}
+          onChange={handleChange}
+        />
+        <InputField
+          label="Pincode"
+          name="pincode"
+          value={formData.pincode}
+          onChange={handleChange}
+        />
+        <InputField
+          label="City"
+          name="city"
+          value={formData.city}
+          onChange={handleChange}
+        />
+        <InputField
+          label="State"
+          name="state"
+          value={formData.state}
+          onChange={handleChange}
+        />
+        <InputField
+          label="Country"
+          name="country"
+          value={formData.country}
+          onChange={handleChange}
+        />
+        <InputField
+          label="PAN Card Number"
+          name="pancardNumber"
+          value={formData.pancardNumber}
+          onChange={handleChange}
+        />
+        <InputField
+          label="GST Number"
+          name="gstNumber"
+          value={formData.gstNumber}
+          onChange={handleChange}
+        />
+        <InputField
+          label="License"
+          name="license"
+          type="file"
+          value={formData.license}
+          onChange={handleChange}
+        />
+
+        <button
+          type="submit"
+          className="cursor-pointer w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+        >
+          Submit
+        </button>
+      </form>
     </AdminLayout>
   );
 };
+
+// Reusable InputField Component
+const InputField = ({
+  label,
+  name,
+  value,
+  onChange,
+  required = false,
+  type = "text",
+}) => (
+  <div className="mb-4">
+    <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    <input
+      type={type}
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
+    />
+  </div>
+);
+
+// Reusable TextareaField Component
+const TextareaField = ({ label, name, value, onChange, required = false }) => (
+  <div className="mb-4">
+    <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    <textarea
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
+    />
+  </div>
+);
 
 export default ProfileSettings;
