@@ -5,6 +5,13 @@ export const SuperAdminContext = createContext();
 export const SuperAdminProvider = ({ children }) => {
   const [currSuperAdmin, setCurrSuperAdmin] = useState(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("superadmin");
+    if (storedUser) {
+      setCurrSuperAdmin(JSON.parse(storedUser));
+    }
+  }, []);
+
   const registerOnce = async () => {
     try {
       const res = await fetch("/api/super-admin/register-once", {
@@ -36,6 +43,8 @@ export const SuperAdminProvider = ({ children }) => {
       });
 
       const data = await res.json();
+
+      localStorage.setItem("superAdmin", JSON.stringify(data.superadmin));
       localStorage.setItem("superAdminToken", data.token);
       return data;
     } catch (error) {
@@ -44,7 +53,22 @@ export const SuperAdminProvider = ({ children }) => {
     }
   };
 
-  const logout = async () => {};
+  const logout = async () => {
+    try {
+      const res = await fetch("/api/super-admin/logout", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      localStorage.removeItem("superAdmin");
+      localStorage.removeItem("superAdminToken");
+      setCurrSuperAdmin(null);
+      return res;
+    } catch (error) {
+      return { success: false, message: "Something went wrong" };
+    }
+  };
   const register = async () => {};
 
   return (
