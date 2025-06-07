@@ -22,6 +22,8 @@ import FlightDashboard from "./pages/admin/flights/Dashboard";
 import RoomCreate from "./pages/admin/hotels/RoomCreate";
 import RoomList from "./pages/admin/hotels/RoomList";
 import ProfileSettings from "./pages/admin/ProfileSettings";
+import SuperAdminAuth from "./pages/superadmin/SuperAdminLogin";
+import { SuperAdminProvider } from "./context/SuperAdminContext";
 
 function App() {
   return (
@@ -91,9 +93,22 @@ function App() {
             <Route path="/flight/admin/create" element={<FlightForm />} />
           </Routes>
         </AdminAuthProvider>
-        <Routes>
-          <Route path="/super-admin/dashboard" element={<AdminDashboard />} />
-        </Routes>
+        <SuperAdminProvider>
+          <Routes>
+            <Route path="/super-admin/login" element={<SuperAdminAuth />} />
+            <Route
+              path="/super-admin/dashboard"
+              element={
+                <ProtectedRoute
+                  token={"superAdminToken"}
+                  route={"/super-admin/login"}
+                >
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </SuperAdminProvider>
       </BrowserRouter>
     </>
   );
