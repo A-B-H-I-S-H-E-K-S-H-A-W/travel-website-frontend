@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Settings, User, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import Toast from "../../../components/common/Toast";
+import { useSuperAdminC } from "../../../context/SuperAdminContext";
 
 const Sidebar = ({ isOpen }) => {
   const LinkLayout = [
@@ -52,6 +53,8 @@ const Sidebar = ({ isOpen }) => {
 
 const TopBar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const { logout } = useSuperAdminC();
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
       <button
@@ -83,7 +86,13 @@ const TopBar = ({ toggleSidebar }) => {
           <button className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition">
             Set New Admin
           </button>
-          <button className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition">
+          <button
+            onClick={() => {
+              logout();
+              window.location.href = "/super-admin/login";
+            }}
+            className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+          >
             Logout
           </button>
         </div>
