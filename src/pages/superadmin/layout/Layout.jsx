@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Settings, User, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import Toast from "../../../components/common/Toast";
 import { useSuperAdminC } from "../../../context/SuperAdminContext";
+import { useFetchSuperAdmin } from "../../../hooks/useFetchSuperAdmin";
 
 const Sidebar = ({ isOpen }) => {
   const LinkLayout = [
@@ -53,8 +54,9 @@ const Sidebar = ({ isOpen }) => {
 
 const TopBar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const { logout } = useSuperAdminC();
+
+  const superAdmin = useFetchSuperAdmin("superAdminToken");
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
       <button
@@ -65,6 +67,7 @@ const TopBar = ({ toggleSidebar }) => {
       </button>
       <h1 className="text-lg font-semibold tracking-wide">Dashboard</h1>
       <div className="flex items-center space-x-4">
+        <p>{superAdmin?.username}</p>
         <button className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition">
           <User size={20} />
         </button>

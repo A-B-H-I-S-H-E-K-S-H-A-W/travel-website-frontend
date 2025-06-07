@@ -3,14 +3,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const SuperAdminContext = createContext();
 
 export const SuperAdminProvider = ({ children }) => {
-  const [currSuperAdmin, setCurrSuperAdmin] = useState(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("superadmin");
-    if (storedUser) {
-      setCurrSuperAdmin(JSON.parse(storedUser));
+  const [currSuperAdmin, setCurrSuperAdmin] = useState(() => {
+    const storedUser = localStorage.getItem("superAdmin");
+    try {
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch {
+      return null;
     }
-  }, []);
+  });
 
   const registerOnce = async () => {
     try {
@@ -69,11 +69,28 @@ export const SuperAdminProvider = ({ children }) => {
       return { success: false, message: "Something went wrong" };
     }
   };
+
+  const profile = async (token) => {
+    try {
+      const res = await fetch("/api/super-admin/profile", {
+        method: "GET", // should be GET, not POST!
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // required by many backends
+        },
+      });
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const register = async () => {};
 
   return (
     <SuperAdminContext.Provider
-      value={{ currSuperAdmin, login, register, registerOnce, logout }}
+      value={{ currSuperAdmin, login, register, registerOnce, logout, profile }}
     >
       {children}
     </SuperAdminContext.Provider>
