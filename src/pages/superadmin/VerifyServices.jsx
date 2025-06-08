@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import SuperAdminLayout from "./layout/Layout";
 
 const VerifyServices = () => {
   return (
-    <div>VerifyServices</div>
-  )
-}
+    <SuperAdminLayout>
+      <div>VerifyServices</div>
+    </SuperAdminLayout>
+  );
+};
 
-export default VerifyServices
+export default VerifyServices;

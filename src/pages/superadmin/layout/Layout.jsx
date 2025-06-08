@@ -9,18 +9,28 @@ const Sidebar = ({ isOpen }) => {
   const LinkLayout = [
     {
       id: 1,
-      link: "",
-      linkName: "📦 Verify Services",
+      link: "/super-admin/dashboard",
+      linkName: "📦 Dashboard",
     },
     {
       id: 2,
-      link: "",
-      linkName: "📦 Verified Services",
+      link: "/super-admin/verify",
+      linkName: "📦 Verify Services",
     },
     {
       id: 3,
-      link: "",
+      link: "/super-admin/verified",
+      linkName: "📦 Verified Services",
+    },
+    {
+      id: 4,
+      link: "/super-admin/denied",
       linkName: "📦 Denied Services",
+    },
+    {
+      id: 5,
+      link: "/super-admin/dashboard",
+      linkName: "📦 All Super Admin",
     },
   ];
 

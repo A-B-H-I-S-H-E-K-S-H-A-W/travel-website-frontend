@@ -24,6 +24,9 @@ import RoomList from "./pages/admin/hotels/RoomList";
 import ProfileSettings from "./pages/admin/ProfileSettings";
 import SuperAdminAuth from "./pages/superadmin/SuperAdminLogin";
 import { SuperAdminProvider } from "./context/SuperAdminContext";
+import VerifyServices from "./pages/superadmin/VerifyServices";
+import VerifiedServices from "./pages/superadmin/VerifiedServices";
+import DeniedServices from "./pages/superadmin/DeniedServices";
 
 function App() {
   return (
@@ -107,6 +110,13 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/super-admin/verify" element={<VerifyServices />} />
+            <Route
+              path="/super-admin/verified"
+              element={<VerifiedServices />}
+            />
+            <Route path="/super-admin/denied" element={<DeniedServices />} />
+            {/* <Route path="" element /> */}
           </Routes>
         </SuperAdminProvider>
       </BrowserRouter>
