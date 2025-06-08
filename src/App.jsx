@@ -111,13 +111,50 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/super-admin/verify" element={<VerifyServices />} />
+            <Route
+              path="/super-admin/verify"
+              element={
+                <ProtectedRoute
+                  token={"superAdminToken"}
+                  route={"/super-admin/login"}
+                >
+                  <VerifyServices />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/super-admin/verified"
-              element={<VerifiedServices />}
+              element={
+                <ProtectedRoute
+                  token={"superAdminToken"}
+                  route={"/super-admin/login"}
+                >
+                  <VerifiedServices />
+                </ProtectedRoute>
+              }
             />
-            <Route path="/super-admin/denied" element={<DeniedServices />} />
-            <Route path="/all" element={<AllSuperAdmin />} />
+            <Route
+              path="/super-admin/denied"
+              element={
+                <ProtectedRoute
+                  token={"superAdminToken"}
+                  route={"/super-admin/login"}
+                >
+                  <DeniedServices />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/all"
+              element={
+                <ProtectedRoute
+                  token={"superAdminToken"}
+                  route={"/super-admin/login"}
+                >
+                  <AllSuperAdmin />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </SuperAdminProvider>
       </BrowserRouter>
