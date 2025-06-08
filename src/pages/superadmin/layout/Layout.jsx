@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Toast from "../../../components/common/Toast";
 import { useSuperAdminC } from "../../../context/SuperAdminContext";
 import { useFetchSuperAdmin } from "../../../hooks/useFetchSuperAdmin";
+import CreateSuperAdminModal from "../../../components/admin/createSuperAdminModal";
 
 const Sidebar = ({ isOpen }) => {
   const LinkLayout = [
@@ -62,7 +63,7 @@ const Sidebar = ({ isOpen }) => {
   );
 };
 
-const TopBar = ({ toggleSidebar }) => {
+const TopBar = ({ toggleSidebar, modal }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { logout } = useSuperAdminC();
 
@@ -90,7 +91,13 @@ const TopBar = ({ toggleSidebar }) => {
       </div>
       {dropdownOpen && (
         <div className="absolute right-6 top-16 bg-white text-black shadow-lg rounded-lg w-40 py-2 overflow-hidden">
-          <button className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition">
+          <button
+            onClick={() => {
+              setDropdownOpen(false);
+              modal();
+            }}
+            className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
+          >
             Set New Admin
           </button>
           <button
@@ -111,14 +118,24 @@ const TopBar = ({ toggleSidebar }) => {
 export default function SuperAdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [result, setResult] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <div className="flex min-h-screen overflow-hidden bg-gray-100">
       <Sidebar isOpen={sidebarOpen} setResult={setResult} />
       <div className="flex-1 flex flex-col md:ml-64 transition-all">
-        <TopBar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+        <TopBar
+          toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+          modal={openModal}
+        />
         <div className="p-8 text-gray-800 text-lg">{children}</div>
       </div>
+
+      <CreateSuperAdminModal isOpen={isModalOpen} onClose={closeModal} />
+
       <Toast
         result={result}
         setResult={setResult}
