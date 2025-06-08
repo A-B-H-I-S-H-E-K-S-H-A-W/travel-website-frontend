@@ -86,11 +86,33 @@ export const SuperAdminProvider = ({ children }) => {
     }
   };
 
-  const register = async () => {};
+  const newRegistration = async (superAdminData, token) => {
+    try {
+      const res = await fetch("/api/super-admin/new-registration", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(superAdminData),
+      });
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.log("Can't register new super admin", error);
+    }
+  };
 
   return (
     <SuperAdminContext.Provider
-      value={{ currSuperAdmin, login, register, registerOnce, logout, profile }}
+      value={{
+        currSuperAdmin,
+        login,
+        newRegistration,
+        registerOnce,
+        logout,
+        profile,
+      }}
     >
       {children}
     </SuperAdminContext.Provider>

@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import Toast from "../common/Toast";
+import { useSuperAdminC } from "../../context/SuperAdminContext";
 
 const TextareaField = ({
   label,
@@ -25,17 +27,19 @@ const TextareaField = ({
 );
 
 const CreateSuperAdminModal = ({ isOpen, onClose }) => {
+  const [result, setResult] = useState(null);
   const [formData, setFormData] = React.useState({
     username: "",
     email: "",
     password: "",
     logincode: "",
   });
+  const { newRegistration } = useSuperAdminC();
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Ensure logincode is exactly 5 characters
@@ -44,14 +48,22 @@ const CreateSuperAdminModal = ({ isOpen, onClose }) => {
       return;
     }
 
-    console.log("Super Admin Data:", formData);
-    onClose();
+    const token = localStorage.getItem("superAdminToken");
+
+    try {
+      const res = await newRegistration(formData, token);
+
+      setResult(res);
+    } catch (error) {
+      console.log("Register Error ::::", error);
+      return { success: false, message: "Error Register Super Admin" };
+    }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex items-center justify-center z-50 px-5">
       <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md relative">
         <h2 className="text-xl font-semibold mb-4">Create Super Admin</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -100,6 +112,7 @@ const CreateSuperAdminModal = ({ isOpen, onClose }) => {
           ✕
         </button>
       </div>
+      <Toast result={result} setResult={setResult} />
     </div>
   );
 };
