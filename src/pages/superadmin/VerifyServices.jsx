@@ -1,10 +1,11 @@
 import React from "react";
 import SuperAdminLayout from "./layout/Layout";
+import AdminCard from "../../components/admin/AdminCard";
 
 const VerifyServices = () => {
   return (
     <SuperAdminLayout>
-      <div>VerifyServices</div>
+      <AdminCard />
     </SuperAdminLayout>
   );
 };

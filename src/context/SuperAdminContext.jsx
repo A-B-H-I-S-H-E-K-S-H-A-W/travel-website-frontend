@@ -103,6 +103,8 @@ export const SuperAdminProvider = ({ children }) => {
     }
   };
 
+  const fetchAdmins = async () => {};
+
   return (
     <SuperAdminContext.Provider
       value={{
@@ -112,6 +114,7 @@ export const SuperAdminProvider = ({ children }) => {
         registerOnce,
         logout,
         profile,
+        fetchAdmins,
       }}
     >
       {children}
