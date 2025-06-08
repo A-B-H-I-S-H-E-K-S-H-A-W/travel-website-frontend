@@ -62,7 +62,7 @@ const CreateSuperAdminModal = ({ isOpen, onClose }) => {
             required
           />
           <TextareaField
-            label="Logincode"
+            label="Logincode (5 characters)"
             name="logincode"
             value={formData.logincode}
             onChange={handleChange}
