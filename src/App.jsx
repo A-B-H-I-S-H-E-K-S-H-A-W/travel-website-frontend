@@ -27,6 +27,7 @@ import { SuperAdminProvider } from "./context/SuperAdminContext";
 import VerifyServices from "./pages/superadmin/VerifyServices";
 import VerifiedServices from "./pages/superadmin/VerifiedServices";
 import DeniedServices from "./pages/superadmin/DeniedServices";
+import AllSuperAdmin from "./pages/superadmin/AllSuperAdmin";
 
 function App() {
   return (
@@ -116,7 +117,7 @@ function App() {
               element={<VerifiedServices />}
             />
             <Route path="/super-admin/denied" element={<DeniedServices />} />
-            {/* <Route path="" element /> */}
+            <Route path="/all" element={<AllSuperAdmin />} />
           </Routes>
         </SuperAdminProvider>
       </BrowserRouter>

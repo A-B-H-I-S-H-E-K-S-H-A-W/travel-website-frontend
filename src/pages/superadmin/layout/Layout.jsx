@@ -29,7 +29,7 @@ const Sidebar = ({ isOpen }) => {
     },
     {
       id: 5,
-      link: "/super-admin/dashboard",
+      link: "/all",
       linkName: "📦 All Super Admin",
     },
   ];
