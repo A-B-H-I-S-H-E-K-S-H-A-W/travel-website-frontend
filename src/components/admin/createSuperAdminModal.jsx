@@ -1,6 +1,13 @@
 import React from "react";
 
-const TextareaField = ({ label, name, value, onChange, required = false }) => (
+const TextareaField = ({
+  label,
+  name,
+  value,
+  onChange,
+  required = false,
+  maxLength,
+}) => (
   <div>
     <label htmlFor={name} className="block text-sm font-medium text-gray-700">
       {label} {required && <span className="text-red-500">*</span>}
@@ -11,6 +18,7 @@ const TextareaField = ({ label, name, value, onChange, required = false }) => (
       value={value}
       onChange={onChange}
       required={required}
+      maxLength={maxLength}
       className="mt-1 block w-full p-2 border-2 rounded-md focus:ring-blue-500 focus:border-blue-500"
     />
   </div>
@@ -29,6 +37,13 @@ const CreateSuperAdminModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Ensure logincode is exactly 5 characters
+    if (formData.logincode.length !== 5) {
+      alert("Logincode must be exactly 5 characters.");
+      return;
+    }
+
     console.log("Super Admin Data:", formData);
     onClose();
   };
@@ -62,11 +77,12 @@ const CreateSuperAdminModal = ({ isOpen, onClose }) => {
             required
           />
           <TextareaField
-            label="Logincode (5 characters)"
+            label="Logincode (exactly 5 characters)"
             name="logincode"
             value={formData.logincode}
             onChange={handleChange}
             required
+            maxLength={5}
           />
 
           <button
