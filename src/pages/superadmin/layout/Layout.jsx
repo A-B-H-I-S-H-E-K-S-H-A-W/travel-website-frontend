@@ -90,12 +90,6 @@ const TopBar = ({ toggleSidebar }) => {
       </div>
       {dropdownOpen && (
         <div className="absolute right-6 top-16 bg-white text-black shadow-lg rounded-lg w-40 py-2 overflow-hidden">
-          <Link
-            to={``}
-            className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
-          >
-            Profile Settings
-          </Link>
           <button className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition">
             Set New Admin
           </button>
