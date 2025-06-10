@@ -1,9 +1,25 @@
 import { useState } from "react";
 import { Settings, User, Menu } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Toast from "../../../components/common/Toast";
 import { useSuperAdminC } from "../../../context/SuperAdminContext";
 import CreateSuperAdminModal from "../../../components/admin/createSuperAdminModal";
+
+const LinkList = ({ LinkLayout }) => {
+  return (
+    <>
+      <ul className="flex flex-col space-y-4">
+        {LinkLayout.map((item) => (
+          <Link key={item.id} to={item.link}>
+            <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
+              {item.linkName}
+            </li>
+          </Link>
+        ))}
+      </ul>
+    </>
+  );
+};
 
 const Sidebar = ({ isOpen }) => {
   const LinkLayout = [
@@ -34,22 +50,6 @@ const Sidebar = ({ isOpen }) => {
     },
   ];
 
-  const LinkList = ({ LinkLayout }) => {
-    return (
-      <>
-        <ul className="flex flex-col space-y-4">
-          {LinkLayout.map((item) => (
-            <Link key={item.id} to={item.link}>
-              <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
-                {item.linkName}
-              </li>
-            </Link>
-          ))}
-        </ul>
-      </>
-    );
-  };
-
   return (
     <div
       className={`bg-gray-900 text-white w-64 h-screen fixed top-0 left-0 p-6 shadow-xl flex flex-col transition-transform duration-300 ${
@@ -65,7 +65,7 @@ const Sidebar = ({ isOpen }) => {
 const TopBar = ({ toggleSidebar, modal }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { logout, currSuperAdmin } = useSuperAdminC();
-
+  const navigate = useNavigate();
   const superAdmin = currSuperAdmin;
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
@@ -102,7 +102,7 @@ const TopBar = ({ toggleSidebar, modal }) => {
           <button
             onClick={() => {
               logout();
-              window.location.href = "/super-admin/login";
+              navigate("/super-admin/login");
             }}
             className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
           >
@@ -124,7 +124,7 @@ export default function SuperAdminLayout({ children }) {
 
   return (
     <div className="flex min-h-screen overflow-hidden bg-gray-100">
-      <Sidebar isOpen={sidebarOpen} setResult={setResult} />
+      <Sidebar isOpen={sidebarOpen} />
       <div className="flex-1 flex flex-col md:ml-64 transition-all">
         <TopBar
           toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
