@@ -103,7 +103,24 @@ export const SuperAdminProvider = ({ children }) => {
     }
   };
 
-  const fetchAdmins = async () => {};
+  const fetchAdmins = async (verification) => {
+    try {
+      const res = await fetch("/api/admin/verification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(verification),
+      });
+
+      const data = await res.json();
+
+      return data;
+    } catch (error) {
+      console.log("Error fteching admin  ::::", error);
+      return { success: false, message: "Internal Server Error" };
+    }
+  };
 
   return (
     <SuperAdminContext.Provider
