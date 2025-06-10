@@ -20,10 +20,11 @@ const VerifyServices = () => {
 
   useEffect(() => {
     getAdmin();
-  }, []);
+  }, [adminData, setAdminData]);
 
   return (
     <SuperAdminLayout>
+      <h2 className="text-2xl font-semibold pb-4">Verify Services Page</h2>
       <AdminCard admin={adminData} />
     </SuperAdminLayout>
   );

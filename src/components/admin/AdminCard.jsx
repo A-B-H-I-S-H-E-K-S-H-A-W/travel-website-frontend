@@ -1,4 +1,24 @@
+import { useState } from "react";
+import Modal from "../common/Modal";
+import Toast from "../common/Toast";
+
 const AdminCard = ({ admin }) => {
+  const [message, setMessage] = useState(null);
+  const [result, setResult] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [action, setAction] = useState(null);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleClick = (message) => {
+    if (!isModalOpen) {
+      setAction(message);
+      setMessage(`Are you sure you want to ${message} this Admin`);
+      openModal();
+    }
+  };
+
   return (
     <>
       {admin &&
@@ -58,19 +78,34 @@ const AdminCard = ({ admin }) => {
                 Created at: {new Date(item.createdAt).toLocaleString()}
               </p>
               <div className="flex gap-3">
-                <button className="px-4 py-1 rounded-md bg-green-500 text-white cursor-pointer hover:bg-green-600">
+                <button
+                  onClick={() => handleClick("Verify")}
+                  className="px-4 py-1 rounded-md bg-green-500 text-white cursor-pointer hover:bg-green-600"
+                >
                   Verify
                 </button>
-                <button className="px-4 py-1 rounded-md bg-red-500 text-white cursor-pointer hover:bg-red-600">
+                <button
+                  onClick={() => handleClick("Denied")}
+                  className="px-4 py-1 rounded-md bg-red-500 text-white cursor-pointer hover:bg-red-600"
+                >
                   Denied
                 </button>
               </div>
             </div>
+            <Modal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              message={message}
+              action={action}
+              onConfirm={(res) => setResult(res)}
+            />
+
+            <Toast result={result} setResult={setResult} />
           </div>
         ))}
       {!admin && (
         <>
-          <div className="flex justify-center items-center h-[80vh]">
+          <div className="flex justify-center items-center h-[70vh]">
             <div className="mx-auto">
               <h4 className="text-xl font-semibold">No Data Found</h4>
             </div>

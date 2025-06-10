@@ -122,6 +122,30 @@ export const SuperAdminProvider = ({ children }) => {
     }
   };
 
+  const verificationUpdate = async ({ token, verifyData }) => {
+    try {
+      const res = await fetch("/api/admin/verification-update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(verifyData),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("Server Error:", text); // 👈 this is helpful
+        throw new Error("Server returned an error"); // 👈 this triggers your log
+      }
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.log("Error fetching admin verification ::::", error);
+      return { success: false, message: "Internal Server Error" };
+    }
+  };
+
   return (
     <SuperAdminContext.Provider
       value={{
@@ -132,6 +156,7 @@ export const SuperAdminProvider = ({ children }) => {
         logout,
         profile,
         fetchAdmins,
+        verificationUpdate,
       }}
     >
       {children}
