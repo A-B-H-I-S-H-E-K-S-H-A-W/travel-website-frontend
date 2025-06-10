@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Settings, User, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import Toast from "../../../components/common/Toast";
 import { useSuperAdminC } from "../../../context/SuperAdminContext";
-import { useFetchSuperAdmin } from "../../../hooks/useFetchSuperAdmin";
 import CreateSuperAdminModal from "../../../components/admin/createSuperAdminModal";
 
 const Sidebar = ({ isOpen }) => {
@@ -65,9 +64,9 @@ const Sidebar = ({ isOpen }) => {
 
 const TopBar = ({ toggleSidebar, modal }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { logout } = useSuperAdminC();
+  const { logout, currSuperAdmin } = useSuperAdminC();
 
-  const superAdmin = useFetchSuperAdmin("superAdminToken");
+  const superAdmin = currSuperAdmin;
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
       <button

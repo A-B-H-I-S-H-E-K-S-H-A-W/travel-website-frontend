@@ -80,7 +80,7 @@ export const SuperAdminProvider = ({ children }) => {
         },
       });
       const data = await res.json();
-      return data;
+      setCurrSuperAdmin(data);
     } catch (error) {
       console.log(error);
     }
