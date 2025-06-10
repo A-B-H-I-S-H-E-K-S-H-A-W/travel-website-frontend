@@ -1,7 +1,7 @@
 const AdminCard = ({ admin }) => {
   return (
     <>
-      {admin.map((item, id) => (
+      {admin?.map((item, id) => (
         <div
           key={id}
           className="bg-white rounded-xl shadow-lg p-6 w-full max-w-full mb-5"
