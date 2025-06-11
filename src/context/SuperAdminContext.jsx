@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const SuperAdminContext = createContext();
 
 export const SuperAdminProvider = ({ children }) => {
+  const [superAdmins, setSuperAdmins] = useState(null);
   const [currSuperAdmin, setCurrSuperAdmin] = useState(() => {
     const storedUser = localStorage.getItem("superAdmin");
     try {
@@ -146,6 +147,28 @@ export const SuperAdminProvider = ({ children }) => {
     }
   };
 
+  const getSuperAdminsProfile = async (token) => {
+    try {
+      const res = await fetch("/api/super-admin/get-super-admins", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        console.log("Something Went Wrong :::: error");
+      }
+
+      const data = await res.json();
+      setSuperAdmins(data);
+    } catch (error) {
+      console.log("Error fetching super admins ::::", error);
+      return { success: false, message: "Internal Server Error" };
+    }
+  };
+
   return (
     <SuperAdminContext.Provider
       value={{
@@ -157,6 +180,8 @@ export const SuperAdminProvider = ({ children }) => {
         profile,
         fetchAdmins,
         verificationUpdate,
+        superAdmins,
+        getSuperAdminsProfile,
       }}
     >
       {children}
