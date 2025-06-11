@@ -24,7 +24,7 @@ const VerifyServices = () => {
 
   return (
     <SuperAdminLayout>
-      <h2 className="text-2xl font-semibold pb-4">Verify Services Page</h2>
+      <h2 className="text-2xl font-semibold p-4">Verify Services Page</h2>
       <AdminCard admin={adminData} isNewVerification={true} />
     </SuperAdminLayout>
   );

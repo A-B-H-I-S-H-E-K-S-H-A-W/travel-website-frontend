@@ -13,6 +13,13 @@ export const SuperAdminProvider = ({ children }) => {
     }
   });
 
+  useEffect(() => {
+    const token = localStorage.getItem("superAdminToken");
+    if (token) {
+      profile(token);
+    }
+  }, []);
+
   const registerOnce = async () => {
     try {
       const res = await fetch("/api/super-admin/register-once", {
@@ -44,6 +51,11 @@ export const SuperAdminProvider = ({ children }) => {
       });
 
       const data = await res.json();
+      console.log("Login Response:", data);
+
+      if (!res.ok || !data.success) {
+        return data; // Do not store if login fails
+      }
 
       localStorage.setItem("superAdmin", JSON.stringify(data.superadmin));
       localStorage.setItem("superAdminToken", data.token);
@@ -74,16 +86,22 @@ export const SuperAdminProvider = ({ children }) => {
   const profile = async (token) => {
     try {
       const res = await fetch("/api/super-admin/profile", {
-        method: "GET", // should be GET, not POST!
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // required by many backends
+          Authorization: `Bearer ${token}`,
         },
       });
+
       const data = await res.json();
-      setCurrSuperAdmin(data);
+      if (res.ok && data?.email) {
+        setCurrSuperAdmin(data);
+        localStorage.setItem("superAdmin", JSON.stringify(data)); // keep it updated
+      } else {
+        console.warn("Profile fetch failed", data?.message);
+      }
     } catch (error) {
-      console.log(error);
+      console.log("PROFILE FETCH ERROR", error);
     }
   };
 

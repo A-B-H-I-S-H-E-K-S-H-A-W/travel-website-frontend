@@ -10,7 +10,7 @@ export default function SuperAdminAuth() {
   const [form, setForm] = useState({
     email: "",
     password: "",
-    logincode: "",
+    loginCode: "",
   });
 
   const getSuperAdmin = async () => {
@@ -44,7 +44,7 @@ export default function SuperAdminAuth() {
     try {
       const res = await login(form);
       setResult(res);
-      if (res) {
+      if (res?.success) {
         navigate("/super-admin/dashboard");
       } else {
         console.log("error");
@@ -57,8 +57,8 @@ export default function SuperAdminAuth() {
   return (
     <>
       <div className="w-screen max-h-screen overflow-hidden">
-        <div className="flex items-center justify-center bg-gray-900 h-screen w-screen">
-          <div className="flex flex-col h-[80vh] rounded-2xl shadow-2xl px-6 py-12 lg:px-10 w-2xl justify-center bg-white my-20">
+        <div className="flex items-center justify-center bg-gray-900 h-screen w-screen px-2">
+          <div className="flex flex-col rounded-2xl shadow-2xl px-6 py-12 lg:px-10 w-2xl justify-center bg-white my-20">
             <div className="sm:mx-auto text-center">
               <h1 className="md:text-5xl text-4xl font-semibold style-regular">
                 WanderSphere
@@ -120,12 +120,12 @@ export default function SuperAdminAuth() {
                 </label>
                 <div className="mt-2">
                   <input
-                    id="logincode"
-                    name="logincode"
+                    id="loginCode"
+                    name="loginCode"
                     type="text"
                     maxLength={5}
                     required
-                    value={form.logincode}
+                    value={form.loginCode}
                     onChange={handleChange}
                     autoComplete="one-time-code"
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-800 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-600 sm:text-sm/6"

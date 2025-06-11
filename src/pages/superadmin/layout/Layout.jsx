@@ -75,9 +75,11 @@ const TopBar = ({ toggleSidebar, modal }) => {
       >
         <Menu size={24} />
       </button>
-      <h1 className="text-lg font-semibold tracking-wide">Dashboard</h1>
+      <h1 className="text-lg font-semibold tracking-wide sm:block hidden">
+        Dashboard
+      </h1>
       <div className="flex items-center space-x-4">
-        <p>{superAdmin?.username}</p>
+        <p className="text-sm">{superAdmin?.username}</p>
         <button className="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition">
           <User size={20} />
         </button>
@@ -130,7 +132,7 @@ export default function SuperAdminLayout({ children }) {
           toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           modal={openModal}
         />
-        <div className="p-5 md:p-6 text-gray-800 text-lg">{children}</div>
+        <div className="p-3 text-gray-800 text-lg">{children}</div>
       </div>
 
       <CreateSuperAdminModal isOpen={isModalOpen} onClose={closeModal} />
