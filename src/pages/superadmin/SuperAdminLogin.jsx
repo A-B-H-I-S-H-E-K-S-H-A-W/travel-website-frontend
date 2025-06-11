@@ -15,12 +15,23 @@ export default function SuperAdminAuth() {
 
   const getSuperAdmin = async () => {
     const data = await registerOnce();
-    console.log("registerOnce result:", data); // ✅ See what's coming back
+
+    if (data?.message === "Super Admin already registered") {
+      console.log("Super Admin already exists.");
+      return;
+    }
+
+    console.log("registerOnce result:", data);
     setResult(data);
   };
 
   useEffect(() => {
-    getSuperAdmin();
+    const token = localStorage.getItem("superAdminToken");
+    if (token) {
+      navigate("/super-admin/dashboard");
+    } else {
+      getSuperAdmin();
+    }
   }, []);
 
   const handleChange = (e) => {
