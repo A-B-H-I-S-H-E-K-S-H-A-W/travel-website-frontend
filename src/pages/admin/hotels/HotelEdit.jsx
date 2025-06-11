@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../layout/AdminLayout";
-import { useAdminAuth } from "../../../context/AdminAuthContext";
 import Toast from "../../../components/common/Toast";
+import { useAdminAuth } from "../../../context/AdminAuthContext";
 
-const HotelForm = () => {
-  const { createApi } = useAdminAuth();
+const EditHotelForm = () => {
   const [result, setResult] = useState(null);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { state } = useLocation();
+  const { updateApi, getDataApi } = useAdminAuth();
+  const hotelFromList = state?.hotel;
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     category: "",
-    highlight: [""],
+    highlight: [],
     rating: 0,
     address: "",
     landmark: "",
@@ -20,9 +26,60 @@ const HotelForm = () => {
     pincode: "",
     checkInTime: "12:00",
     checkOutTime: "11:00",
-    isActive: "",
+    isActive: false,
     images: [],
   });
+
+  useEffect(() => {
+    if (hotelFromList) {
+      setFormData(hotelFromList);
+    } else {
+      fetchHotelDataFromAPI();
+    }
+  }, [hotelFromList]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("adminToken");
+      const formToSend = new FormData();
+
+      for (const key in formData) {
+        if (key === "images") {
+          formData.images.forEach((img) => formToSend.append("images", img));
+        } else if (Array.isArray(formData[key])) {
+          formData[key].forEach((val) => formToSend.append(key, val)); // ✅ correct
+        } else {
+          formToSend.append(key, formData[key]);
+        }
+      }
+
+      const res = await updateApi(`/api/hotel/update/${id}`, formToSend, token);
+
+      if (res.success) {
+        setResult({ success: true, message: "Hotel updated successfully" });
+        navigate("/hotel/admin/list");
+      } else {
+        setResult({ success: false, message: res.message || "Update failed" });
+      }
+    } catch (error) {
+      setResult({ success: false, message: "Unexpected error during update" });
+      console.error("Update error:", error);
+    }
+  };
+
+  const fetchHotelDataFromAPI = async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const res = await getDataApi(`/${id}`, token);
+      if (res.success) {
+        setFormData(res.data);
+      }
+    } catch (error) {
+      console.error("API fetch fallback failed", error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -38,34 +95,10 @@ const HotelForm = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const token = localStorage.getItem("adminToken");
-      const res = await createApi("/api/hotel/create", formData, token);
-      console.log("API response :::", res);
-
-      if (res.success) {
-        setResult({
-          success: true,
-          message: res.data.message || "Hotel created successfully",
-        });
-      } else {
-        setResult({
-          success: false,
-          message: res.message || "Something went wrong",
-        });
-      }
-    } catch (error) {
-      console.log("Error create hotel data ::::", error);
-      setResult({ success: false, message: "Internal server error" });
-    }
-  };
-
   return (
     <AdminLayout>
       <form className="max-w-4xl" onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-bold mb-6">Create Hotel</h1>
+        <h1 className="text-2xl font-bold mb-6">Update Hotel</h1>
 
         {/* Hotel Name */}
         <InputField
@@ -250,10 +283,10 @@ const HotelForm = () => {
 
         {/* Submit */}
         <button
-          type="submit"
+          type="Update"
           className="cursor-pointer w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
         >
-          Submit
+          Update
         </button>
       </form>
       <Toast result={result} setResult={setResult} />
@@ -305,4 +338,4 @@ const TextareaField = ({ label, name, value, onChange, required = false }) => (
   </div>
 );
 
-export default HotelForm;
+export default EditHotelForm;

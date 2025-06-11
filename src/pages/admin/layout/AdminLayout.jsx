@@ -34,11 +34,16 @@ const hotelLayout = [
   },
   {
     id: 3,
+    link: "/hotel/admin/list",
+    linkName: "📦 List Hotels",
+  },
+  {
+    id: 4,
     link: "/hotel/admin/room/create",
     linkName: "📦 Create Room",
   },
   {
-    id: 4,
+    id: 5,
     link: "/hotel/admin/room/list",
     linkName: "📦 List Rooms",
   },
@@ -205,7 +210,7 @@ export default function AdminLayout({ children }) {
       <Sidebar isOpen={sidebarOpen} setResult={setResult} />
       <div className="flex-1 flex flex-col md:ml-64 transition-all">
         <TopBar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        <div className="p-8 text-gray-800 text-lg">{children}</div>
+        <div className="p-3 md:p-5 text-gray-800 text-lg">{children}</div>
       </div>
       <Toast
         result={result}

@@ -28,6 +28,8 @@ import VerifyServices from "./pages/superadmin/VerifyServices";
 import VerifiedServices from "./pages/superadmin/VerifiedServices";
 import DeniedServices from "./pages/superadmin/DeniedServices";
 import AllSuperAdmin from "./pages/superadmin/AllSuperAdmin";
+import HotelsList from "./pages/admin/hotels/HotelsList";
+import EditHotelForm from "./pages/admin/hotels/HotelEdit";
 
 function App() {
   return (
@@ -80,10 +82,54 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/hotel/admin/settings" element={<ProfileSettings />} />
-            <Route path="/hotel/admin/create" element={<HotelForm />} />
-            <Route path="/hotel/admin/room/create" element={<RoomCreate />} />
-            <Route path="/hotel/admin/room/list" element={<RoomList />} />
+            <Route
+              path="/hotel/admin/settings"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <ProfileSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hotel/admin/create"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <HotelForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hotel/admin/list"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <HotelsList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hotel/admin/room/create"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <RoomCreate />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hotel/admin/room/list"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <RoomList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/hotel/edit/:id"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <EditHotelForm />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
           <Routes>
             <Route path="/bus/admin/dashboard" element={<BusDashboard />} />

@@ -13,6 +13,8 @@ const ProfileSettings = () => {
     try {
       const token = localStorage.getItem("adminToken");
       const data = await fetchAdmin(token);
+      console.log(data);
+
       setAdminData(data);
     } catch (error) {
       console.log("ERROR :::", error);
@@ -163,6 +165,16 @@ const ProfileSettings = () => {
           type="file"
           onChange={handleChange}
         />
+        {adminData?.license && (
+          <a
+            className="text-blue-800 underline mb-4 block"
+            href={adminData.license}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Download License
+          </a>
+        )}
 
         <button
           type="submit"
