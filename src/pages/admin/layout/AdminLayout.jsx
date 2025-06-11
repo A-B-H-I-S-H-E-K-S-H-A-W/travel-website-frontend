@@ -80,24 +80,26 @@ const Sidebar = ({ isOpen, setResult }) => {
             </ul>
           </>
         )}
-        <ul className="flex flex-col space-y-4">
-          <Link to={layout[0].link}>
-            <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
-              {layout[0].linkName}
+        {admin.verification !== "Verified" && (
+          <ul className="flex flex-col space-y-4">
+            <Link to={layout[0].link}>
+              <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
+                {layout[0].linkName}
+              </li>
+            </Link>
+            <li
+              onClick={() => {
+                const res = {
+                  message: "Verify yourself in profile settings",
+                };
+                setResult(res);
+              }}
+              className="p-3 rounded-lg bg-gray-950 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3"
+            >
+              📦 Manage Resource
             </li>
-          </Link>
-          <li
-            onClick={() => {
-              const res = {
-                message: "Verify yourself in profile settings",
-              };
-              setResult(res);
-            }}
-            className="p-3 rounded-lg bg-gray-950 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3"
-          >
-            📦 Manage Resource
-          </li>
-        </ul>
+          </ul>
+        )}
       </>
     );
   };

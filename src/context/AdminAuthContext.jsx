@@ -4,7 +4,7 @@ const AdminAuthContext = createContext();
 
 export const AdminAuthProvider = ({ children }) => {
   const [currentAdmin, setCurrentAdmin] = useState(null);
-
+  const [adminData, setAdminData] = useState(null);
   useEffect(() => {
     const storedUser = localStorage.getItem("admin");
     if (storedUser) {
@@ -90,6 +90,7 @@ export const AdminAuthProvider = ({ children }) => {
       }
 
       const data = await res.json();
+      setAdminData(data);
       return data;
     } catch (error) {
       console.error("Verify Admin Error:", error);
@@ -99,7 +100,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   return (
     <AdminAuthContext.Provider
-      value={{ currentAdmin, login, logout, register, fetchAdmin }}
+      value={{ currentAdmin, login, logout, register, fetchAdmin, adminData }}
     >
       {children}
     </AdminAuthContext.Provider>

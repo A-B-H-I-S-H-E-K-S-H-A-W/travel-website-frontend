@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "./layout/AdminLayout";
-import { fetchAdminId, updateAdmin } from "../../services/ApiServices";
-import { useParams } from "react-router-dom";
+import { updateAdmin } from "../../services/ApiServices";
 import Toast from "../../components/common/Toast";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 
