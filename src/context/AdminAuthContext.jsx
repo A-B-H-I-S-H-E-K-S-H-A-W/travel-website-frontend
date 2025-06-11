@@ -5,10 +5,18 @@ const AdminAuthContext = createContext();
 export const AdminAuthProvider = ({ children }) => {
   const [currentAdmin, setCurrentAdmin] = useState(null);
   const [adminData, setAdminData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const storedUser = localStorage.getItem("admin");
+    const token = localStorage.getItem("adminToken");
+
     if (storedUser) {
       setCurrentAdmin(JSON.parse(storedUser));
+    }
+
+    if (token) {
+      fetchAdmin(token); // fetch only once
     }
   }, []);
 
@@ -60,12 +68,13 @@ export const AdminAuthProvider = ({ children }) => {
       });
 
       if (res.ok) {
-        console.log("error3");
-
         const data = await res.json();
         localStorage.setItem("adminToken", data.token);
         localStorage.setItem("admin", JSON.stringify(data.admin));
-        setCurrentAdmin(data.user);
+        setCurrentAdmin(data.admin); // ✅ correct object
+
+        await fetchAdmin(data.token); // ✅ manually fetch profile
+
         return data;
       } else {
         return { success: false, message: `Email not found, Please Register` };
@@ -98,9 +107,32 @@ export const AdminAuthProvider = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("admin");
+    const token = localStorage.getItem("adminToken");
+
+    if (storedUser) {
+      setCurrentAdmin(JSON.parse(storedUser));
+    }
+
+    if (token) {
+      fetchAdmin(token).finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
   return (
     <AdminAuthContext.Provider
-      value={{ currentAdmin, login, logout, register, fetchAdmin, adminData }}
+      value={{
+        currentAdmin,
+        login,
+        logout,
+        register,
+        fetchAdmin,
+        adminData,
+        loading,
+      }}
     >
       {children}
     </AdminAuthContext.Provider>

@@ -2,107 +2,104 @@ import { useEffect, useState } from "react";
 import { Settings, User, Menu, List } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
-import { useDomainFromLocalStorage } from "../../../hooks/useDomainFromLocalStorage";
 import Toast from "../../../components/common/Toast";
 
-const Sidebar = ({ isOpen, setResult }) => {
-  const admin = useDomainFromLocalStorage("adminToken");
-  const busLayout = [
-    {
-      id: 1,
-      link: "/bus/admin/dashboard",
-      linkName: "📦 Dashboard",
-    },
-    {
-      id: 2,
-      link: "/bus/admin/create",
-      linkName: "📦 Create Bus Shedule",
-    },
-    {
-      id: 3,
-      link: "/bus/admin/dashboard",
-      linkName: "📦 List Buses",
-    },
-  ];
-  const hotelLayout = [
-    {
-      id: 1,
-      link: "/hotel/admin/dashboard",
-      linkName: "📦 Dashboard",
-    },
-    {
-      id: 1,
-      link: "/hotel/admin/create",
-      linkName: "📦 Hotel Details",
-    },
-    {
-      id: 2,
-      link: "/hotel/admin/room/create",
-      linkName: "📦 Create Room",
-    },
-    {
-      id: 3,
-      link: "/hotel/admin/room/list",
-      linkName: "📦 List Rooms",
-    },
-  ];
-  const flightLayout = [
-    {
-      id: 1,
-      link: "/flight/admin/dashboard",
-      linkName: "📦 Dashboard",
-    },
-    {
-      id: 2,
-      link: "/flight/admin/create",
-      linkName: "📦 Create Flight",
-    },
-    {
-      id: 3,
-      link: "/flight/admin/dashboard",
-      linkName: "📦 List Flights",
-    },
-  ];
+const busLayout = [
+  {
+    id: 1,
+    link: "/bus/admin/dashboard",
+    linkName: "📦 Dashboard",
+  },
+  {
+    id: 2,
+    link: "/bus/admin/create",
+    linkName: "📦 Create Bus Shedule",
+  },
+  {
+    id: 3,
+    link: "/bus/admin/dashboard",
+    linkName: "📦 List Buses",
+  },
+];
+const hotelLayout = [
+  {
+    id: 1,
+    link: "/hotel/admin/dashboard",
+    linkName: "📦 Dashboard",
+  },
+  {
+    id: 2,
+    link: "/hotel/admin/create",
+    linkName: "📦 Hotel Details",
+  },
+  {
+    id: 3,
+    link: "/hotel/admin/room/create",
+    linkName: "📦 Create Room",
+  },
+  {
+    id: 4,
+    link: "/hotel/admin/room/list",
+    linkName: "📦 List Rooms",
+  },
+];
+const flightLayout = [
+  {
+    id: 1,
+    link: "/flight/admin/dashboard",
+    linkName: "📦 Dashboard",
+  },
+  {
+    id: 2,
+    link: "/flight/admin/create",
+    linkName: "📦 Create Flight",
+  },
+  {
+    id: 3,
+    link: "/flight/admin/dashboard",
+    linkName: "📦 List Flights",
+  },
+];
 
-  const LinkList = ({ layout }) => {
-    return (
-      <>
-        {admin.verification === "Verified" && (
-          <>
-            <ul className="flex flex-col space-y-4">
-              {layout.map((item) => (
-                <Link key={item.id} to={item.link}>
-                  <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
-                    {item.linkName}
-                  </li>
-                </Link>
-              ))}
-            </ul>
-          </>
-        )}
-        {admin.verification !== "Verified" && (
-          <ul className="flex flex-col space-y-4">
-            <Link to={layout[0].link}>
+const LinkList = ({ layout, admin, setResult }) => {
+  if (!admin) return null;
+
+  return (
+    <>
+      {admin.verification === "Verified" ? (
+        <ul className="flex flex-col space-y-4">
+          {layout.map((item) => (
+            <Link key={item.id} to={item.link}>
               <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
-                {layout[0].linkName}
+                {item.linkName}
               </li>
             </Link>
-            <li
-              onClick={() => {
-                const res = {
-                  message: "Verify yourself in profile settings",
-                };
-                setResult(res);
-              }}
-              className="p-3 rounded-lg bg-gray-950 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3"
-            >
-              📦 Manage Resource
+          ))}
+        </ul>
+      ) : (
+        <ul className="flex flex-col space-y-4">
+          <Link to={layout[0].link}>
+            <li className="p-3 rounded-lg bg-gray-800 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3">
+              {layout[0].linkName}
             </li>
-          </ul>
-        )}
-      </>
-    );
-  };
+          </Link>
+          <li
+            onClick={() => {
+              const res = { message: "Verify yourself in profile settings" };
+              setResult(res);
+            }}
+            className="p-3 rounded-lg bg-gray-950 hover:bg-gray-700 cursor-pointer transition flex items-center gap-3"
+          >
+            📦 Manage Resource
+          </li>
+        </ul>
+      )}
+    </>
+  );
+};
+
+const Sidebar = ({ isOpen, setResult }) => {
+  const { adminData: admin } = useAdminAuth();
 
   return (
     <div
@@ -112,9 +109,15 @@ const Sidebar = ({ isOpen, setResult }) => {
     >
       <h2 className="text-xl font-semibold mb-8 tracking-wide">WanderSphere</h2>
 
-      {admin?.domain === "Hotel" && <LinkList layout={hotelLayout} />}
-      {admin?.domain === "Bus" && <LinkList layout={busLayout} />}
-      {admin?.domain === "Flight" && <LinkList layout={flightLayout} />}
+      {admin?.domain === "Hotel" && (
+        <LinkList layout={hotelLayout} admin={admin} setResult={setResult} />
+      )}
+      {admin?.domain === "Bus" && (
+        <LinkList layout={busLayout} admin={admin} setResult={setResult} />
+      )}
+      {admin?.domain === "Flight" && (
+        <LinkList layout={flightLayout} admin={admin} setResult={setResult} />
+      )}
     </div>
   );
 };
@@ -123,7 +126,7 @@ const TopBar = ({ toggleSidebar }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { logout } = useAdminAuth();
 
-  const admin = useDomainFromLocalStorage("adminToken");
+  const { adminData: admin } = useAdminAuth();
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
       <button
@@ -161,7 +164,7 @@ const TopBar = ({ toggleSidebar }) => {
       </div>
       {dropdownOpen && (
         <div className="absolute right-6 top-14 bg-white text-black shadow-lg rounded-lg w-40 py-2 overflow-hidden">
-          {admin?.domain === "Hotel" && (
+          {admin?.domain && (
             <Link
               to={`/${admin.domain.toLowerCase()}/admin/settings`}
               className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
@@ -187,6 +190,15 @@ const TopBar = ({ toggleSidebar }) => {
 export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [result, setResult] = useState(null);
+  const { loading } = useAdminAuth();
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-800"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen overflow-hidden bg-gray-100">
