@@ -169,6 +169,24 @@ export const SuperAdminProvider = ({ children }) => {
     }
   };
 
+  const removeSuperAdmin = async ({ token, id }) => {
+    try {
+      const res = await fetch("/api/super-admin/remove", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ id }),
+      });
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      console.log("Error removing admin verification ::::", error);
+      return { success: false, message: "Internal Server Error" };
+    }
+  };
+
   return (
     <SuperAdminContext.Provider
       value={{
@@ -182,6 +200,7 @@ export const SuperAdminProvider = ({ children }) => {
         verificationUpdate,
         superAdmins,
         getSuperAdminsProfile,
+        removeSuperAdmin,
       }}
     >
       {children}

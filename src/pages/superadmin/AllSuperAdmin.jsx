@@ -8,7 +8,7 @@ const AllSuperAdmin = () => {
   const token = localStorage.getItem("superAdminToken");
   useEffect(() => {
     getSuperAdminsProfile(token);
-  }, []);
+  }, [superAdmins]);
 
   return (
     <SuperAdminLayout>
