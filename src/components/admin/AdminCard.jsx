@@ -2,7 +2,7 @@ import { useState } from "react";
 import Modal from "../common/Modal";
 import Toast from "../common/Toast";
 
-const AdminCard = ({ admin }) => {
+const AdminCard = ({ admin, isVerify, isNewVerification }) => {
   const [message, setMessage] = useState(null);
   const [result, setResult] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,18 +78,39 @@ const AdminCard = ({ admin }) => {
                 Created at: {new Date(item.createdAt).toLocaleString()}
               </p>
               <div className="flex gap-3">
-                <button
-                  onClick={() => handleClick("Verify")}
-                  className="px-4 py-1 rounded-md bg-green-500 text-white cursor-pointer hover:bg-green-600"
-                >
-                  Verify
-                </button>
-                <button
-                  onClick={() => handleClick("Denied")}
-                  className="px-4 py-1 rounded-md bg-red-500 text-white cursor-pointer hover:bg-red-600"
-                >
-                  Denied
-                </button>
+                {isVerify ? (
+                  <button
+                    onClick={() => handleClick("Denied")}
+                    className="px-4 py-1 rounded-md bg-red-500 text-white cursor-pointer hover:bg-red-600"
+                  >
+                    Denied
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleClick("Verify")}
+                    className="px-4 py-1 rounded-md bg-green-500 text-white cursor-pointer hover:bg-green-600"
+                  >
+                    Verify
+                  </button>
+                )}
+                {isNewVerification ? (
+                  <>
+                    <button
+                      onClick={() => handleClick("Denied")}
+                      className="px-4 py-1 rounded-md bg-red-500 text-white cursor-pointer hover:bg-red-600"
+                    >
+                      Denied
+                    </button>
+                    <button
+                      onClick={() => handleClick("Verify")}
+                      className="px-4 py-1 rounded-md bg-green-500 text-white cursor-pointer hover:bg-green-600"
+                    >
+                      Verify
+                    </button>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
             <Modal
