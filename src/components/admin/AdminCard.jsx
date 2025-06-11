@@ -31,7 +31,7 @@ const AdminCard = ({ admin, isVerify, isNewVerification }) => {
               {item.companyName}
             </h2>
 
-            <div className="grid grid-cols-2 gap-2 text-base text-gray-700">
+            <div className="grid md:grid-cols-2 gap-2 text-base text-gray-700">
               <p>
                 <span className="font-bold">Username:</span> {item.username}
               </p>

@@ -130,7 +130,7 @@ export default function SuperAdminLayout({ children }) {
           toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           modal={openModal}
         />
-        <div className="p-8 text-gray-800 text-lg">{children}</div>
+        <div className="p-5 md:p-6 text-gray-800 text-lg">{children}</div>
       </div>
 
       <CreateSuperAdminModal isOpen={isModalOpen} onClose={closeModal} />
