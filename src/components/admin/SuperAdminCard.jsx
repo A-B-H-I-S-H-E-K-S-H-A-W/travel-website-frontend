@@ -2,6 +2,7 @@ import { Trash2, User } from "lucide-react";
 import { useSuperAdminC } from "../../context/SuperAdminContext";
 import { useState } from "react";
 import Toast from "../common/Toast";
+import Modal from "../common/Modal";
 
 const SuperAdminCard = ({ superAdminData }) => {
   if (!superAdminData || superAdminData.length === 0) {
@@ -11,6 +12,16 @@ const SuperAdminCard = ({ superAdminData }) => {
       </div>
     );
   }
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = async () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = async () => {
+    setIsModalOpen(false);
+  };
 
   const { removeSuperAdmin } = useSuperAdminC();
   const [result, setResult] = useState(null);
@@ -36,31 +47,42 @@ const SuperAdminCard = ({ superAdminData }) => {
   return (
     <div className="my-5">
       {superAdminData.map((admin, idx) => (
-        <div key={idx} className="w-full rounded-xl border shadow-lg p-4 mb-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-5">
-              <div className="rounded-full bg-blue-900 p-2 text-white w-10">
-                <User />
+        <>
+          <div
+            key={idx}
+            className="w-full rounded-xl border shadow-lg p-4 mb-6"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-5">
+                <div className="rounded-full bg-blue-900 p-2 text-white w-10">
+                  <User />
+                </div>
+                <div className="text-base">
+                  <p>
+                    <span className="font-bold">Username: </span>
+                    {admin.username}
+                  </p>
+                  <p>
+                    <span className="font-bold">Email: </span>
+                    {admin.email}
+                  </p>
+                </div>
               </div>
-              <div className="text-base">
-                <p>
-                  <span className="font-bold">Username: </span>
-                  {admin.username}
-                </p>
-                <p>
-                  <span className="font-bold">Email: </span>
-                  {admin.email}
-                </p>
-              </div>
+              <button
+                onClick={openModal}
+                className="rounded-full bg-red-600 p-2 text-white w-10 cursor-pointer"
+              >
+                <Trash2 />
+              </button>
             </div>
-            <button
-              onClick={() => removeData(admin._id)}
-              className="rounded-full bg-red-600 p-2 text-white w-10 cursor-pointer"
-            >
-              <Trash2 />
-            </button>
           </div>
-        </div>
+          <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            message={"Remove this super admin"}
+            onConfirm={() => removeData(admin._id)}
+          />
+        </>
       ))}
 
       <Toast result={result} setResult={setResult} />
