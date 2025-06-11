@@ -4,7 +4,6 @@ import SuperAdminCard from "../../components/admin/SuperAdminCard";
 import { useSuperAdminC } from "../../context/SuperAdminContext";
 
 const AllSuperAdmin = () => {
-  const [sAdmins, setsAdmins] = useState(null);
   const { getSuperAdminsProfile, superAdmins } = useSuperAdminC();
   const token = localStorage.getItem("superAdminToken");
   useEffect(() => {
@@ -13,7 +12,7 @@ const AllSuperAdmin = () => {
 
   return (
     <SuperAdminLayout>
-      <h4 className="text-2xl font-semibold">AllSuperAdmin</h4>
+      <h4 className="text-2xl font-semibold">All Super Admin</h4>
       <SuperAdminCard superAdminData={superAdmins} />
     </SuperAdminLayout>
   );

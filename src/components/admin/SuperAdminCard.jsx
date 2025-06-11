@@ -3,7 +3,11 @@ import React from "react";
 
 const SuperAdminCard = ({ superAdminData }) => {
   if (!superAdminData || superAdminData.length === 0) {
-    return <p>No Super Admins Found</p>;
+    return (
+      <div className="h-[70vh] flex items-center justify-center">
+        <p className="text-xl font-semibold">No Super Admins Found</p>
+      </div>
+    );
   }
 
   return (
