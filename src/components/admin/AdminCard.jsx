@@ -1,36 +1,66 @@
 import { useState } from "react";
 import Modal from "../common/Modal";
 import Toast from "../common/Toast";
+import { useSuperAdminC } from "../../context/SuperAdminContext";
 
 const AdminCard = ({ admin, isVerify, isNewVerification }) => {
-  const [message, setMessage] = useState(null);
+  const { verificationUpdate } = useSuperAdminC();
+
+  const [message, setMessage] = useState("");
   const [result, setResult] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [action, setAction] = useState(null);
+  const [selectedAction, setSelectedAction] = useState("");
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = (adminData, actionType) => {
+    setSelectedAdmin(adminData);
+    setSelectedAction(actionType);
+    setMessage(`Are you sure you want to ${actionType} this Admin?`);
+    setIsModalOpen(true);
+  };
 
-  const handleClick = (message) => {
-    if (!isModalOpen) {
-      setAction(message);
-      setMessage(`Are you sure you want to ${message} this Admin`);
-      openModal();
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedAdmin(null);
+    setSelectedAction("");
+  };
+
+  const confirmAction = async () => {
+    const token = localStorage.getItem("adminToken");
+    const verifyStatus =
+      selectedAction === "Verify"
+        ? "Verified"
+        : selectedAction === "Denied"
+        ? "Denied"
+        : "";
+
+    try {
+      const res = await verificationUpdate({
+        token,
+        verifyData: {
+          verificationUpdate: verifyStatus,
+          adminId: selectedAdmin?._id, // include ID if needed
+        },
+      });
+      setResult(res);
+      return res;
+    } catch (error) {
+      console.log("Verification failed:", error);
+      return { success: false, message: "Verification Failed" };
     }
   };
 
   return (
     <>
-      {admin &&
-        admin.map((item, id) => (
+      {admin && admin.length > 0 ? (
+        admin.map((item) => (
           <div
-            key={id}
+            key={item._id}
             className="bg-white rounded-xl shadow-lg p-6 w-full max-w-full mb-5"
           >
             <h2 className="text-2xl font-bold text-gray-800 mb-3">
               {item.companyName}
             </h2>
-
             <div className="grid md:grid-cols-2 gap-2 text-base text-gray-700">
               <p>
                 <span className="font-bold">Username:</span> {item.username}
@@ -41,7 +71,6 @@ const AdminCard = ({ admin, isVerify, isNewVerification }) => {
               <p>
                 <span className="font-bold">Phone:</span> {item.phoneNumber}
               </p>
-
               <p>
                 <span className="font-bold">Address:</span> {item.address},{" "}
                 {item.city}: {item.pincode}
@@ -67,6 +96,7 @@ const AdminCard = ({ admin, isVerify, isNewVerification }) => {
                   className="text-blue-800 underline"
                   href={item.license}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Download License
                 </a>
@@ -78,61 +108,59 @@ const AdminCard = ({ admin, isVerify, isNewVerification }) => {
                 Created at: {new Date(item.createdAt).toLocaleString()}
               </p>
               <div className="flex gap-3">
-                {isVerify ? (
-                  <button
-                    onClick={() => handleClick("Denied")}
-                    className="px-4 py-1 rounded-md bg-red-500 text-white cursor-pointer hover:bg-red-600"
-                  >
-                    Denied
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => handleClick("Verify")}
-                    className="px-4 py-1 rounded-md bg-green-500 text-white cursor-pointer hover:bg-green-600"
-                  >
-                    Verify
-                  </button>
-                )}
                 {isNewVerification ? (
                   <>
                     <button
-                      onClick={() => handleClick("Denied")}
-                      className="px-4 py-1 rounded-md bg-red-500 text-white cursor-pointer hover:bg-red-600"
+                      onClick={() => openModal(item, "Verify")}
+                      className="px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer"
+                    >
+                      Verify
+                    </button>
+                    <button
+                      onClick={() => openModal(item, "Denied")}
+                      className="px-4 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 cursor-pointer"
                     >
                       Denied
                     </button>
+                  </>
+                ) : null}
+                {isVerify ? (
+                  <>
                     <button
-                      onClick={() => handleClick("Verify")}
-                      className="px-4 py-1 rounded-md bg-green-500 text-white cursor-pointer hover:bg-green-600"
+                      onClick={() => openModal(item, "Denied")}
+                      className="px-4 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 cursor-pointer"
+                    >
+                      Denied
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => openModal(item, "Verify")}
+                      className="px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer"
                     >
                       Verify
                     </button>
                   </>
-                ) : (
-                  <></>
                 )}
               </div>
             </div>
-            <Modal
-              isOpen={isModalOpen}
-              onClose={closeModal}
-              message={message}
-              action={action}
-              onConfirm={(res) => setResult(res)}
-            />
-
-            <Toast result={result} setResult={setResult} />
           </div>
-        ))}
-      {!admin && (
-        <>
-          <div className="flex justify-center items-center h-[70vh]">
-            <div className="mx-auto">
-              <h4 className="text-xl font-semibold">No Data Found</h4>
-            </div>
-          </div>
-        </>
+        ))
+      ) : (
+        <div className="flex justify-center items-center h-[70vh]">
+          <h4 className="text-xl font-semibold">No Data Found</h4>
+        </div>
       )}
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        message={message}
+        onConfirm={confirmAction}
+      />
+
+      <Toast result={result} setResult={setResult} />
     </>
   );
 };
