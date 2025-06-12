@@ -26,7 +26,7 @@ const Navbar = ({ user }) => {
                   onClick={() => setToggle((prev) => !prev)}
                 >
                   <p className="text-black font-semibold text-md">
-                    {user.email}
+                    {user.username}
                   </p>
 
                   <img
