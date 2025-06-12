@@ -108,7 +108,7 @@ const AdminCard = ({ admin, isVerify, isNewVerification }) => {
                 Created at: {new Date(item.createdAt).toLocaleString()}
               </p>
               <div className="flex gap-3">
-                {isNewVerification ? (
+                {isNewVerification && !isVerify ? (
                   <>
                     <button
                       onClick={() => openModal(item, "Verify")}
@@ -124,24 +124,24 @@ const AdminCard = ({ admin, isVerify, isNewVerification }) => {
                     </button>
                   </>
                 ) : null}
-                {isVerify ? (
-                  <>
+                {!isNewVerification ? (
+                  isVerify ? (
                     <button
                       onClick={() => openModal(item, "Denied")}
                       className="px-4 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 cursor-pointer"
                     >
                       Denied
                     </button>
-                  </>
-                ) : (
-                  <>
+                  ) : (
                     <button
                       onClick={() => openModal(item, "Verify")}
                       className="px-4 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer"
                     >
                       Verify
                     </button>
-                  </>
+                  )
+                ) : (
+                  <div></div>
                 )}
               </div>
             </div>

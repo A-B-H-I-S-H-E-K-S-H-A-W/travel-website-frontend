@@ -91,6 +91,22 @@ function App() {
               }
             />
             <Route
+              path="/bus/admin/settings"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <ProfileSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/flight/admin/settings"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <ProfileSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/hotel/admin/create"
               element={
                 <ProtectedRoute token={"adminToken"} route={"/admin/register"}>

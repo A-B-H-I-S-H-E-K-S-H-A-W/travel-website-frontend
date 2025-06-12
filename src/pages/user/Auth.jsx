@@ -40,12 +40,12 @@ export default function Auth({ isLoginSection = true }) {
           }}
         >
           <div className="flex items-center justify-center backdrop-blur-sm h-screen bg-black/30">
-            <div className="flex flex-col px-6 py-12 lg:px-10 w-xl justify-center rounded-4xl bg-white my-20 mx-5">
+            <div className="flex flex-col px-1 py-8 lg:px-10 w-xl justify-center rounded-4xl bg-white my-20 mx-5">
               <div className="sm:mx-auto text-center">
                 <h1 className="md:text-5xl text-4xl font-semibold style-regular">
                   WanderSphere
                 </h1>
-                <h2 className="mt-10 text-center text-xl/9 md:text-2xl font-bold tracking-tight text-gray-800">
+                <h2 className="mt-2 text-center text-xl/9 md:text-2xl font-bold tracking-tight text-gray-800">
                   {isLoginSection ? (
                     <p>Login to your account</p>
                   ) : (
@@ -112,18 +112,6 @@ export default function Auth({ isLoginSection = true }) {
                       >
                         Password
                       </label>
-                      {isLoginSection ? (
-                        <div className="text-sm">
-                          <a
-                            href="#"
-                            className="font-semibold text-cyan-600 hover:text-cyan-500"
-                          >
-                            Forgot password?
-                          </a>
-                        </div>
-                      ) : (
-                        <></>
-                      )}
                     </div>
                     <div className="mt-2">
                       <input
