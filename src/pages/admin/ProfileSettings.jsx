@@ -13,7 +13,6 @@ const ProfileSettings = () => {
     try {
       const token = localStorage.getItem("adminToken");
       const data = await fetchAdmin(token);
-      console.log(data);
 
       setAdminData(data);
     } catch (error) {
@@ -23,7 +22,7 @@ const ProfileSettings = () => {
 
   useEffect(() => {
     getAdminData();
-  }, []);
+  }, [result]);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -71,6 +70,29 @@ const ProfileSettings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    const aadharRegex = /^\d{12}$/;
+
+    if (
+      formData.pancardNumber &&
+      !panRegex.test(formData.pancardNumber.toUpperCase())
+    ) {
+      setResult({
+        success: false,
+        message: "Invalid PAN card number. Format should be: ABCDE1234F",
+      });
+      return;
+    }
+
+    if (formData.aadharNumber && !aadharRegex.test(formData.aadharNumber)) {
+      setResult({
+        success: false,
+        message: "Invalid Aadhar number. It should be a 12-digit number.",
+      });
+      return;
+    }
+
     const token = localStorage.getItem("adminToken");
     const fd = new FormData();
 

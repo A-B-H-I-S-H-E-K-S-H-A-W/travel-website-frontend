@@ -37,14 +37,6 @@ export default function AdminAuth({ isLoginSection = true }) {
     }
 
     if (!isLoginSection) {
-      if (!form.username.trim().match(/^[a-zA-Z0-9_]{3,}$/)) {
-        setResult({
-          success: false,
-          message:
-            "Username must be at least 3 characters and contain only letters, numbers, or underscores",
-        });
-        return false;
-      }
       if (!form.domain) {
         setResult({ success: false, message: "Please select a valid domain" });
         return false;
