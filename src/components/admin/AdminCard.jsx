@@ -25,12 +25,12 @@ const AdminCard = ({ admin, isVerify, isNewVerification }) => {
     setSelectedAction("");
   };
 
-  const confirmAction = async () => {
+  const confirmAction = async (adminData, actionType) => {
     const token = localStorage.getItem("adminToken");
     const verifyStatus =
-      selectedAction === "Verify"
+      actionType === "Verify"
         ? "Verified"
-        : selectedAction === "Denied"
+        : actionType === "Denied"
         ? "Denied"
         : "";
 
@@ -39,10 +39,12 @@ const AdminCard = ({ admin, isVerify, isNewVerification }) => {
         token,
         verifyData: {
           verificationUpdate: verifyStatus,
-          adminId: selectedAdmin?._id, // include ID if needed
+          adminId: adminData?._id,
         },
       });
+
       setResult(res);
+      closeModal();
       return res;
     } catch (error) {
       console.log("Verification failed:", error);
@@ -157,7 +159,7 @@ const AdminCard = ({ admin, isVerify, isNewVerification }) => {
         isOpen={isModalOpen}
         onClose={closeModal}
         message={message}
-        onConfirm={confirmAction}
+        onConfirm={() => confirmAction(selectedAdmin, selectedAction)}
       />
 
       <Toast result={result} setResult={setResult} />
