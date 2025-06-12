@@ -39,8 +39,8 @@ export default function Auth({ isLoginSection = true }) {
             backgroundRepeat: "no-repeat",
           }}
         >
-          <div className="flex items-center justify-center backdrop-blur-sm h-screen bg-black/30">
-            <div className="flex flex-col px-1 py-8 lg:px-10 w-xl justify-center rounded-4xl bg-white my-20 mx-5">
+          <div className="flex items-center justify-center backdrop-blur-sm h-[95vh] bg-black/30 mt-8">
+            <div className="flex flex-col px-4 py-8 lg:px-8 w-xl justify-center rounded-4xl bg-white my-20 mx-5">
               <div className="sm:mx-auto text-center">
                 <h1 className="md:text-5xl text-4xl font-semibold style-regular">
                   WanderSphere
@@ -146,7 +146,7 @@ export default function Auth({ isLoginSection = true }) {
                 </div>
 
                 {isLoginSection ? (
-                  <p className="mt-10 text-center text-sm/6 text-gray-800">
+                  <p className="mt-5 text-center text-sm/6 text-gray-800">
                     Not a member?{" "}
                     <Link
                       to="/auth/v1/register"
@@ -156,7 +156,7 @@ export default function Auth({ isLoginSection = true }) {
                     </Link>
                   </p>
                 ) : (
-                  <p className="mt-10 text-center text-sm/6 text-gray-800">
+                  <p className="mt-5 text-center text-sm/6 text-gray-800">
                     Already have an account?{" "}
                     <Link
                       to="/auth/v1/login"
@@ -166,6 +166,18 @@ export default function Auth({ isLoginSection = true }) {
                     </Link>
                   </p>
                 )}
+              </div>
+              <div className="text-center mt-5">
+                <Link
+                  to="/admin/register"
+                  className="px-8 py-2 w-full rounded-md 
+             bg-gradient-to-r from-blue-500 to-purple-600 
+             hover:from-blue-600 hover:to-purple-500 
+             text-white transition-all duration-500 ease-in-out 
+             text-center block"
+                >
+                  Want to List Events? Click here to register
+                </Link>
               </div>
             </div>
           </div>

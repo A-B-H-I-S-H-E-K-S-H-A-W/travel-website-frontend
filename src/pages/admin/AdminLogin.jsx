@@ -208,6 +208,18 @@ export default function AdminAuth({ isLoginSection = true }) {
                 </p>
               )}
             </div>
+            <div className="mt-5">
+              <Link
+                to="/"
+                className="px-8 py-2 w-full rounded-md 
+             bg-gradient-to-r from-blue-500 to-purple-600 
+             hover:from-blue-600 hover:to-purple-500 
+             text-white transition-all duration-500 ease-in-out 
+             text-center block"
+              >
+                Go to Website
+              </Link>
+            </div>
           </div>
         </div>
         <Toast result={result} setResult={setResult} />
