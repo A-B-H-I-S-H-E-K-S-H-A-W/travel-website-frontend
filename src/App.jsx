@@ -30,6 +30,8 @@ import DeniedServices from "./pages/superadmin/DeniedServices";
 import AllSuperAdmin from "./pages/superadmin/AllSuperAdmin";
 import HotelsList from "./pages/admin/hotels/HotelsList";
 import EditHotelForm from "./pages/admin/hotels/HotelEdit";
+import BusList from "./pages/admin/bus/BusList";
+import EditBusPage from "./pages/admin/bus/BusEdit";
 
 function App() {
   return (
@@ -139,7 +141,7 @@ function App() {
               }
             />
             <Route
-              path="/admin/hotel/edit/:id"
+              path="/hotel/admin/edit/:id"
               element={
                 <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
                   <EditHotelForm />
@@ -148,8 +150,38 @@ function App() {
             />
           </Routes>
           <Routes>
-            <Route path="/bus/admin/dashboard" element={<BusDashboard />} />
-            <Route path="/bus/admin/create" element={<BusForm />} />
+            <Route
+              path="/bus/admin/dashboard"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <BusDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bus/admin/create"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <BusForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bus/admin/list"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <BusList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/bus/admin/edit/:id"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <EditBusPage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
           <Routes>
             <Route

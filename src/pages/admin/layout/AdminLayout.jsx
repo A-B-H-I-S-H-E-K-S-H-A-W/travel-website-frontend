@@ -17,7 +17,7 @@ const busLayout = [
   },
   {
     id: 3,
-    link: "/bus/admin/dashboard",
+    link: "/bus/admin/list",
     linkName: "📦 List Buses",
   },
 ];
@@ -197,20 +197,20 @@ export default function AdminLayout({ children }) {
   const [result, setResult] = useState(null);
   const { loading } = useAdminAuth();
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-800"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex min-h-screen overflow-hidden bg-gray-100">
       <Sidebar isOpen={sidebarOpen} setResult={setResult} />
       <div className="flex-1 flex flex-col md:ml-64 transition-all">
         <TopBar toggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
-        <div className="p-3 md:p-5 text-gray-800 text-lg">{children}</div>
+        <div className="p-3 md:p-5 text-gray-800 text-lg">
+          {loading ? (
+            <div className="flex justify-center items-center h-screen">
+              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-800"></div>
+            </div>
+          ) : (
+            children
+          )}
+        </div>
       </div>
       <Toast
         result={result}

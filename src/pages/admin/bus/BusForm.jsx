@@ -1,247 +1,264 @@
 import React, { useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
+import { useAdminAuth } from "../../../context/AdminAuthContext";
+import Toast from "../../../components/common/Toast";
+
+const BUS_TYPES = ["AC Sleeper", "Non-AC Seater", "Sleeper", "AC Seater"];
+const OPERATING_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const BusForm = () => {
+  const { createApi } = useAdminAuth();
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
-    numberPlate: "",
-    busType: "",
-    origin: "",
-    seatsAvailable: 0,
+    busNumber: "",
+    busName: "",
+    source: "",
     destination: "",
-    price: 0,
-    arrival: "",
-    departure: "",
-    availability: true,
-    driver: "",
-    driverDetails: [""],
+    departureTime: "",
+    arrivalTime: "",
+    totalSeats: "",
+    availableSeats: "",
+    fare: "",
+    busType: "",
+    operatingDays: [],
+    isActive: false,
+    images: [],
   });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    const { name, value, type, checked, files } = e.target;
+
+    if (name === "operatingDays") {
+      const updated = checked
+        ? [...formData.operatingDays, value]
+        : formData.operatingDays.filter((item) => item !== value);
+      setFormData({ ...formData, operatingDays: updated });
+    } else if (name === "images") {
+      setFormData({ ...formData, images: Array.from(files) });
+    } else if (type === "checkbox") {
+      setFormData({ ...formData, [name]: checked });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted: ", formData);
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("adminToken");
+      const res = await createApi("/api/bus/create", formData, token);
+      if (res.success) {
+        setResult({ success: true, message: res.message });
+      } else {
+        setResult({
+          success: false,
+          message: res.message || "Something went wrong",
+        });
+      }
+    } catch (error) {
+      console.error("Create Bus Error:", error);
+      setResult({ success: false, message: "Internal server error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <AdminLayout>
-      <form className="max-w-4xl" onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-bold mb-6">Bus Details Form</h1>
+      <form onSubmit={handleSubmit} className="max-w-4xl space-y-4">
+        <h1 className="text-2xl font-bold mb-6">Create Bus Schedule</h1>
 
-        {/* Number Plate */}
-        <div className="mb-4">
-          <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="numberPlate"
-          >
-            Number Plate <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="numberPlate"
-            name="numberPlate"
-            value={formData.numberPlate}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
+        <InputField
+          label="Bus Number"
+          name="busNumber"
+          value={formData.busNumber}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          label="Bus Name"
+          name="busName"
+          value={formData.busName}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          label="Source"
+          name="source"
+          value={formData.source}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          label="Destination"
+          name="destination"
+          value={formData.destination}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          type="time"
+          label="Departure Time"
+          name="departureTime"
+          value={formData.departureTime}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          type="time"
+          label="Arrival Time"
+          name="arrivalTime"
+          value={formData.arrivalTime}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          type="number"
+          label="Total Seats"
+          name="totalSeats"
+          value={formData.totalSeats}
+          onChange={handleChange}
+          required
+        />
+        <InputField
+          type="number"
+          label="Fare (INR)"
+          name="fare"
+          value={formData.fare}
+          onChange={handleChange}
+          required
+        />
 
-        {/* Bus Type */}
+        {/* Bus Type Select Dropdown (Single Select) */}
         <div className="mb-4">
-          <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="busType"
-          >
-            Bus Type
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Bus Type <span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
-            id="busType"
+          <select
             name="busType"
             value={formData.busType}
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Origin */}
-        <div className="mb-4">
-          <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="origin"
-          >
-            Origin <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="origin"
-            name="origin"
-            value={formData.origin}
-            onChange={handleChange}
+            className="w-full p-2 border-4 rounded-md"
             required
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Destination */}
-        <div className="mb-4">
-          <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="destination"
           >
-            Destination <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="destination"
-            name="destination"
-            value={formData.destination}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
+            <option value="" disabled>
+              Select Bus Type
+            </option>
+            {BUS_TYPES.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Seats Available */}
-        <div className="mb-4">
-          <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="seatsAvailable"
-          >
-            Seats Available
-          </label>
-          <input
-            type="number"
-            id="seatsAvailable"
-            name="seatsAvailable"
-            value={formData.seatsAvailable}
-            onChange={handleChange}
-            min="0"
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
+        {/* Operating Days Checkboxes */}
+        <CheckboxGroup
+          label="Operating Days"
+          name="operatingDays"
+          options={OPERATING_DAYS}
+          selected={formData.operatingDays}
+          onChange={handleChange}
+        />
 
-        {/* Price */}
-        <div className="mb-4">
-          <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="price"
-          >
-            Price <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-            min="0"
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Arrival and Departure */}
-        <div className="mb-4">
-          <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="arrival"
-          >
-            Arrival
-          </label>
-          <input
-            type="text"
-            id="arrival"
-            name="arrival"
-            value={formData.arrival}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="departure"
-          >
-            Departure
-          </label>
-          <input
-            type="text"
-            id="departure"
-            name="departure"
-            value={formData.departure}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Availability */}
+        {/* Is Active Checkbox */}
         <div className="mb-4">
           <label className="flex items-center">
             <input
               type="checkbox"
-              name="availability"
-              checked={formData.availability}
+              name="isActive"
+              checked={formData.isActive}
               onChange={handleChange}
               className="mr-2"
             />
-            Available
+            Is Active
           </label>
         </div>
 
-        {/* Driver */}
+        {/* Images Input */}
         <div className="mb-4">
           <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="driver"
+            htmlFor="images"
+            className="block text-sm font-medium text-gray-700"
           >
-            Driver
+            Upload Images <span className="text-red-500">*</span>
           </label>
           <input
-            type="text"
-            id="driver"
-            name="driver"
-            value={formData.driver}
+            type="file"
+            id="images"
+            name="images"
+            accept="image/*"
+            multiple
             onChange={handleChange}
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="mt-1 block w-full p-2 border-4 rounded-md"
+            required
           />
         </div>
 
-        {/* Driver Details */}
-        <div className="mb-4">
-          <label
-            className="block text-md font-medium text-gray-700"
-            htmlFor="driverDetails"
-          >
-            Driver Details
-          </label>
-          <textarea
-            id="driverDetails"
-            name="driverDetails"
-            value={formData.driverDetails}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+          disabled={loading}
+          className={`w-full text-white py-2 px-4 rounded-md cursor-pointer ${
+            loading
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
-          Submit
+          {loading ? "Submitting..." : "Submit"}
         </button>
       </form>
+
+      <Toast result={result} setResult={setResult} />
     </AdminLayout>
   );
 };
+
+const InputField = ({
+  label,
+  name,
+  value,
+  onChange,
+  required = false,
+  type = "text",
+}) => (
+  <div className="mb-4">
+    <label htmlFor={name} className="block font-medium text-gray-700">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    <input
+      type={type}
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      className="mt-1 block w-full p-2 border-3 border-blue-200 rounded-md"
+    />
+  </div>
+);
+
+const CheckboxGroup = ({ label, name, options, selected, onChange }) => (
+  <div className="mb-4">
+    <label className="block font-medium text-gray-700 mb-2">{label}</label>
+    <div className="grid grid-cols-2 gap-2">
+      {options.map((option) => (
+        <label key={option} className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            name={name}
+            value={option}
+            checked={selected.includes(option)}
+            onChange={onChange}
+            className="cursor-pointer"
+          />
+          <span>{option}</span>
+        </label>
+      ))}
+    </div>
+  </div>
+);
 
 export default BusForm;

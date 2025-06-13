@@ -144,7 +144,7 @@ export const AdminAuthProvider = ({ children }) => {
         throw new Error(result.message || "Failed to create resource");
       }
 
-      return { success: true, data: result };
+      return result;
     } catch (error) {
       console.error("Create API Error:", error);
       return { success: false, message: error.message };

@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AdminLayout from "../layout/AdminLayout";
-import { useAdminAuth } from "../../../context/AdminAuthContext";
 import Toast from "../../../components/common/Toast";
+import { useAdminAuth } from "../../../context/AdminAuthContext";
 
-// Enum values (match the ones in your Mongoose schema)
 const BUS_TYPES = ["AC Sleeper", "Non-AC Seater", "Sleeper", "AC Seater"];
 const OPERATING_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const BusForm = () => {
-  const { createApi } = useAdminAuth();
+const EditBusPage = () => {
+  const { id } = useParams();
+  const { state } = useLocation();
+  const { updateApi, getDataApi } = useAdminAuth();
+  const navigate = useNavigate();
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     busNumber: "",
@@ -21,22 +25,47 @@ const BusForm = () => {
     totalSeats: "",
     availableSeats: "",
     fare: "",
-    busType: [],
+    busType: "",
     operatingDays: [],
     isActive: false,
     images: [],
   });
 
+  const busFromList = state?.bus;
+
+  useEffect(() => {
+    if (busFromList) {
+      setFormData(busFromList);
+    } else {
+      fetchBusData();
+    }
+  }, [busFromList]);
+
+  const fetchBusData = async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const res = await getDataApi(`/api/bus/${id}`, token);
+
+      console.log(res);
+
+      if (res.success) {
+        setFormData(res.data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch bus", err);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
 
-    if (name === "busType" || name === "operatingDays") {
-      const updated = checked
-        ? [...formData[name], value]
-        : formData[name].filter((item) => item !== value);
-      setFormData({ ...formData, [name]: updated });
-    } else if (name === "images") {
+    if (name === "images") {
       setFormData({ ...formData, images: Array.from(files) });
+    } else if (name === "operatingDays") {
+      const updated = checked
+        ? [...formData.operatingDays, value]
+        : formData.operatingDays.filter((day) => day !== value);
+      setFormData({ ...formData, operatingDays: updated });
     } else if (type === "checkbox") {
       setFormData({ ...formData, [name]: checked });
     } else {
@@ -46,20 +75,37 @@ const BusForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await createApi("/api/bus/create", formData, token);
-      if (res.success) {
-        setResult({ success: true, message: res.message });
-      } else {
-        setResult({
-          success: false,
-          message: res.message || "Something went wrong",
-        });
+      const formToSend = new FormData();
+
+      for (const key in formData) {
+        if (key === "images") {
+          formData.images.forEach((img) => formToSend.append("images", img));
+        } else if (Array.isArray(formData[key])) {
+          formData[key].forEach((val) => formToSend.append(key, val));
+        } else {
+          formToSend.append(key, formData[key]);
+        }
       }
-    } catch (error) {
-      console.error("Create Bus Error:", error);
-      setResult({ success: false, message: "Internal server error" });
+
+      const res = await updateApi(`/api/bus/update/${id}`, formToSend, token);
+
+      if (res.success) {
+        setResult({
+          success: true,
+          message: res.message || "Updated successfully",
+        });
+        navigate("/bus/admin/list");
+      } else {
+        setResult({ success: false, message: res.message || "Update failed" });
+      }
+    } catch (err) {
+      console.error("Submit error", err);
+      setResult({ success: false, message: "Update failed unexpectedly" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -97,7 +143,7 @@ const BusForm = () => {
           required
         />
         <InputField
-          type="datetime-local"
+          type="time"
           label="Departure Time"
           name="departureTime"
           value={formData.departureTime}
@@ -105,7 +151,7 @@ const BusForm = () => {
           required
         />
         <InputField
-          type="datetime-local"
+          type="time"
           label="Arrival Time"
           name="arrivalTime"
           value={formData.arrivalTime}
@@ -129,14 +175,28 @@ const BusForm = () => {
           required
         />
 
-        {/* Bus Type Checkboxes */}
-        <CheckboxGroup
-          label="Bus Type"
-          name="busType"
-          options={BUS_TYPES}
-          selected={formData.busType}
-          onChange={handleChange}
-        />
+        {/* Bus Type Select Dropdown (Single Select) */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Bus Type <span className="text-red-500">*</span>
+          </label>
+          <select
+            name="busType"
+            value={formData.busType}
+            onChange={handleChange}
+            className="w-full p-2 border-4 rounded-md"
+            required
+          >
+            <option value="" disabled>
+              Select Bus Type
+            </option>
+            {BUS_TYPES.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* Operating Days Checkboxes */}
         <CheckboxGroup
@@ -161,7 +221,7 @@ const BusForm = () => {
           </label>
         </div>
 
-        {/* Image Upload */}
+        {/* Images Input */}
         <div className="mb-4">
           <label
             htmlFor="images"
@@ -178,13 +238,31 @@ const BusForm = () => {
             onChange={handleChange}
             className="mt-1 block w-full p-2 border-4 rounded-md"
           />
+
+          {formData.images.length > 0 && (
+            <div className="grid grid-cols-3 gap-4 my-4">
+              {formData.images.map((img, idx) => (
+                <img
+                  key={idx}
+                  src={typeof img === "string" ? img : URL.createObjectURL(img)}
+                  alt={`Bus Image ${idx + 1}`}
+                  className="w-full h-32 object-cover rounded-md border-2 border-blue-500"
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+          disabled={loading}
+          className={`w-full text-white py-2 px-4 rounded-md cursor-pointer ${
+            loading
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
-          Submit
+          {loading ? "Updating..." : "Update"}
         </button>
       </form>
 
@@ -193,6 +271,7 @@ const BusForm = () => {
   );
 };
 
+// Reusable Input
 const InputField = ({
   label,
   name,
@@ -206,22 +285,20 @@ const InputField = ({
       {label} {required && <span className="text-red-500">*</span>}
     </label>
     <input
-      type={type}
       id={name}
       name={name}
+      type={type}
       value={value}
       onChange={onChange}
       required={required}
-      className="mt-1 block w-full p-2 border-4 rounded-md"
+      className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
     />
   </div>
 );
 
 const CheckboxGroup = ({ label, name, options, selected, onChange }) => (
   <div className="mb-4">
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-      {label}
-    </label>
+    <label className="block font-medium text-gray-700 mb-2">{label}</label>
     <div className="grid grid-cols-2 gap-2">
       {options.map((option) => (
         <label key={option} className="flex items-center space-x-2">
@@ -240,4 +317,4 @@ const CheckboxGroup = ({ label, name, options, selected, onChange }) => (
   </div>
 );
 
-export default BusForm;
+export default EditBusPage;
