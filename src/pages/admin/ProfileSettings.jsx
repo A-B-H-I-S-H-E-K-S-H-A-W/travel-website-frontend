@@ -7,6 +7,7 @@ import { useAdminAuth } from "../../context/AdminAuthContext";
 const ProfileSettings = () => {
   const { fetchAdmin } = useAdminAuth();
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [adminData, setAdminData] = useState(null);
 
   const getAdminData = async () => {
@@ -74,36 +75,46 @@ const ProfileSettings = () => {
     const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
     const aadharRegex = /^\d{12}$/;
 
-    if (
-      formData.pancardNumber &&
-      !panRegex.test(formData.pancardNumber.toUpperCase())
-    ) {
+    setLoading(true);
+    try {
+      if (
+        formData.pancardNumber &&
+        !panRegex.test(formData.pancardNumber.toUpperCase())
+      ) {
+        setResult({
+          success: false,
+          message: "Invalid PAN card number. Format should be: ABCDE1234F",
+        });
+        return;
+      }
+
+      if (formData.aadharNumber && !aadharRegex.test(formData.aadharNumber)) {
+        setResult({
+          success: false,
+          message: "Invalid Aadhar number. It should be a 12-digit number.",
+        });
+        return;
+      }
+
+      const token = localStorage.getItem("adminToken");
+      const fd = new FormData();
+
+      for (let key in formData) {
+        fd.append(key, formData[key]);
+      }
+
+      const res = await updateAdmin(fd, token);
+      console.log("Update response:", res);
+      setResult(res);
+    } catch (error) {
+      console.log("Error updating admin ::::", error);
       setResult({
         success: false,
-        message: "Invalid PAN card number. Format should be: ABCDE1234F",
+        message: "Internal Server Error",
       });
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    if (formData.aadharNumber && !aadharRegex.test(formData.aadharNumber)) {
-      setResult({
-        success: false,
-        message: "Invalid Aadhar number. It should be a 12-digit number.",
-      });
-      return;
-    }
-
-    const token = localStorage.getItem("adminToken");
-    const fd = new FormData();
-
-    for (let key in formData) {
-      fd.append(key, formData[key]);
-    }
-
-    const res = await updateAdmin(fd, token);
-    console.log("Update response:", res);
-    setResult(res);
-    // optionally show a toast or success message here
   };
 
   return (
@@ -200,9 +211,39 @@ const ProfileSettings = () => {
 
         <button
           type="submit"
-          className="cursor-pointer w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+          disabled={loading}
+          className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white cursor-pointer 
+    ${
+      loading
+        ? "bg-cyan-400 cursor-not-allowed"
+        : "bg-cyan-600 hover:bg-cyan-500"
+    }
+    focus:outline-2 focus:outline-offset-2 focus:outline-cyan-600`}
         >
-          Submit
+          {loading ? (
+            <svg
+              className="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>
+            </svg>
+          ) : (
+            <p>Submit</p>
+          )}
         </button>
       </form>
       <Toast

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 
 export default function AdminAuth({ isLoginSection = true }) {
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -56,19 +57,27 @@ export default function AdminAuth({ isLoginSection = true }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    setLoading(true);
+    try {
+      if (!validateForm()) return;
 
-    if (isLoginSection) {
-      const res = await login(form);
-      setResult(res);
-      if (res.success === true) {
-        const domain = res.admin.domain.toLowerCase();
-        navigate(`/${domain}/admin/dashboard`);
+      if (isLoginSection) {
+        const res = await login(form);
+        setResult(res);
+        if (res.success === true) {
+          const domain = res.admin.domain.toLowerCase();
+          navigate(`/${domain}/admin/dashboard`);
+        }
+      } else {
+        const res = await register(form);
+        setResult(res);
+        navigate("/admin/login");
       }
-    } else {
-      const res = await register(form);
-      setResult(res);
-      navigate("/admin/login");
+    } catch (error) {
+      console.log("Error login user ::::", error);
+      setResult({ success: false, message: "Internal server error" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -181,9 +190,41 @@ export default function AdminAuth({ isLoginSection = true }) {
 
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-cyan-600 px-3 py-1.5 text-sm/6 font-semibold text-white hover:bg-cyan-500 focus:outline-2 focus:outline-offset-2 focus:outline-cyan-600 cursor-pointer"
+              disabled={loading}
+              className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm/6 font-semibold text-white cursor-pointer 
+    ${
+      loading
+        ? "bg-cyan-400 cursor-not-allowed"
+        : "bg-cyan-600 hover:bg-cyan-500"
+    }
+    focus:outline-2 focus:outline-offset-2 focus:outline-cyan-600`}
             >
-              {isLoginSection ? "Login" : "Register"}
+              {loading ? (
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+              ) : isLoginSection ? (
+                "Login"
+              ) : (
+                "Register"
+              )}
             </button>
           </div>
 
