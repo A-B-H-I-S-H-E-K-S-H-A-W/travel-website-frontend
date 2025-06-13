@@ -1,260 +1,287 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
+import { useAdminAuth } from "../../../context/AdminAuthContext";
+import Toast from "../../../components/common/Toast";
 
-const RoomCreate = () => {
+const BED_TYPES = ["King Size", "Queen Size", "Twin"];
+const PAYMENT_TYPES = ["Book now and pay online", "Book now and pay at hotel"];
+const FACILITIES = ["WiFi", "TV", "AC", "Room Service", "Mini Bar", "Balcony"];
+
+const RoomForm = () => {
+  const { createApi, getDataApi } = useAdminAuth();
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+  const [hotels, setHotels] = useState([]);
+
   const [formData, setFormData] = useState({
-    name: "",
-    address: "",
-    landmark: [""],
-    city: "",
-    state: "",
-    country: "",
-    pincode: "",
-    freeCancellation: false,
-    facilities: [""],
-    ratings: 0,
-    photos: "",
-    rooms: "",
+    hotel: "",
+    bedType: "",
+    maxPerson: "",
+    facilities: [],
+    discount: 1,
+    price: "",
+    payment: "",
+    image: [],
+    totalRooms: "",
   });
+
+  const fetchHotels = async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const res = await getDataApi("/api/hotel/list", token);
+      if (res.success) {
+        setHotels(res.data);
+      }
+    } catch (error) {
+      console.error("Error fetching hotels", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchHotels();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    // Handle array fields (landmark, facilities)
-    if (name === "landmark" || name === "facilities") {
-      setFormData({
-        ...formData,
-        [name]: value.split(","),
-      });
+    if (type === "checkbox" && name === "facilities") {
+      const updated = checked
+        ? [...formData.facilities, value]
+        : formData.facilities.filter((f) => f !== value);
+      setFormData({ ...formData, facilities: updated });
+    } else if (type === "checkbox" && name === "booked") {
+      setFormData({ ...formData, booked: checked });
+    } else if (name === "images") {
+      setFormData({ ...formData, [name]: Array.from(e.target.files) });
     } else {
-      setFormData({
-        ...formData,
-        [name]: type === "checkbox" ? checked : value,
-      });
+      setFormData({ ...formData, [name]: value });
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted: ", formData);
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("adminToken");
+
+      const res = await createApi("/api/hotel/create-room", formData, token);
+      if (res.success) {
+        setResult({ success: true, message: "Room created successfully" });
+        setFormData({
+          hotel: "",
+          bedType: "",
+          maxPerson: "",
+          facilities: [],
+          discount: 1,
+          price: "",
+          payment: "",
+          image: [],
+          totalRooms: "",
+        });
+      } else {
+        setResult({
+          success: false,
+          message: res.message || "Something went wrong",
+        });
+      }
+    } catch (err) {
+      console.error("Error creating room:", err);
+      setResult({ success: false, message: "Internal server error" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <AdminLayout>
-      <form className="max-w-4xl" onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-bold mb-6">Room Details Form</h1>
+      <form className="max-w-3xl" onSubmit={handleSubmit}>
+        <h1 className="text-2xl font-bold mb-6">Create Room</h1>
 
-        {/* Hotel Name */}
+        {/* Hotel Dropdown */}
         <div className="mb-4">
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Room Name <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
+          <label className="block text-sm font-medium mb-1">Select Hotel</label>
+          <select
+            name="hotel"
+            value={formData.hotel}
             onChange={handleChange}
             required
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Address */}
-        <div className="mb-4">
-          <label
-            htmlFor="address"
-            className="block text-sm font-medium text-gray-700"
+            className="block w-full border-4 rounded-md p-2"
           >
-            Address <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
+            <option value="">-- Select --</option>
+            {hotels.map((hotel) => (
+              <option key={hotel._id} value={hotel._id}>
+                {hotel.name}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Landmark */}
-        <div className="mb-4">
-          <label
-            htmlFor="landmark"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Landmark (comma-separated)
-          </label>
-          <input
-            type="text"
-            id="landmark"
-            name="landmark"
-            value={formData.landmark.join(",")}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
+        {/* Bed Type */}
+        <SelectField
+          name="bedType"
+          label="Bed Type"
+          value={formData.bedType}
+          onChange={handleChange}
+          options={BED_TYPES}
+          required
+        />
 
-        {/* City */}
-        <div className="mb-4">
-          <label
-            htmlFor="city"
-            className="block text-sm font-medium text-gray-700"
-          >
-            City <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="city"
-            name="city"
-            value={formData.city}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* State */}
-        <div className="mb-4">
-          <label
-            htmlFor="state"
-            className="block text-sm font-medium text-gray-700"
-          >
-            State <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="state"
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Country */}
-        <div className="mb-4">
-          <label
-            htmlFor="country"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Country <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="country"
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Pincode */}
-        <div className="mb-4">
-          <label
-            htmlFor="pincode"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Pincode <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="pincode"
-            name="pincode"
-            value={formData.pincode}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Free Cancellation */}
-        <div className="mb-4">
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              name="freeCancellation"
-              checked={formData.freeCancellation}
-              onChange={handleChange}
-              className="mr-2"
-            />
-            Free Cancellation
-          </label>
-        </div>
+        {/* Max Person */}
+        <InputField
+          label="Max Person"
+          name="maxPerson"
+          value={formData.maxPerson}
+          onChange={handleChange}
+          required
+        />
 
         {/* Facilities */}
         <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Facilities</label>
+          <div className="grid grid-cols-2 gap-2">
+            {FACILITIES.map((f) => (
+              <label key={f} className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  name="facilities"
+                  value={f}
+                  checked={formData.facilities.includes(f)}
+                  onChange={handleChange}
+                  className="cursor-pointer"
+                />
+                <span>{f}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* Price */}
+        <InputField
+          label="Price"
+          name="price"
+          value={formData.price}
+          onChange={handleChange}
+          required
+        />
+
+        {/* Discount */}
+        <InputField
+          label="Discount (%)"
+          name="discount"
+          value={formData.discount}
+          onChange={handleChange}
+          required
+        />
+
+        {/* Payment Type */}
+        <SelectField
+          name="payment"
+          label="Payment Option"
+          value={formData.payment}
+          onChange={handleChange}
+          options={PAYMENT_TYPES}
+          required
+        />
+
+        {/* Image URL */}
+        <div className="mb-4">
           <label
-            htmlFor="facilities"
+            htmlFor="images"
             className="block text-sm font-medium text-gray-700"
           >
-            Facilities (comma-separated)
+            Upload Images <span className="text-red-500">*</span>
           </label>
           <input
-            type="text"
-            id="facilities"
-            name="facilities"
-            value={formData.facilities.join(",")}
+            type="file"
+            id="images"
+            name="images"
+            accept="image/*"
+            multiple
             onChange={handleChange}
             className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
 
-        {/* Ratings */}
-        <div className="mb-4">
-          <label
-            htmlFor="ratings"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Ratings (0-5)
-          </label>
-          <input
-            type="number"
-            id="ratings"
-            name="ratings"
-            value={formData.ratings}
-            onChange={handleChange}
-            min="0"
-            max="5"
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        {/* Photos */}
-        <div className="mb-4">
-          <label
-            htmlFor="photos"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Photos (URL)
-          </label>
-          <input
-            type="text"
-            id="photos"
-            name="photos"
-            value={formData.photos}
-            onChange={handleChange}
-            className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
+        {/* Total Rooms */}
+        <InputField
+          label="Total Rooms"
+          name="totalRooms"
+          value={formData.totalRooms}
+          onChange={handleChange}
+          required
+        />
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+          disabled={loading}
+          className={`w-full text-white py-2 px-4 rounded-md ${
+            loading ? "bg-blue-400" : "bg-blue-500 hover:bg-blue-600"
+          }`}
         >
-          Submit
+          {loading ? "Submitting..." : "Create Room"}
         </button>
       </form>
+
+      <Toast result={result} setResult={setResult} />
     </AdminLayout>
   );
 };
 
-export default RoomCreate;
+// Reusable Input
+const InputField = ({
+  label,
+  name,
+  value,
+  onChange,
+  type = "text",
+  required = false,
+}) => (
+  <div className="mb-4">
+    <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    <input
+      type={type}
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
+    />
+  </div>
+);
+
+// Reusable Select
+const SelectField = ({
+  label,
+  name,
+  value,
+  onChange,
+  options = [],
+  required = false,
+}) => (
+  <div className="mb-4">
+    <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    <select
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      className="mt-1 block w-full p-2 border-4 rounded-md focus:ring-blue-500 focus:border-blue-500"
+    >
+      <option value="">-- Select --</option>
+      {options.map((opt) => (
+        <option key={opt} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </select>
+  </div>
+);
+
+export default RoomForm;

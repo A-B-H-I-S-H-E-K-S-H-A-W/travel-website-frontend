@@ -5,6 +5,7 @@ import Toast from "../../../components/common/Toast";
 
 const HotelForm = () => {
   const { createApi } = useAdminAuth();
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -40,15 +41,15 @@ const HotelForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const token = localStorage.getItem("adminToken");
       const res = await createApi("/api/hotel/create", formData, token);
-      console.log("API response :::", res);
 
       if (res.success) {
         setResult({
           success: true,
-          message: res.data.message || "Hotel created successfully",
+          message: res.message || "Hotel created successfully",
         });
       } else {
         setResult({
@@ -59,6 +60,8 @@ const HotelForm = () => {
     } catch (error) {
       console.log("Error create hotel data ::::", error);
       setResult({ success: false, message: "Internal server error" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -250,10 +253,13 @@ const HotelForm = () => {
 
         {/* Submit */}
         <button
+          disabled={loading}
           type="submit"
-          className="cursor-pointer w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+          className={`cursor-pointer w-full  text-white py-2 px-4 rounded-md  ${
+            loading ? "bg-blue-400" : "bg-blue-500 hover:bg-blue-600"
+          }`}
         >
-          Submit
+          {loading ? "Submitting..." : "Submit"}
         </button>
       </form>
       <Toast result={result} setResult={setResult} />
