@@ -7,7 +7,6 @@ const Modal = ({ isOpen, onClose, message, onConfirm }) => {
     setLoading(true);
     try {
       const result = await onConfirm?.(); // Execute passed callback
-      console.log("Modal Confirm Result:", result);
     } catch (error) {
       console.error("Error in modal confirmation:", error);
     } finally {

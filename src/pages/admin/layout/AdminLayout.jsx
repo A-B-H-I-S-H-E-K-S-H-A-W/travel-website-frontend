@@ -61,7 +61,7 @@ const flightLayout = [
   },
   {
     id: 3,
-    link: "/flight/admin/dashboard",
+    link: "/flight/admin/list",
     linkName: "📦 List Flights",
   },
 ];

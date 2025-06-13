@@ -6,7 +6,7 @@ import Search from "./pages/user/Search";
 import InfoPage from "./pages/user/InfoPage";
 import BusDashboard from "./pages/admin/bus/Dashboard";
 import BusForm from "./pages/admin/bus/BusForm";
-import FlightForm from "./pages/admin/flights/FlightForm";
+import FlightForm from "./pages/admin/flights/FlightCreate";
 import HotelForm from "./pages/admin/hotels/HotelForm";
 import HotelDashboard from "./pages/admin/hotels/Dashboard";
 import AdminDashboard from "./pages/superadmin/Dashboard";
@@ -32,6 +32,8 @@ import HotelsList from "./pages/admin/hotels/HotelsList";
 import EditHotelForm from "./pages/admin/hotels/HotelEdit";
 import BusList from "./pages/admin/bus/BusList";
 import EditBusPage from "./pages/admin/bus/BusEdit";
+import FlightList from "./pages/admin/flights/FlightList";
+import FlightEdit from "./pages/admin/flights/FlightEdit";
 
 function App() {
   return (
@@ -186,9 +188,36 @@ function App() {
           <Routes>
             <Route
               path="/flight/admin/dashboard"
-              element={<FlightDashboard />}
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <FlightDashboard />
+                </ProtectedRoute>
+              }
             />
-            <Route path="/flight/admin/create" element={<FlightForm />} />
+            <Route
+              path="/flight/admin/create"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <FlightForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/flight/admin/list"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <FlightList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/flight/admin/edit/:id"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <FlightEdit />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </AdminAuthProvider>
         <SuperAdminProvider>
