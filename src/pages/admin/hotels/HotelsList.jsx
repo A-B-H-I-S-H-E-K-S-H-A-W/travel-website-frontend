@@ -57,7 +57,7 @@ const HotelsList = () => {
   }, []);
 
   const handleEdit = (item) => {
-    navigate(`/admin/hotel/edit/${item._id}`, { state: { hotel: item } });
+    navigate(`/hotel/admin/edit/${item._id}`, { state: { hotel: item } });
   };
 
   return (
