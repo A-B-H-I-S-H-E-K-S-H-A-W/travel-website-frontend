@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Settings, User, Menu } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Toast from "../../../components/common/Toast";
 import { useSuperAdminC } from "../../../context/SuperAdminContext";
 import CreateSuperAdminModal from "../../../components/admin/createSuperAdminModal";
@@ -65,7 +65,6 @@ const Sidebar = ({ isOpen }) => {
 const TopBar = ({ toggleSidebar, modal }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { logout, currSuperAdmin } = useSuperAdminC();
-  const navigate = useNavigate();
   const superAdmin = currSuperAdmin;
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md relative px-6">
@@ -104,7 +103,7 @@ const TopBar = ({ toggleSidebar, modal }) => {
           <button
             onClick={() => {
               logout();
-              navigate("/super-admin/login");
+              window.location.href = "/admin/login";
             }}
             className="cursor-pointer block w-full text-left px-4 py-3 hover:bg-gray-100 transition"
           >
