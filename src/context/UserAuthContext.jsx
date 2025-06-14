@@ -156,6 +156,30 @@ export const UserAuthProvider = ({ children }) => {
     }
   };
 
+  const fetchSearchData = async (url, data) => {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return { success: false, message: `error data ${errorData}` };
+      }
+
+      const result = await response.json();
+      console.log(result);
+
+      return result;
+    } catch (err) {
+      console.error("Search error:", err.message);
+    }
+  };
+
   return (
     <UserAuthContext.Provider
       value={{
@@ -167,6 +191,7 @@ export const UserAuthProvider = ({ children }) => {
         fetchDataInfo,
         update,
         getUser,
+        fetchSearchData,
       }}
     >
       {children}

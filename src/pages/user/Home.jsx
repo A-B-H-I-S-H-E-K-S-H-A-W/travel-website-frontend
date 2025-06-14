@@ -13,8 +13,9 @@ const Home = () => {
   const [hotels, setHotels] = useState([]);
   const [flights, setFlights] = useState([]);
   const [buses, setBuses] = useState([]);
+  const token = localStorage.getItem("userToken");
 
-  const { fetchDashboardCard } = useUserAuth();
+  const { fetchDashboardCard, fetchSearchData } = useUserAuth();
 
   useEffect(() => {
     // Show the loader for 3 seconds
@@ -41,6 +42,10 @@ const Home = () => {
     } catch (error) {
       console.log("Got an error", error);
     }
+  };
+
+  const handleSearch = (formData) => {
+    fetchSearchData("/api/fetch/search", formData);
   };
 
   useEffect(() => {
@@ -80,7 +85,7 @@ const Home = () => {
                         </p>
                       </div>
                       <div className="mt-6">
-                        <SearchBox />
+                        <SearchBox onSearch={handleSearch} />
                       </div>
                     </div>
                   </div>

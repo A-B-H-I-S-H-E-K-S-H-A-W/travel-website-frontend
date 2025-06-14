@@ -21,6 +21,8 @@ const FlightsList = () => {
     try {
       const res = await getDataApi("/api/flight/list", token);
       if (res.success) {
+        console.log(res.data);
+
         setData(res.data);
       } else {
         console.error("Unexpected data format:", res);
