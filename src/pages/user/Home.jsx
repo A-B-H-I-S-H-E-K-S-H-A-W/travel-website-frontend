@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ButtonSolid } from "../../components/common/Button";
 import Loading from "../../components/common/Loading";
 import Cards from "../../components/user/Cards";
 
@@ -7,19 +6,21 @@ import Layout from "../../Layout";
 import bg from "../../assets/images/bg_main.jpg";
 import SearchBox from "../../components/user/SearchBox";
 import { useUserAuth } from "../../context/UserAuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hotels, setHotels] = useState([]);
   const [flights, setFlights] = useState([]);
   const [buses, setBuses] = useState([]);
+  const navigate = useNavigate();
   const token = localStorage.getItem("userToken");
 
   const { fetchDashboardCard, fetchSearchData } = useUserAuth();
 
   useEffect(() => {
     // Show the loader for 3 seconds
-    if (localStorage.getItem("userToken")) {
+    if (token) {
       setIsLoading(false);
       return;
     }
@@ -44,8 +45,20 @@ const Home = () => {
     }
   };
 
-  const handleSearch = (formData) => {
-    fetchSearchData("/api/fetch/search", formData);
+  const handleSearch = async (formData) => {
+    try {
+      const res = await fetchSearchData("/api/fetch/search", formData);
+      if (res) {
+        navigate("/search", {
+          state: {
+            formData,
+            searchResults: res,
+          },
+        });
+      }
+    } catch (error) {
+      console.log("Search error", error);
+    }
   };
 
   useEffect(() => {

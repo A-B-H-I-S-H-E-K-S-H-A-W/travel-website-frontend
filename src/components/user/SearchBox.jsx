@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { ButtonSolid } from "../common/Button";
 
-const SearchBox = ({ onSearch }) => {
+const SearchBox = ({ onSearch, initialData }) => {
   const [formData, setFormData] = useState({
     source: "",
     destination: "",
     person: "1",
+    ...initialData,
   });
 
   const [loading, setLoading] = useState(false);
@@ -75,7 +75,7 @@ const SearchBox = ({ onSearch }) => {
             <button
               onClick={handleSearch}
               disabled={loading}
-              className={`text-white bg-blue-600 hover:bg-blue-700 font-semibold ${
+              className={`cursor-pointer text-white bg-blue-600 hover:bg-blue-700 font-semibold ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               } md:px-16 sm:px-14 px-20 py-2 md:py-3 md:rounded-full rounded-xl transition-all duration-300`}
             >
