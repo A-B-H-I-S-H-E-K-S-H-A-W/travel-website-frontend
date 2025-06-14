@@ -14,7 +14,6 @@ import Checkout from "./pages/user/Checkout";
 import { UserAuthProvider } from "./context/UserAuthContext";
 import AccountSettings from "./pages/user/AccountSettings";
 import ProtectedRoute from "./services/ProtectedRoute";
-import Saved from "./pages/user/Saved";
 import RecentTrips from "./pages/user/RecentTrips";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
 import AdminAuth from "./pages/admin/AdminLogin";
@@ -53,8 +52,22 @@ function App() {
               element={<Auth isLoginSection={false} />}
             />
             <Route path="/search" element={<Search />} />
-            <Route path="/info/:id" element={<InfoPage />} />
-            <Route path="/checkout" element={<Checkout />} />
+            <Route
+              path="/info/:id"
+              element={
+                <ProtectedRoute token={"userToken"} route={"/"}>
+                  <InfoPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute token={"userToken"} route={"/"}>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/settings/:id"
               element={
@@ -63,8 +76,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/saved" element={<Saved />} />
-            <Route path="/recent" element={<RecentTrips />} />
+            <Route
+              path="/recent"
+              element={
+                <ProtectedRoute token={"userToken"} route={"/"}>
+                  <RecentTrips />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </UserAuthProvider>
         {/* User Ends */}
