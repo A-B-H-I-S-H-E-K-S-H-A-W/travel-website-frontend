@@ -55,7 +55,7 @@ export const UserAuthProvider = ({ children }) => {
 
       if (res.ok) {
         const data = await res.json();
-        localStorage.setItem("userToken", JSON.stringify(data.token));
+        localStorage.setItem("userToken", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         setCurrentUser(data.user);
         return data;
@@ -64,6 +64,58 @@ export const UserAuthProvider = ({ children }) => {
       }
     } catch (error) {
       return { success: false, message: `${error.message}` };
+    }
+  };
+
+  const update = async (url, data, token) => {
+    try {
+      console.log(url, data, token);
+
+      const isFormData = data instanceof FormData;
+
+      const res = await fetch(url, {
+        method: "PUT",
+        headers: {
+          ...(isFormData
+            ? { Authorization: `Bearer ${token}` }
+            : {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              }),
+        },
+        body: isFormData ? data : JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        const responseData = await res.json();
+        return responseData;
+      }
+
+      return { success: false, message: "Error occur during updation" };
+    } catch (error) {
+      console.log("Error updating user ::::", error);
+      return { success: false, message: "Internal server error" };
+    }
+  };
+
+  const getUser = async (url, token) => {
+    try {
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      return await res.json();
+    } catch (error) {
+      console.log("Error fetching Info ::::", error);
+      return { success: false, message: "Internal Server Error" };
     }
   };
 
@@ -113,6 +165,8 @@ export const UserAuthProvider = ({ children }) => {
         register,
         fetchDashboardCard,
         fetchDataInfo,
+        update,
+        getUser,
       }}
     >
       {children}

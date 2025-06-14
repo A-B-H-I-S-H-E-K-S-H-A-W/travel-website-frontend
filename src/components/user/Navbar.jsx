@@ -7,6 +7,8 @@ import { useUserAuth } from "../../context/UserAuthContext";
 const Navbar = ({ user }) => {
   const [toggle, setToggle] = useState(false);
   const { logout } = useUserAuth();
+
+  
   return (
     <>
       <div className="flex fixed z-50 top-0 w-full backdrop-blur-xl items-center justify-between md:px-20 px-5 h-20">
@@ -45,7 +47,7 @@ const Navbar = ({ user }) => {
                 >
                   <div className="py-1" role="none">
                     <Link
-                      to="/settings"
+                      to={`/settings/${user.id}`}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
                       role="menuitem"
                       id="menu-item-0"

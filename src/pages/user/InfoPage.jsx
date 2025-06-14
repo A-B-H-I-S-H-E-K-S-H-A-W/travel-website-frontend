@@ -1,5 +1,7 @@
-import { Heart, Star } from "lucide-react";
-import img from "../../assets/images/bg.jpg";
+import { Heart } from "lucide-react";
+import hotelImg from "../../assets/images/bg.jpg";
+import busImg from "../../assets/images/bus.jpg";
+import flightImg from "../../assets/images/flight.jpg";
 import { ButtonOutline, ButtonSolid } from "../../components/common/Button";
 import ImagesCarousel from "../../components/user/ImagesCarousel";
 import { useParams } from "react-router-dom";
@@ -18,9 +20,10 @@ const InfoPage = () => {
     try {
       setLoading(true);
       const res = await fetchDataInfo(`/api/fetch/info/${id}`);
-
       if (res) {
         setData(res);
+      } else {
+        console.log("error");
       }
     } catch (error) {
       setResult({
@@ -36,17 +39,31 @@ const InfoPage = () => {
     getData();
   }, []);
 
-  console.log(data);
-
   return (
     <div className="bg-gray-100 min-h-screen w-full">
       <div className="bg-white shadow-md overflow-hidden">
         <div className="relative">
-          <img
-            src={img}
-            alt="Product image"
-            className="w-full h-40 md:h-62 object-cover"
-          />
+          {data && data.type === "bus" && (
+            <img
+              src={busImg}
+              alt="Product image"
+              className="w-full h-40 md:h-62 object-cover"
+            />
+          )}
+          {data && data.type === "flight" && (
+            <img
+              src={flightImg}
+              alt="Product image"
+              className="w-full h-40 md:h-62 object-cover"
+            />
+          )}
+          {data && data.type === "hotel" && (
+            <img
+              src={hotelImg}
+              alt="Product image"
+              className="w-full h-40 md:h-62 object-cover"
+            />
+          )}
           <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200">
             <Heart size={15} />
           </button>

@@ -10,7 +10,6 @@ import { useUserAuth } from "../../context/UserAuthContext";
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState(null);
   const [hotels, setHotels] = useState([]);
   const [flights, setFlights] = useState([]);
   const [buses, setBuses] = useState([]);
@@ -35,7 +34,6 @@ const Home = () => {
     try {
       const res = await fetchDashboardCard("/api/fetch/items");
       if (res) {
-        setData(res);
         setHotels(res.hotels);
         setFlights(res.flights);
         setBuses(res.buses);
