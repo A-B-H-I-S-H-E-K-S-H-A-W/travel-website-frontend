@@ -5,6 +5,20 @@ const UserAuthContext = createContext();
 export const UserAuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
+  // 🔹 Modal State
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+
+  const openModal = (bookingData) => {
+    setSelectedBooking(bookingData);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedBooking(null);
+  };
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -15,9 +29,7 @@ export const UserAuthProvider = ({ children }) => {
   const logout = async () => {
     const res = await fetch("/api/users/logout", {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     localStorage.removeItem("user");
@@ -30,9 +42,7 @@ export const UserAuthProvider = ({ children }) => {
     try {
       const res = await fetch("/api/users/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userDetails),
       });
 
@@ -47,9 +57,7 @@ export const UserAuthProvider = ({ children }) => {
     try {
       const res = await fetch("/api/users/auth", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
       });
 
@@ -69,8 +77,6 @@ export const UserAuthProvider = ({ children }) => {
 
   const update = async (url, data, token) => {
     try {
-      console.log(url, data, token);
-
       const isFormData = data instanceof FormData;
 
       const res = await fetch(url, {
@@ -123,14 +129,10 @@ export const UserAuthProvider = ({ children }) => {
     try {
       const res = await fetch(url, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
-      if (res) {
-        return res.json();
-      }
+      if (res) return res.json();
     } catch (err) {
       console.error("❌ Failed to fetch dashboard data", err);
     }
@@ -140,15 +142,10 @@ export const UserAuthProvider = ({ children }) => {
     try {
       const res = await fetch(url, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
       return await res.json();
     } catch (error) {
       console.log("Error fetching Info ::::", error);
@@ -160,9 +157,7 @@ export const UserAuthProvider = ({ children }) => {
     try {
       const response = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
@@ -173,10 +168,33 @@ export const UserAuthProvider = ({ children }) => {
 
       const result = await response.json();
       console.log(result);
-
       return result;
     } catch (err) {
       console.error("Search error:", err.message);
+    }
+  };
+
+  const createBooking = async (payload, token) => {
+    try {
+      const res = await fetch("/api/booking/book", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errRes = await res.json();
+        return { success: false, message: errRes.message || "Booking failed." };
+      }
+
+      const result = await res.json();
+      return result;
+    } catch (error) {
+      console.error("Error creating booking:", error.message);
+      return { success: false, message: "Internal Server Error" };
     }
   };
 
@@ -192,6 +210,11 @@ export const UserAuthProvider = ({ children }) => {
         update,
         getUser,
         fetchSearchData,
+        createBooking,
+        showModal,
+        selectedBooking,
+        openModal,
+        closeModal,
       }}
     >
       {children}
@@ -199,5 +222,4 @@ export const UserAuthProvider = ({ children }) => {
   );
 };
 
-// Optional: create a hook for easier context usage
 export const useUserAuth = () => useContext(UserAuthContext);

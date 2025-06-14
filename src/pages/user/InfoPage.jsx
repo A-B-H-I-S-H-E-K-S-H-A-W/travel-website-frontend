@@ -8,10 +8,12 @@ import { useParams } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { useEffect, useState } from "react";
 import Loader from "../../components/common/Loader";
+import BookingModal from "../../components/user/BookingModal";
 
 const InfoPage = () => {
   const { id } = useParams();
-  const { fetchDataInfo } = useUserAuth();
+  const { fetchDataInfo, openModal, showModal, closeModal, selectedBooking } =
+    useUserAuth();
   const [data, setData] = useState(null);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -145,6 +147,7 @@ const InfoPage = () => {
                     <ButtonSolid
                       title={"Book"}
                       className={"flex-1 px-4 py-2 rounded-full"}
+                      onClick={() => openModal(data)}
                     />
                     <ButtonOutline
                       title={"Quick View"}
@@ -222,15 +225,23 @@ const InfoPage = () => {
                   </div>
 
                   <div className="flex space-x-2">
-                    <ButtonSolid
-                      title={"Check Price"}
-                      className={"flex-1 px-4 py-2 rounded-full"}
-                    />
+                    <div onClick={() => openModal(data)}>
+                      <ButtonSolid
+                        title={"Check Price"}
+                        className={"flex-1 px-4 py-2 rounded-full"}
+                      />
+                    </div>
                     <ButtonOutline
                       title={"See Available Rooms"}
                       className={"px-4 py-2 rounded-full"}
                     />
                   </div>
+
+                  <BookingModal
+                    isOpen={showModal}
+                    onClose={() => setShowModal(false)}
+                    booking={selectedBooking}
+                  />
                 </div>
               </>
             )}
@@ -315,6 +326,7 @@ const InfoPage = () => {
                     <ButtonSolid
                       title={"Book"}
                       className={"flex-1 px-4 py-2 rounded-full"}
+                      onClick={() => openModal(data)}
                     />
                     <ButtonOutline
                       title={"Quick View"}
@@ -327,6 +339,11 @@ const InfoPage = () => {
           </div>
         )}
       </div>
+      <BookingModal
+        isOpen={showModal}
+        onClose={closeModal}
+        booking={selectedBooking}
+      />
     </div>
   );
 };
