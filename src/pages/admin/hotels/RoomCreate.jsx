@@ -21,7 +21,7 @@ const RoomForm = () => {
     discount: 1,
     price: "",
     payment: "",
-    image: [],
+    images: [],
     totalRooms: "",
   });
 
@@ -75,7 +75,7 @@ const RoomForm = () => {
           discount: 1,
           price: "",
           payment: "",
-          image: [],
+          images: [],
           totalRooms: "",
         });
       } else {

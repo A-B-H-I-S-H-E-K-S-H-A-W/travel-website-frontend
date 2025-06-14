@@ -34,6 +34,7 @@ import BusList from "./pages/admin/bus/BusList";
 import EditBusPage from "./pages/admin/bus/BusEdit";
 import FlightList from "./pages/admin/flights/FlightList";
 import FlightEdit from "./pages/admin/flights/FlightEdit";
+import RoomEdit from "./pages/admin/hotels/RoomEdit";
 
 function App() {
   return (
@@ -127,6 +128,14 @@ function App() {
               }
             />
             <Route
+              path="/hotel/admin/edit/:id"
+              element={
+                <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
+                  <EditHotelForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/hotel/admin/room/create"
               element={
                 <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
@@ -143,10 +152,10 @@ function App() {
               }
             />
             <Route
-              path="/hotel/admin/edit/:id"
+              path="/hotel/admin/room/edit/:id"
               element={
                 <ProtectedRoute token={"adminToken"} route={"/admin/register"}>
-                  <EditHotelForm />
+                  <RoomEdit />
                 </ProtectedRoute>
               }
             />
