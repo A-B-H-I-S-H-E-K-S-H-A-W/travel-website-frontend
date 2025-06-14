@@ -15,6 +15,8 @@ export const AdminAuthProvider = ({ children }) => {
       setCurrentAdmin(JSON.parse(storedUser));
     }
 
+    if (!token) return;
+
     if (token) {
       fetchAdmin(token); // fetch only once
     }

@@ -1,39 +1,33 @@
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
-import { offers } from "../../data";
+import { Link } from "react-router-dom";
 
-const CardCarousel = () => {
+const CardCarousel = ({ data = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const carouselRef = useRef(null);
 
-  // Get visible cards count based on screen size
   const getVisibleCards = () => {
     if (typeof window !== "undefined") {
       return window.innerWidth >= 768 ? 3.3 : 1.8;
     }
-    return 4; // Default to desktop view
+    return 4;
   };
 
-  const [visibleCards, setVisibleCards] = useState(4);
+  const [visibleCards, setVisibleCards] = useState(getVisibleCards());
 
   useEffect(() => {
     const handleResize = () => {
       setVisibleCards(getVisibleCards());
     };
 
-    // Set initial value
-    handleResize();
-
-    // Add event listener
     window.addEventListener("resize", handleResize);
-
-    // Clean up
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const totalSlides = Math.max(0, offers.length - Math.floor(visibleCards));
+  // ✅ Use incoming data length
+  const totalSlides = Math.max(0, data.length - Math.floor(visibleCards));
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -45,7 +39,6 @@ const CardCarousel = () => {
     setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
   };
 
-  // Touch handlers for mobile swipe
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientX);
   };
@@ -56,27 +49,19 @@ const CardCarousel = () => {
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-
     const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
 
-    if (isLeftSwipe && currentIndex < totalSlides) {
-      nextSlide();
-    } else if (isRightSwipe && currentIndex > 0) {
-      prevSlide();
-    }
+    if (distance > 50 && currentIndex < totalSlides) nextSlide();
+    else if (distance < -50 && currentIndex > 0) prevSlide();
 
     setTouchStart(null);
     setTouchEnd(null);
   };
 
-  // Calculate translateX for the carousel
   const translateX = `-${currentIndex * (100 / visibleCards)}%`;
 
   return (
     <div className="relative w-full mx-auto md:px-20 px-2 py-1">
-      {/* Carousel Container */}
       <div className="relative overflow-hidden">
         <div
           ref={carouselRef}
@@ -86,28 +71,32 @@ const CardCarousel = () => {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
-          {offers.map(({ src, title, id }) => (
-            <div
-              key={id}
-              className="shrink-0 relative z-0 px- w-full "
+          {data.map((item, index) => (
+            <Link
+              to={`/info/${item._id}`}
+              key={item._id || index}
+              className="shrink-0 relative z-0 w-full cursor-pointer"
               style={{ width: `${100 / visibleCards}%` }}
             >
-              <div className="md:h-[22rem] sm:h-[18rem] h-[16rem] bg-white rounded-lg shadow-md border border-gray-200 transition-all hover:shadow-lg">
+              <div className="md:h-[22rem] sm:h-[18rem] h-[16rem] bg-white rounded-lg shadow-md border border-gray-200 transition-all hover:shadow-lg overflow-hidden">
                 <img
-                  className="w-full h-full rounded-lg"
-                  src={src}
-                  alt="img"
+                  className="w-full h-full rounded-lg object-cover"
+                  src={
+                    item?.images?.[0] || "https://via.placeholder.com/300x200"
+                  }
+                  alt="cover"
                 />
-                <div className="inset-0 absolute z-10 flex rounded-lg justify-center items-center hover:bg-black/40 text-white duration-300">
-                  <p className="text-3xl font-semibold">{title}</p>
+                <div className="inset-0 absolute z-10 flex rounded-lg p-4 justify-start items-end bg-gradient-to-b from-transparent to-black/80 hover:bg-black/10 text-white duration-300">
+                  <p className="text-xl font-semibold text-center px-2">
+                    {item?.name || item?.busName || item?.airline || "No title"}
+                  </p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
 
-      {/* Navigation Dots (Optional) */}
       <div className="flex justify-center mt-4 gap-1">
         {Array.from({ length: totalSlides + 1 }).map((_, index) => (
           <button
@@ -120,24 +109,20 @@ const CardCarousel = () => {
         ))}
       </div>
 
-      {/* Navigation Buttons */}
       <div className="flex md:justify-end justify-center mt-5">
-        <div>
+        <div className="flex gap-2">
           <button
             className="bg-white text-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed z-10"
             onClick={prevSlide}
             disabled={currentIndex === 0}
           >
-            {/* <ChevronLeft className="h-6 w-6" /> */}
             <ArrowLeft />
           </button>
-
           <button
             className="bg-white text-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed z-10"
             onClick={nextSlide}
             disabled={currentIndex >= totalSlides}
           >
-            {/* <ChevronRight className="h-6 w-6" /> */}
             <ArrowRight />
           </button>
         </div>

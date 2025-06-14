@@ -40,7 +40,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        {/* User */}
+        {/* User Routes */}
         <UserAuthProvider>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -53,7 +53,7 @@ function App() {
               element={<Auth isLoginSection={false} />}
             />
             <Route path="/search" element={<Search />} />
-            <Route path="/info" element={<InfoPage />} />
+            <Route path="/info/:id" element={<InfoPage />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route
               path="/settings"
@@ -67,8 +67,10 @@ function App() {
             <Route path="/recent" element={<RecentTrips />} />
           </Routes>
         </UserAuthProvider>
-        {/* User Ends */}
-        {/* Admin */}
+
+        {/* Admin Login/Register (no provider needed) */}
+
+        {/* Admin Routes wrapped with AdminAuthProvider */}
         <AdminAuthProvider>
           <Routes>
             <Route
@@ -79,6 +81,8 @@ function App() {
               path="/admin/register"
               element={<AdminAuth isLoginSection={false} />}
             />
+          </Routes>
+          <Routes>
             <Route
               path="/hotel/admin/dashboard"
               element={
@@ -159,8 +163,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-          </Routes>
-          <Routes>
             <Route
               path="/bus/admin/dashboard"
               element={
@@ -193,8 +195,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-          </Routes>
-          <Routes>
             <Route
               path="/flight/admin/dashboard"
               element={
@@ -229,6 +229,8 @@ function App() {
             />
           </Routes>
         </AdminAuthProvider>
+
+        {/* Super Admin Routes */}
         <SuperAdminProvider>
           <Routes>
             <Route path="/super-admin/login" element={<SuperAdminAuth />} />

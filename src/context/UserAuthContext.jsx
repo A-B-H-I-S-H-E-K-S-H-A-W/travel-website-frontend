@@ -67,8 +67,54 @@ export const UserAuthProvider = ({ children }) => {
     }
   };
 
+  const fetchDashboardCard = async (url) => {
+    try {
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res) {
+        return res.json();
+      }
+    } catch (err) {
+      console.error("❌ Failed to fetch dashboard data", err);
+    }
+  };
+
+  const fetchDataInfo = async (url) => {
+    try {
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      return await res.json();
+    } catch (error) {
+      console.log("Error fetching Info ::::", error);
+      return { success: false, message: "Internal Server Error" };
+    }
+  };
+
   return (
-    <UserAuthContext.Provider value={{ currentUser, login, logout, register }}>
+    <UserAuthContext.Provider
+      value={{
+        currentUser,
+        login,
+        logout,
+        register,
+        fetchDashboardCard,
+        fetchDataInfo,
+      }}
+    >
       {children}
     </UserAuthContext.Provider>
   );

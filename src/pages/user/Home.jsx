@@ -5,9 +5,17 @@ import Cards from "../../components/user/Cards";
 
 import Layout from "../../Layout";
 import bg from "../../assets/images/bg_main.jpg";
+import SearchBox from "../../components/user/SearchBox";
+import { useUserAuth } from "../../context/UserAuthContext";
 
 const Home = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState(null);
+  const [hotels, setHotels] = useState([]);
+  const [flights, setFlights] = useState([]);
+  const [buses, setBuses] = useState([]);
+
+  const { fetchDashboardCard } = useUserAuth();
 
   useEffect(() => {
     // Show the loader for 3 seconds
@@ -22,6 +30,25 @@ const Home = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const getData = async () => {
+    try {
+      const res = await fetchDashboardCard("/api/fetch/items");
+      if (res) {
+        setData(res);
+        setHotels(res.hotels);
+        setFlights(res.flights);
+        setBuses(res.buses);
+      }
+    } catch (error) {
+      console.log("Got an error", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
       {isLoading ? (
@@ -55,68 +82,25 @@ const Home = () => {
                         </p>
                       </div>
                       <div className="mt-6">
-                        <div className="w-full md:h-16 md:rounded-full rounded-xl md:max-w-5xl mx-auto bg-white">
-                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 text-center px-2 gap-2">
-                            <div className="h-16 w-full flex flex-col items-start justify-center px-5">
-                              <pre>Choose Location</pre>
-                              <input
-                                type="text"
-                                className="border-4 rounded-xl w-full"
-                              />
-                            </div>
-                            <div className="h-16 w-full flex flex-col items-start justify-center px-5">
-                              <pre>Destination</pre>
-                              <input
-                                type="text"
-                                className="border-4 rounded-xl w-full"
-                              />
-                            </div>
-                            <div className="h-16 w-full flex flex-col items-start justify-center px-5">
-                              <pre>Date of Stay</pre>
-                              <input
-                                type="date"
-                                className="border-4 rounded-xl w-full"
-                              />
-                            </div>
-                            <div className="h-16 w-full flex flex-col items-start justify-center px-5">
-                              <pre>Add Guest</pre>
-                              <select
-                                name=""
-                                id=""
-                                className="border-4 rounded-xl w-full"
-                              >
-                                <option value="1">1 People</option>
-                                <option value="2">2 People</option>
-                                <option value="3">3 People</option>
-                                <option value="4">4 People</option>
-                                <option value="5">5 People</option>
-                                <option value="6">6 People</option>
-                                <option value="8">8 People</option>
-                                <option value="10">10 People</option>
-                              </select>
-                            </div>
-                            <div className="h-16 col-span-2 md:col-auto flex justify-center items-center">
-                              <ButtonSolid
-                                title={"Serach"}
-                                className={
-                                  "md:px-16 sm:px-14 px-20 py-2 md:py-3 md:rounded-full rounded-xl"
-                                }
-                              />
-                            </div>
-                          </div>
-                        </div>
+                        <SearchBox />
                       </div>
                     </div>
                   </div>
                 </div>
               </main>
             </div>
-            <Cards CardTitle={"Top offers live now"} CardBtn={"See more"} />
             <Cards
+              data={buses}
+              CardTitle={"Top offers live now"}
+              CardBtn={"See more"}
+            />
+            <Cards
+              data={hotels}
               CardTitle={"Top hotels to choose from"}
               CardBtn={"More hotels"}
             />
             <Cards
+              data={flights}
               CardTitle={"Choose perfect destination."}
               CardBtn={"Search Places"}
             />

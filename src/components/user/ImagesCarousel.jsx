@@ -2,29 +2,23 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const images = [
-  "./src/assets/images/bg.jpg",
-  "./src/assets/images/bg_1.jpg",
-  "./src/assets/images/bg_2.jpg",
-];
-
-export default function ImagesCarousel() {
+export default function ImagesCarousel({ image }) {
   const [current, setCurrent] = useState(0);
 
   const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % images.length);
+    setCurrent((prev) => (prev + 1) % image.length);
   };
 
   const prevSlide = () => {
-    setCurrent((prev) => (prev - 1 + images.length) % images.length);
+    setCurrent((prev) => (prev - 1 + image.length) % image.length);
   };
 
   return (
     <div className="relative w-full max-w-2xl mx-auto">
       <div className="overflow-hidden rounded-2xl shadow-lg">
         <motion.img
-          key={images[current]}
-          src={images[current]}
+          key={image[current]}
+          src={image[current]}
           alt="carousel slide"
           className="w-full h-80 object-cover"
           initial={{ opacity: 0, x: 50 }}
@@ -46,7 +40,7 @@ export default function ImagesCarousel() {
         <ChevronRight />
       </button>
       <div className="flex justify-center mt-2 space-x-2">
-        {images.map((_, index) => (
+        {image.map((_, index) => (
           <button
             key={index}
             className={`w-3 h-3 rounded-full ${
