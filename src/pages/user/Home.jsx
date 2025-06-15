@@ -105,21 +105,9 @@ const Home = () => {
                 </div>
               </main>
             </div>
-            <Cards
-              data={buses}
-              CardTitle={"Top offers live now"}
-              CardBtn={"See more"}
-            />
-            <Cards
-              data={hotels}
-              CardTitle={"Top hotels to choose from"}
-              CardBtn={"More hotels"}
-            />
-            <Cards
-              data={flights}
-              CardTitle={"Choose perfect destination."}
-              CardBtn={"Search Places"}
-            />
+            <Cards data={buses} CardTitle={"Top offers live now on bus"} />
+            <Cards data={hotels} CardTitle={"Top hotels to choose from"} />
+            <Cards data={flights} CardTitle={"Choose perfect destination."} />
           </Layout>
         </>
       )}
