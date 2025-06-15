@@ -43,7 +43,6 @@ const FlightForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("Submitting form data:", formData);
     e.preventDefault();
 
     setLoading(true);
@@ -51,7 +50,6 @@ const FlightForm = () => {
       const token = localStorage.getItem("adminToken");
       const res = await createApi("/api/flight/create", formData, token);
 
-      console.log("API response:", res);
       if (res.success) {
         setResult({
           success: true,
