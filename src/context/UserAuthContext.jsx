@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-
+import { API_BASE } from "../constants/ApiUrl";
 const UserAuthContext = createContext();
 
 export const UserAuthProvider = ({ children }) => {
@@ -25,7 +25,7 @@ export const UserAuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
-    const res = await fetch("/api/users/logout", {
+    const res = await fetch(`${API_BASE}/api/users/logout`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -38,7 +38,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const register = async (userDetails) => {
     try {
-      const res = await fetch("/api/users/register", {
+      const res = await fetch(`${API_BASE}/api/users/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userDetails),
@@ -53,7 +53,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const login = async (userData) => {
     try {
-      const res = await fetch("/api/users/auth", {
+      const res = await fetch(`${API_BASE}/api/users/auth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
@@ -77,7 +77,7 @@ export const UserAuthProvider = ({ children }) => {
     try {
       const isFormData = data instanceof FormData;
 
-      const res = await fetch(url, {
+      const res = await fetch(`${API_BASE}${url}`, {
         method: "PUT",
         headers: {
           ...(isFormData
@@ -104,7 +104,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const getUser = async (url, token) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(`${API_BASE}${url}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -125,7 +125,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const fetchDashboardCard = async (url) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(`${API_BASE}${url}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -138,7 +138,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const fetchDataInfo = async (url) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(`${API_BASE}${url}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -153,7 +153,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const fetchSearchData = async (url, data) => {
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`${API_BASE}${url}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -174,7 +174,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const createBooking = async (payload, token) => {
     try {
-      const res = await fetch("/api/booking/book", {
+      const res = await fetch(`${API_BASE}/api/booking/book`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -200,7 +200,7 @@ export const UserAuthProvider = ({ children }) => {
     if (!url) return;
 
     try {
-      const res = await fetch(url, {
+      const res = await fetch(`${API_BASE}${url}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -227,7 +227,7 @@ export const UserAuthProvider = ({ children }) => {
 
   const cancelBooking = async (url, token) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(`${API_BASE}${url}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

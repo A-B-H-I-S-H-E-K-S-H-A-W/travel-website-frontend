@@ -1,6 +1,8 @@
+import { API_BASE } from "../constants/ApiUrl";
+
 export const updateAdmin = async (formData, token) => {
   try {
-    const res = await fetch("/api/admin/update", {
+    const res = await fetch(`${API_BASE}/api/admin/update`, {
       method: "POST",
       body: formData,
       headers: {
@@ -22,7 +24,7 @@ export const updateAdmin = async (formData, token) => {
 
 export const fetchAdminId = async (paramId, token) => {
   try {
-    const res = await fetch(`/api/admin/profile/${paramId}`, {
+    const res = await fetch(`${API_BASE}/api/admin/profile/${paramId}`, {
       method: "GET", // should be GET, not POST!
       headers: {
         "Content-Type": "application/json",
@@ -41,5 +43,3 @@ export const fetchAdminId = async (paramId, token) => {
     return { success: false, message: error.message };
   }
 };
-
-

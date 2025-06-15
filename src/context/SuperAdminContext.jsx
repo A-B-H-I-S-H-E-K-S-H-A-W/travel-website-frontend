@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-
+import { API_BASE } from "../constants/ApiUrl";
 export const SuperAdminContext = createContext();
 
 export const SuperAdminProvider = ({ children }) => {
@@ -22,7 +22,7 @@ export const SuperAdminProvider = ({ children }) => {
 
   const registerOnce = async () => {
     try {
-      const res = await fetch("/api/super-admin/register-once", {
+      const res = await fetch(`${API_BASE}/api/super-admin/register-once`, {
         method: "POST",
       });
 
@@ -42,7 +42,7 @@ export const SuperAdminProvider = ({ children }) => {
 
   const login = async (superAdminData) => {
     try {
-      const res = await fetch("/api/super-admin/auth", {
+      const res = await fetch(`${API_BASE}/api/super-admin/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export const SuperAdminProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const res = await fetch("/api/super-admin/logout", {
+      const res = await fetch(`${API_BASE}/api/super-admin/logout`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export const SuperAdminProvider = ({ children }) => {
 
   const profile = async (token) => {
     try {
-      const res = await fetch("/api/super-admin/profile", {
+      const res = await fetch(`${API_BASE}/api/super-admin/profile`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export const SuperAdminProvider = ({ children }) => {
 
   const newRegistration = async (superAdminData, token) => {
     try {
-      const res = await fetch("/api/super-admin/new-registration", {
+      const res = await fetch(`${API_BASE}/api/super-admin/new-registration`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export const SuperAdminProvider = ({ children }) => {
 
   const fetchAdmins = async (verification) => {
     try {
-      const res = await fetch("/api/admin/verification", {
+      const res = await fetch(`${API_BASE}/api/admin/verification`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -143,7 +143,7 @@ export const SuperAdminProvider = ({ children }) => {
 
   const verificationUpdate = async ({ token, verifyData }) => {
     try {
-      const res = await fetch("/api/admin/verification-update", {
+      const res = await fetch(`${API_BASE}/api/admin/verification-update`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -167,7 +167,7 @@ export const SuperAdminProvider = ({ children }) => {
 
   const getSuperAdminsProfile = async (token) => {
     try {
-      const res = await fetch("/api/super-admin/get-super-admins", {
+      const res = await fetch(`${API_BASE}/api/super-admin/get-super-admins`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -189,7 +189,7 @@ export const SuperAdminProvider = ({ children }) => {
 
   const removeSuperAdmin = async ({ token, id }) => {
     try {
-      const res = await fetch("/api/super-admin/remove", {
+      const res = await fetch(`${API_BASE}/api/super-admin/remove`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -14,7 +14,6 @@ const RecentTrips = () => {
 
   const getData = async () => {
     const data = await fetchBookings(`/api/booking/my-booking/${id}`, token);
-    console.log("Fetched bookings:", data);
     if (data) setBookings(data);
   };
 

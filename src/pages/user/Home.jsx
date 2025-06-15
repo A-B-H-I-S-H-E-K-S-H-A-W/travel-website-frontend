@@ -9,7 +9,7 @@ import { useUserAuth } from "../../context/UserAuthContext";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hotels, setHotels] = useState([]);
   const [flights, setFlights] = useState([]);
   const [buses, setBuses] = useState([]);

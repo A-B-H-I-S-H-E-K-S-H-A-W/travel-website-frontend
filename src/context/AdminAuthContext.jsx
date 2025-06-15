@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-
+import { API_BASE } from "../constants/ApiUrl";
 const AdminAuthContext = createContext();
 
 export const AdminAuthProvider = ({ children }) => {
@@ -24,7 +24,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const res = await fetch("/api/users/logout", {
+      const res = await fetch(`${API_BASE}/api/users/logout`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const register = async (adminDetails) => {
     try {
-      const res = await fetch("/api/admin/register", {
+      const res = await fetch(`${API_BASE}/api/admin/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export const AdminAuthProvider = ({ children }) => {
     try {
       console.log("error2");
 
-      const res = await fetch("/api/admin/auth", {
+      const res = await fetch(`${API_BASE}/api/admin/auth`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const fetchAdmin = async (token) => {
     try {
-      const res = await fetch(`/api/admin/profile`, {
+      const res = await fetch(`${API_BASE}/api/admin/profile`, {
         method: "GET", // should be GET, not POST!
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +132,7 @@ export const AdminAuthProvider = ({ children }) => {
         throw new Error("No images uploaded");
       }
 
-      const response = await fetch(url, {
+      const response = await fetch(`${API_BASE}/${url}`, {
         method: "POST",
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }), // DON'T set Content-Type here
@@ -155,7 +155,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const fetchApi = async (url, token) => {
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`${API_BASE}/${url}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -179,7 +179,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const getDataApi = async (url, token) => {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(`${API_BASE}${url}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -196,7 +196,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const updateApi = async (url, data, token) => {
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`${API_BASE}${url}`, {
         method: "PUT",
         headers: {
           ...(data instanceof FormData
@@ -226,7 +226,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const deleteApi = async (url, token) => {
     try {
-      const response = await fetch(url, {
+      const response = await fetch(`${API_BASE}${url}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
