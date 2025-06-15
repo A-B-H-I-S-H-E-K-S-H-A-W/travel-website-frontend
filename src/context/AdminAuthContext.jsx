@@ -132,7 +132,7 @@ export const AdminAuthProvider = ({ children }) => {
         throw new Error("No images uploaded");
       }
 
-      const response = await fetch(`${API_BASE}/${url}`, {
+      const response = await fetch(`${API_BASE}${url}`, {
         method: "POST",
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }), // DON'T set Content-Type here
@@ -155,7 +155,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const fetchApi = async (url, token) => {
     try {
-      const response = await fetch(`${API_BASE}/${url}`, {
+      const response = await fetch(`${API_BASE}${url}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
