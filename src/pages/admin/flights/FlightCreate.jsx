@@ -55,7 +55,6 @@ const FlightForm = () => {
           success: true,
           message: res.message || "Flight created successfully",
         });
-        navigate("/flight/admin/list");
       } else {
         setResult({
           success: false,
