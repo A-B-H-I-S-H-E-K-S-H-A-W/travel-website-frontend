@@ -77,7 +77,7 @@ function App() {
               }
             />
             <Route
-              path="/recent"
+              path="/recent/:id"
               element={
                 <ProtectedRoute token={"userToken"} route={"/"}>
                   <RecentTrips />

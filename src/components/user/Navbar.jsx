@@ -56,12 +56,20 @@ const Navbar = ({ user }) => {
                   </div>
                   <div className="py-1" role="none">
                     <Link
-                      to="/recent"
+                      to={`/recent/${user.id}`}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
                       role="menuitem"
                       id="menu-item-5"
                     >
                       Trips
+                    </Link>
+                    <Link
+                      to="/booking"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
+                      role="menuitem"
+                      id="menu-item-5"
+                    >
+                      Bookings
                     </Link>
                   </div>
                   <div className="py-1" role="none">

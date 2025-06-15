@@ -4,8 +4,6 @@ const UserAuthContext = createContext();
 
 export const UserAuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-
-  // 🔹 Modal State
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
 
@@ -198,6 +196,35 @@ export const UserAuthProvider = ({ children }) => {
     }
   };
 
+  const fetchBookings = async (url, token) => {
+    if (!url) return;
+
+    try {
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error(
+          "API responded with error:",
+          data.message || res.statusText
+        );
+        return null;
+      }
+
+      return data.success ? data.data : null;
+    } catch (err) {
+      console.error("Failed to fetch bookings:", err);
+      return null;
+    }
+  };
+
   return (
     <UserAuthContext.Provider
       value={{
@@ -215,6 +242,7 @@ export const UserAuthProvider = ({ children }) => {
         selectedBooking,
         openModal,
         closeModal,
+        fetchBookings,
       }}
     >
       {children}

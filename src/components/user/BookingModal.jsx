@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Toast from "../common/Toast";
 import { useUserAuth } from "../../context/UserAuthContext"; // adjust path if needed
+import { useNavigate } from "react-router-dom";
 
 const BookingModal = ({ isOpen, onClose, booking }) => {
   const [travelDate, setTravelDate] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const { createBooking } = useUserAuth();
 
@@ -25,15 +27,23 @@ const BookingModal = ({ isOpen, onClose, booking }) => {
       };
 
       const token = localStorage.getItem("userToken");
-
       const response = await createBooking(payload, token);
+
       setResult(response);
+
+      if (response?.success) {
+        navigate("/checkout", {
+          state: {
+            bookingData: {
+              ...booking.data,
+              travelDate,
+            },
+          },
+        });
+      }
     } catch (err) {
       console.error(err);
-      setResult({
-        success: false,
-        message: "Unexpected error occurred.",
-      });
+      setResult({ success: false, message: "Unexpected error occurred." });
     } finally {
       setLoading(false);
     }

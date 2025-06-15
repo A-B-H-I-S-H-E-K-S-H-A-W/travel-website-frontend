@@ -2,99 +2,121 @@ import React from "react";
 import Layout from "../../Layout";
 import Input from "../../components/common/Input";
 import { ButtonSolid } from "../../components/common/Button";
-import Table from "../../components/common/Table";
+import { useLocation } from "react-router-dom";
 
 const Checkout = () => {
-  const months = [
-    "Month",
-    "January",
-    "Febuary",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const { state } = useLocation();
+  const bookingData = state?.bookingData;
 
-  const years = ["Year"];
-
-  for (let year = 1995; year <= 2025; year++) {
-    years.push(year);
-  }
-
-  const rowData = [
-    { name: "John Doe", email: "john.doe@example.com", role: "Admin" },
-    { name: "Jane Smith", email: "jane.smith@example.com", role: "Editor" },
-    { name: "Mark Taylor", email: "mark.taylor@example.com", role: "Viewer" },
-  ];
-
-  const columnDefs = ["Name", "Email", "Role"];
   return (
     <Layout>
-      <div className="px-20 py-28 h-screen">
-        <div className="grid md:grid-cols-[69%_29%] gap-[2%]">
-          <div className="">
-            <Table columnDefs={columnDefs} rowData={rowData} />
-          </div>
-          <div className="p-4 ring rounded-xl shadow-2xl">
-            <div>
-              <div>
-                <h3 className="text-3xl font-bold">Payment Method</h3>
-                <p>Add a new payment method to your account.</p>
-
-                <div className="py-6">
-                  <div className="space-y-2 py-2">
-                    <p className="font-medium">Name</p>
-                    <Input type="text" placeholder={"Full Name"} />
-                  </div>
-                  <div className="space-y-2 py-2">
-                    <p className="font-medium">City</p>
-                    <Input type="text" placeholder={""} />
-                  </div>
-                  <div className="space-y-2 py-2">
-                    <p className="font-medium">Card Number</p>
-                    <Input type="number" placeholder={""} />
-                  </div>
-                  <div className="grid grid-cols-3 mt-8">
-                    <div>
-                      <label className="font-medium">Expires</label>
-                      <select className="w-full border py-1.5 rounded-md">
-                        {months.map((item, i) => (
-                          <option key={i} value={item}>
-                            {item}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="font-medium">Year</label>
-                      <select className="w-full border py-1.5 rounded-md">
-                        {years.map((year, i) => (
-                          <option key={i} value={year}>
-                            {year}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="font-medium">CVC</label>
-                      <Input type={"number"} placeholder={"CVC"} />
-                    </div>
-                  </div>
-                  <div className="mt-8">
-                    <ButtonSolid
-                      title={"Continue"}
-                      className={"px-[9.1rem] py-2 rounded-md"}
-                    >
-                      Continue
-                    </ButtonSolid>
-                  </div>
+      <div className="px-5 md:px-20 py-20 min-h-screen">
+        <div className="p-2 text-3xl font-bold">
+          Checkout Page
+        </div>
+        <div className="grid md:grid-cols-[65%_33%] gap-[2%]">
+          {/* Booking Summary Card */}
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h2 className="text-2xl font-semibold mb-4">Booking Summary</h2>
+            <div className="space-y-4">
+              {bookingData && (
+                <div className="border p-4 rounded-lg shadow">
+                  <img
+                    src={
+                      bookingData.images?.[0] ||
+                      "https://via.placeholder.com/300"
+                    }
+                    alt="preview"
+                    className="w-full h-48 object-cover rounded mb-4"
+                  />
+                  <h3 className="text-xl font-bold">
+                    {bookingData.name ||
+                      bookingData.busName ||
+                      bookingData.airline ||
+                      "Booking Item"}
+                  </h3>
+                  <p className="text-gray-600">
+                    {bookingData.city || bookingData.departureCity || ""} →{" "}
+                    {bookingData.destination || bookingData.arrivalCity || ""}
+                  </p>
+                  <p className="text-gray-500 text-sm mt-2">
+                    Travel Date: {bookingData.travelDate}
+                  </p>
+                  <p className="text-gray-500 text-sm">
+                    Price: ₹
+                    {bookingData.finalAmount || bookingData.fare || "--"}
+                  </p>
                 </div>
+              )}
+            </div>
+          </div>
+
+          {/* Payment Section */}
+          <div className="p-6 bg-white rounded-xl shadow-2xl">
+            <h3 className="text-3xl font-bold mb-2">Payment Method</h3>
+            <p className="text-gray-600 mb-6">
+              Add a new payment method to complete your booking.
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <p className="font-medium">Full Name</p>
+                <Input type="text" placeholder="Full Name" />
+              </div>
+              <div>
+                <p className="font-medium">City</p>
+                <Input type="text" placeholder="City" />
+              </div>
+              <div>
+                <p className="font-medium">Card Number</p>
+                <Input type="number" placeholder="Card Number" />
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="font-medium">Expires</label>
+                  <select className="w-full border py-1.5 rounded-md">
+                    {[
+                      "Month",
+                      "January",
+                      "February",
+                      "March",
+                      "April",
+                      "May",
+                      "June",
+                      "July",
+                      "August",
+                      "September",
+                      "October",
+                      "November",
+                      "December",
+                    ].map((month, i) => (
+                      <option key={i}>{month}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="font-medium">Year</label>
+                  <select className="w-full border py-1.5 rounded-md">
+                    {[...Array(31)].map((_, i) => (
+                      <option key={i} value={1995 + i}>
+                        {1995 + i}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="font-medium">CVC</label>
+                  <Input type="number" placeholder="CVC" />
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <ButtonSolid
+                  title="Continue"
+                  className="w-full py-2 rounded-md"
+                >
+                  Continue
+                </ButtonSolid>
               </div>
             </div>
           </div>

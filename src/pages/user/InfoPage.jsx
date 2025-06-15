@@ -144,11 +144,12 @@ const InfoPage = () => {
                     </div>
                   </div>
                   <div className="flex space-x-2">
-                    <ButtonSolid
-                      title={"Book"}
-                      className={"flex-1 px-4 py-2 rounded-full"}
-                      onClick={() => openModal(data)}
-                    />
+                    <div onClick={() => openModal(data)}>
+                      <ButtonSolid
+                        title={"Book"}
+                        className={"px-20 py-2 rounded-full"}
+                      />
+                    </div>
                     <ButtonOutline
                       title={"Quick View"}
                       className={"px-4 py-2 rounded-full"}
@@ -323,11 +324,12 @@ const InfoPage = () => {
                   </div>
 
                   <div className="flex space-x-2">
-                    <ButtonSolid
-                      title={"Book"}
-                      className={"flex-1 px-4 py-2 rounded-full"}
-                      onClick={() => openModal(data)}
-                    />
+                    <div onClick={() => openModal(data)}>
+                      <ButtonSolid
+                        title={"Book"}
+                        className={"flex-1 px-4 py-2 rounded-full"}
+                      />
+                    </div>
                     <ButtonOutline
                       title={"Quick View"}
                       className={"px-4 py-2 rounded-full"}
