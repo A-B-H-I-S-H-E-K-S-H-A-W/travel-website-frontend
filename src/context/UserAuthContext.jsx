@@ -225,6 +225,26 @@ export const UserAuthProvider = ({ children }) => {
     }
   };
 
+  const cancelBooking = async (url, token) => {
+    try {
+      const res = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const result = await res.json();
+      console.log(result);
+
+      return res.ok ? result : { success: false, message: result.message };
+    } catch (err) {
+      console.error("Failed to cancel booking:", err);
+      return { success: false, message: "Server Error" };
+    }
+  };
+
   return (
     <UserAuthContext.Provider
       value={{
@@ -243,6 +263,7 @@ export const UserAuthProvider = ({ children }) => {
         openModal,
         closeModal,
         fetchBookings,
+        cancelBooking,
       }}
     >
       {children}

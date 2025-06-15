@@ -12,12 +12,13 @@ const RecentTrips = () => {
 
   const { id } = useParams();
 
+  const getData = async () => {
+    const data = await fetchBookings(`/api/booking/my-booking/${id}`, token);
+    console.log("Fetched bookings:", data);
+    if (data) setBookings(data);
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      const data = await fetchBookings(`/api/booking/my-booking/${id}`, token);
-      console.log("Fetched bookings:", data);
-      if (data) setBookings(data);
-    };
     getData();
   }, []);
 
@@ -40,7 +41,7 @@ const RecentTrips = () => {
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-5 md:px-20 pb-20">
         {bookings.length > 0 ? (
           bookings.map((booking) => (
-            <InfoCard key={booking._id} data={booking} />
+            <InfoCard key={booking._id} data={booking} onRefresh={getData} />
           ))
         ) : (
           <p className="text-center col-span-3 text-gray-500 text-lg">
