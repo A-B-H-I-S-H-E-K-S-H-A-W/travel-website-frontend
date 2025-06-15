@@ -69,7 +69,7 @@ function App() {
             <Route
               path="/checkout"
               element={
-                <ProtectedRoute token={"userToken"} route={"/"}>
+                <ProtectedRoute token={"userToken"} route={"/auth/v1/login"}>
                   <Checkout />
                 </ProtectedRoute>
               }
@@ -77,7 +77,7 @@ function App() {
             <Route
               path="/settings/:id"
               element={
-                <ProtectedRoute token={"userToken"} route={"/"}>
+                <ProtectedRoute token={"userToken"} route={"/auth/v1/login"}>
                   <AccountSettings />
                 </ProtectedRoute>
               }
