@@ -52,7 +52,7 @@ const BookingModal = ({ isOpen, onClose, booking }) => {
   if (!isOpen || !booking) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/20 bg-opacity-40 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black/20 bg-opacity-40 z-50 flex items-center justify-center px-3">
       <div className="bg-white p-6 rounded-lg w-96">
         <h2 className="text-xl font-bold mb-4">Confirm Booking</h2>
         <p className="text-gray-600 mb-2">
