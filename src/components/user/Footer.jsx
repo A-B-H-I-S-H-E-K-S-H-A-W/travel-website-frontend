@@ -4,7 +4,7 @@ import {
   TwitterIcon,
   YoutubeIcon,
 } from "lucide-react";
-import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -38,50 +38,45 @@ const Footer = () => {
           </div>
 
           <div className="mt-8">
-            <h4 className="text-white font-bold text-xl md:text-2xl">About</h4>
+            <h4 className="text-white font-bold text-xl md:text-2xl">Links</h4>
             <ul className="text-white text-lg flex flex-col gap-3 my-3">
               <li className="flex items-center gap-2">
-                <i className="fa-solid fa-arrow-right"></i>
-                <a href="#">About Us</a>
+                <a href="/">Home</a>
               </li>
               <li className="flex items-center gap-2">
-                <i className="fa-solid fa-arrow-right"></i>
-                <a href="#">Privacy Policy</a>
+                <Link to="/search">Search</Link>
               </li>
               <li className="flex items-center gap-2">
-                <i className="fa-solid fa-arrow-right"></i>
-                <a href="#">Terms & Services</a>
+                <Link to="/auth/v1/login">Login</Link>
               </li>
               <li className="flex items-center gap-2">
-                <i className="fa-solid fa-arrow-right"></i>
-                <a href="#">FAQ's</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <i className="fa-solid fa-arrow-right"></i>
-                <a href="#">Blog's</a>
+                <Link to="/auth/v1/register">Register</Link>
               </li>
             </ul>
           </div>
 
           <div className="mt-8">
-            <h4 className="text-white font-bold text-xl md:text-2xl">
-              Help & Support
-            </h4>
+            <h4 className="text-white font-bold text-xl md:text-2xl">About</h4>
             <ul className="text-white text-lg flex flex-col gap-3 my-3">
               <li className="flex items-center gap-2">
-                <a href="#">Help & Support</a>
+                <a href={"/about-us"}>
+                  <p>About Us</p>
+                </a>
               </li>
               <li className="flex items-center gap-2">
-                <a href="#">Trust & Security</a>
+                <a href={"/privacy-policy"}>
+                  <p>Privacy Policy</p>
+                </a>
               </li>
               <li className="flex items-center gap-2">
-                <a href="#">Work zones Guide</a>
+                <a href={"/terms-condition"}>
+                  <p>Terms & Services</p>
+                </a>
               </li>
               <li className="flex items-center gap-2">
-                <a href="#">WorkSpace</a>
-              </li>
-              <li className="flex items-center gap-2">
-                <a href="#">Reviews</a>
+                <a href={"/faq"}>
+                  <p>FAQ's</p>
+                </a>
               </li>
             </ul>
           </div>

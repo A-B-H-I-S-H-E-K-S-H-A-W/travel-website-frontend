@@ -61,14 +61,6 @@ const Navbar = ({ user }) => {
                       role="menuitem"
                       id="menu-item-5"
                     >
-                      Trips
-                    </Link>
-                    <Link
-                      to="/booking"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
-                      role="menuitem"
-                      id="menu-item-5"
-                    >
                       Bookings
                     </Link>
                   </div>

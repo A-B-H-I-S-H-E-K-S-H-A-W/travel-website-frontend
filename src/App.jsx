@@ -34,6 +34,12 @@ import EditBusPage from "./pages/admin/bus/BusEdit";
 import FlightList from "./pages/admin/flights/FlightList";
 import FlightEdit from "./pages/admin/flights/FlightEdit";
 import EditRoomForm from "./pages/admin/hotels/RoomEdit";
+import {
+  AboutUs,
+  FAQ,
+  PrivacyPolicy,
+  TermsAndServices,
+} from "./pages/user/Mics";
 
 function App() {
   return (
@@ -84,6 +90,10 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-condition" element={<TermsAndServices />} />
+            <Route path="/faq" element={<FAQ />} />
           </Routes>
         </UserAuthProvider>
         {/* User Ends */}

@@ -119,7 +119,7 @@ const Search = () => {
           </div>
 
           {/* Results */}
-          <div className="min-h-screen mt-10">
+          <div className="min-h-[50vh] mt-10">
             <div className="md:px-20 px-5 flex items-center justify-between">
               <h2 className="md:text-3xl text-xl font-bold">
                 {activeTab} Results
