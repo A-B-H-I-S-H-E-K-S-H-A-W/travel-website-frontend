@@ -9,7 +9,7 @@ const statuses = ["Scheduled", "Delayed", "Cancelled", "Completed"];
 
 const FlightForm = () => {
   const { createApi } = useAdminAuth();
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState({});
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -43,13 +43,15 @@ const FlightForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    const navigate = useNavigate();
+    console.log("Submitting form data:", formData);
     e.preventDefault();
+
     setLoading(true);
     try {
       const token = localStorage.getItem("adminToken");
       const res = await createApi("/api/flight/create", formData, token);
 
+      console.log("API response:", res);
       if (res.success) {
         setResult({
           success: true,
