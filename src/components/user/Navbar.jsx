@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { ButtonOutline, ButtonSolid } from "../common/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import avatar from "../../assets/static/avatar.jpg";
 import { useUserAuth } from "../../context/UserAuthContext";
 
 const Navbar = ({ user }) => {
   const [toggle, setToggle] = useState(false);
   const { logout } = useUserAuth();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -64,6 +65,7 @@ const Navbar = ({ user }) => {
                     <button
                       onClick={async () => {
                         await logout();
+                        navigate("/");
                       }}
                       className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
                       role="menuitem"
