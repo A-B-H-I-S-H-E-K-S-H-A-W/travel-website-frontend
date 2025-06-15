@@ -46,7 +46,6 @@ export default function AccountSettings() {
       setFormData({
         username: user.username || "",
         email: user.email || "",
-        avatar: user.avatar || "",
         phoneNumber: user.phoneNumber || "",
         address: user.address || "",
         city: user.city || "",
@@ -77,14 +76,13 @@ export default function AccountSettings() {
         }
       }
 
-      console.log(form);
-      console.log(token);
-
       const res = await update(`/api/users/update/${id}`, form, token);
 
       console.log(res);
 
       if (res.success) {
+        setResult(res);
+      } else {
         setResult(res);
       }
     } catch (error) {
@@ -104,6 +102,7 @@ export default function AccountSettings() {
         <div className="py-10">
           <h3 className="text-3xl font-bold">Profile Information</h3>
         </div>
+
         <form noValidate onSubmit={handleSubmit}>
           <div className="space-y-12">
             {/* Profile Section */}
@@ -131,32 +130,6 @@ export default function AccountSettings() {
                       placeholder="janesmith"
                       required
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-gray-300 placeholder:text-gray-400 focus:outline-cyan-600 sm:text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="col-span-full">
-                  <label
-                    htmlFor="avatar"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Avatar (Profile Photo)
-                  </label>
-                  <div className="mt-2">
-                    {formData.avatar && typeof formData.avatar === "string" && (
-                      <img
-                        src={formData.avatar}
-                        alt="Avatar"
-                        className="w-16 h-16 rounded-full mb-3"
-                      />
-                    )}
-                    <input
-                      type="file"
-                      id="avatar"
-                      name="avatar"
-                      accept="image/*"
-                      onChange={handleChange}
-                      className="border px-2 py-2 rounded-xl"
                     />
                   </div>
                 </div>

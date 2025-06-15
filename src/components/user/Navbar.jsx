@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { ButtonOutline, ButtonSolid } from "../common/Button";
 import { Link } from "react-router-dom";
 import avatar from "../../assets/static/avatar.jpg";
@@ -30,11 +30,7 @@ const Navbar = ({ user }) => {
                     {user.username}
                   </p>
 
-                  <img
-                    className="w-10 rounded-full"
-                    src={user.avatar ? user.avatar : avatar}
-                    alt="img"
-                  />
+                  <img className="w-10 rounded-full" src={avatar} alt="img" />
                 </button>
               </div>
               {toggle ? (
@@ -66,9 +62,8 @@ const Navbar = ({ user }) => {
                   </div>
                   <div className="py-1" role="none">
                     <button
-                      onClick={() => {
-                        logout();
-                        window.location.href = "/";
+                      onClick={async () => {
+                        await logout();
                       }}
                       className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 w-full text-start"
                       role="menuitem"
