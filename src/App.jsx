@@ -61,7 +61,7 @@ function App() {
             <Route
               path="/info/:id"
               element={
-                <ProtectedRoute token={"userToken"} route={"/"}>
+                <ProtectedRoute token={"userToken"} route={"/auth/v1/login"}>
                   <InfoPage />
                 </ProtectedRoute>
               }
