@@ -43,7 +43,7 @@ const InfoPage = () => {
   }, []);
 
   return (
-    <Layout>
+    <Layout showFooter={false}>
       <div className="bg-gray-100 min-h-screen w-full">
         <div className="bg-white shadow-md overflow-hidden">
           <div className="relative">

@@ -49,7 +49,12 @@ const InfoCard = ({ data, onRefresh }) => {
       <p className="text-gray-500">
         Travel Date: {travelDate.toLocaleDateString()}
       </p>
-      <p className="text-blue-600 font-semibold mt-2">₹ {data.finalAmount}</p>
+      <p className="text-blue-600 font-semibold mt-2">
+        ₹{" "}
+        {data?.bus?.fare ||
+          data?.hotel?.discountedAmount ||
+          data?.flight?.finalAmount}
+      </p>
 
       {travelDate >= currentDate && (
         <>

@@ -22,7 +22,7 @@ const RecentTrips = () => {
   }, []);
 
   return (
-    <Layout>
+    <Layout showFooter={false}>
       <div
         className="inset-0 mt-20 md:h-54 h-64 text-white w-screen"
         style={{
