@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 import Layout from "../../Layout";
 import { useEffect, useState } from "react";
@@ -97,7 +97,7 @@ export default function AccountSettings() {
   };
 
   return (
-    <Layout>
+    <Layout showFooter={false}>
       <div className="px-5 md:px-20 pt-20 py-10">
         <div className="py-10">
           <h3 className="text-3xl font-bold">Profile Information</h3>
@@ -286,12 +286,13 @@ export default function AccountSettings() {
 
           {/* Buttons */}
           <div className="mt-6 flex items-center justify-end gap-x-6">
-            <button
+            <Link
+              to={"/"}
               type="button"
               className="cursor-pointer text-sm font-semibold text-gray-900"
             >
               Cancel
-            </button>
+            </Link>
             <button
               disabled={loading}
               type="submit"

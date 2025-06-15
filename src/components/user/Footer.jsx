@@ -44,7 +44,7 @@ const Footer = () => {
                 <a href="/">Home</a>
               </li>
               <li className="flex items-center gap-2">
-                <Link to="/search">Search</Link>
+                <a href="/search">Search</a>
               </li>
               <li className="flex items-center gap-2">
                 <Link to="/auth/v1/login">Login</Link>
