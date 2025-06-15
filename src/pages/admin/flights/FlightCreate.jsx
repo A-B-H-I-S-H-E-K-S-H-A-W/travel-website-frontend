@@ -71,7 +71,7 @@ const FlightForm = () => {
 
   return (
     <AdminLayout>
-      <form className="max-w-4xl space-y-4" onSubmit={handleSubmit} noValidate>
+      <form className="max-w-4xl space-y-4" onSubmit={handleSubmit}>
         <h1 className="text-2xl font-bold text-gray-800 mb-4">
           Flight Details Form
         </h1>
@@ -226,7 +226,11 @@ const FlightForm = () => {
           {loading ? "Submitting..." : "Submit"}
         </button>
       </form>
-      <Toast result={result} setResult={setResult} />
+      {result?.message ? (
+        <Toast result={result} setResult={setResult} />
+      ) : (
+        <></>
+      )}
     </AdminLayout>
   );
 };
